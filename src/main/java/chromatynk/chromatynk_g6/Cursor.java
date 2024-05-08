@@ -154,7 +154,6 @@ public class Cursor {
         }
 
         //Add the verification for the canvas
-
         this.posX= posX;
         this.posY= posY;
     }
