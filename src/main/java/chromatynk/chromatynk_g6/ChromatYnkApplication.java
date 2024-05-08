@@ -38,7 +38,7 @@ public class ChromatYnkApplication extends Application {
             this.rootLayout = (BorderPane) fxmlLoader.load();
 
             // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
+            Scene scene = new Scene(rootLayout,1000,800);
             this.primaryStage.setScene(scene);
             this.primaryStage.show();
         } catch (IOException e) {
