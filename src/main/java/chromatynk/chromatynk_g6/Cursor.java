@@ -219,4 +219,91 @@ public class Cursor {
         //The rotationAngle is always between -360 and 360
         this.rotationAngle = this.rotationAngle%360;
     }
+
+    /**
+     * Move the cursor forward
+     * @param value the value from witch the cursor will advance
+     * @throws NegativeNumberException verify the cursor is not out of the canvas
+     */
+     public void forward(int value) throws NegativeNumberException{
+         if (value < 0 ){
+            throw new NegativeNumberException();
+         }
+         double newX;
+         double newY;
+
+             newX = Math.cos(Math.toRadians(this.rotationAngle))*value +this.posX; // Math use trigonometry in radiants so the conversion is needed
+             newY = Math.sin(Math.toRadians(this.rotationAngle))*value +this.posY;
+
+         if(newX < 0 ){
+            newX = 0;
+         }
+         if(newY < 0){
+            newY = 0;
+         }
+         // TODO:Add the verification for the canvas
+
+         this.posX = (int) newX;
+         this.posY = (int) newY;
+     }
+
+
+     /**
+     *  Move the cursor backward
+     * @param value the value form witch the cursor goes backward
+     * @throws NegativeNumberException verify the cursor is not out of the canvas
+     */
+    public void backward(int value) throws NegativeNumberException{
+        if (value < 0 ){
+            throw new NegativeNumberException();
+        }
+        double newX;
+        double newY;
+
+        newX = this.posX - Math.sin(Math.toRadians(90-this.rotationAngle))*value; // Math use trigonometry in radiants so the conversion is needed
+        newY = this.posY - Math.cos(Math.toRadians(90-this.rotationAngle))*value;
+
+        if(newX < 0 ){
+            newX = 0;
+        }
+        if(newY < 0){
+            newY = 0;
+        }
+        //TODO:Add the verification for the canvas
+
+        this.posX = (int) newX;
+        this.posY = (int) newY;
+    }
+
+    /**
+     * Change the angle of cursor to point at b
+     * @param bx x value of point b
+     * @param by y value of point b
+     */
+    public void lookAt(int bx, int by){
+        int ax = this.posX;
+        int ay = this.posY;
+        int dy = ay - by ;
+        int dx = bx - ax ;
+        this.rotationAngle = (float)(Math.atan2(dx, dy) * 180 / Math.PI)-90;
+    }
+
+
+    /**
+     * Method toString for the Cursor class
+     * @return the cursor parameters in a String
+     */
+    @Override
+    public String toString() {
+        return "Cursor{" +
+                "id=" + id +
+                ", ( X=" + posX +
+                "; Y=" + posY +
+                "), thickness=" + thickness +
+                ", rotationAngle=" + rotationAngle +
+                "°, color=" + color +
+                ", opacity=" + opacity +
+                ", isVisible=" + isVisible +
+                '}';
+    }
 }

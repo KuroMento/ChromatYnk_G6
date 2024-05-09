@@ -22,9 +22,10 @@ public class CursorManager {
      * Constructor of CursorManager adding by default a generic cursor to the list of active cursors.
      */
     public CursorManager(){
-        Cursor defaultCursor = new Cursor();
-        this.activeCursors = new HashMap<Long,Cursor>();
-        this.activeCursors.put(defaultCursor.getId(),defaultCursor);
+        Cursor defaultCursor = new Cursor(0);
+        this.selectedCursorId = defaultCursor.getId();
+        this.cursors = new HashMap<Long,Cursor>();
+        this.cursors.put(defaultCursor.getId(),defaultCursor);
     }
 
     // Getters/Setters

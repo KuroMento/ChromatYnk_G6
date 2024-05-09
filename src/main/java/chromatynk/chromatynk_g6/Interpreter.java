@@ -10,7 +10,11 @@ import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
+
+
 public class Interpreter {
     CursorManager cursorManager = new CursorManager();
     VariableManager varList = new VariableManager();
@@ -21,7 +25,7 @@ public class Interpreter {
     /**
      * Stock the different instructions to be executed from a line edit or a loaded file using FIFO as standard.
      */
-    private Queue<String> info;
+    private Queue<String> instructions;
 
     // Constructor (JavaDoc to do when better implementation)
     public Interpreter(){
@@ -42,11 +46,11 @@ public class Interpreter {
     }
 
     public Queue<String> getInfo() {
-        return info;
+        return instructions;
     }
 
     public void setInfo(Queue<String> info) {
-        this.info = info;
+        this.instructions = info;
     }
 
     /**
@@ -61,7 +65,7 @@ public class Interpreter {
             while (br.ready()) {
                 temp = br.readLine();
                 System.out.println(temp);
-                info.add(temp); //allows to stock entries in the history
+                instructions.add(temp); //allows to stock entries in the history
             }
             br.close();
             System.out.println();
@@ -69,23 +73,40 @@ public class Interpreter {
             System.out.println("Erreur :" + e);
         }
     }
-    
-    // Constructor (JavaDoc to do when better implementation)
-    public Interpreter(){
-    }
-    public Interpreter(String path){ //temporary constructor, will be removed when interpreter will be more advanced
-        read(path);
-        cursorList = new HashMap<Long, Cursor>();
-        this.info = null;
-    }
 
     /**
-     * creates default conditions at the start of the application
+     * This method enters a line of command, checks if there are any % and remove them if it is the case and replace the number in front of the % by the pixel value
+     * @param line the line of command
      */
-    public void starting(){
-        Color defaultColor = Color.rgb(0,0,0);
-        Cursor cursor1 = new Cursor(0l,0,0,1,0,defaultColor, 1,true); //default cursor
-        cursorList.put(cursor1.getId(), cursor1);
+    public static String[] percentUsed(String[] line){
+        ArrayList<Integer> resolution = new ArrayList<Integer>(); // store the height and width of the image
+        resolution.add(1920); //temporary resolution, will be replaced by the exact resolution of the canvas
+        resolution.add(1080);
+        int resolutionAxis = 0; // 0: x-axis of the image; 1: y-axis of the image
+        double val;
+        for(int i = 1; i< line.length; i++){
+            //If a % is detected the previous value in percent is replaced by its pixel value
+            if(line[i].equals("%")){
+                try {
+                    val = (int) ((Double.valueOf(line[i - 1]) / 100) * resolution.get(resolutionAxis));
+                    line[i - 1] = String.valueOf(val);
+                    line[i] = "";
+                    resolutionAxis = (resolutionAxis + 1) % 2;
+                }
+                //If the value to apply % is not a double
+                catch(NumberFormatException e){
+                    System.out.println("Expected a value to apply % in " + line.toString());
+                }
+            }
+        }
+        List<String> list = new ArrayList<String>();
+        for(int i = 0; i< line.length; i++) {
+            if(!line[i].equals("")) {
+                list.add(line[i]);
+            }
+        }
+        String[] stringArray = list.toArray(new String[0]);
+        return stringArray;
     }
 
     /**
@@ -168,8 +189,8 @@ public class Interpreter {
     public void executeAllInfo() throws InvalidNumberArgumentsException, NegativeNumberException, CursorAlreadyExistingException, VariableDoesNotExistException, InvalidNameException, InvalidSymbolException, InvalidColorException, OutOfRangeException, MissingCursorException { //in the main, the first id is 0
         while (! instructions.isEmpty()){
            String command = instructions.remove();
-           String[] args =command.toUpperCase().split(" ");
-           
+           String[] args = command.toUpperCase().split(" ");
+           String[] lineWithoutPercents = percentUsed(args);
            //for (int i= 0; i < args.length; i++){
                switch(args[0]) {
                         //Simple Instruction
@@ -177,30 +198,34 @@ public class Interpreter {
                        if (lineWithoutPercents.length != 2){
                            throw new InvalidNumberArgumentsException();
                        }
-                       cursorList.get(0).forward(Integer.parseInt(args[1]));
+                       cursorManager.getSelectedCursor().forward(Integer.parseInt(lineWithoutPercents[1]));
                        break;
                    case "BWD":
-                        if(args.length != 2){
-                            throw  new InvalidNumberArgumentsException();
+                        if(lineWithoutPercents.length != 2){
+                            throw new InvalidNumberArgumentsException();
                         }
+                       cursorManager.getSelectedCursor().backward(Integer.parseInt(lineWithoutPercents[1]));
                        break;
 
                    case "TURN":
                        if(args.length != 2){
                            throw  new InvalidNumberArgumentsException();
                        }
+                       cursorManager.getSelectedCursor().rotateCursor(Float.parseFloat(args[1]));
                        break;
 
                    case "MOV" :
-                       if(args.length != 3){
-                           throw  new InvalidNumberArgumentsException();
+                       if(!(lineWithoutPercents.length != 3)){
+                           throw new InvalidNumberArgumentsException();
                        }
+                       cursorManager.getSelectedCursor().moveCursor(Integer.parseInt(lineWithoutPercents[1]),Integer.parseInt(lineWithoutPercents[2]));
                        break;
 
                    case "POS" :
-                       if(args.length != 3){
+                       if(!(args.length != 3)){
                            throw  new InvalidNumberArgumentsException();
                        }
+                       cursorManager.getSelectedCursor().placeCursor(Integer.parseInt(lineWithoutPercents[1]),Integer.parseInt(lineWithoutPercents[2]));
                        break;
 
                    case "HIDE" :
@@ -218,8 +243,20 @@ public class Interpreter {
                        break;
 
                    case "PRESS" :
-                       if(args.length != 2){
+                       if(args.length != 2 && args.length != 3){
                            throw  new InvalidNumberArgumentsException();
+                       }
+                       if(args.length == 2){
+                           if(!(Float.parseFloat(args[1]) >= 0 && Float.parseFloat(args[1]) <= 1)){
+                               throw new OutOfRangeException("Opacity must be between 0 and 1");
+                           }
+                           cursorManager.getSelectedCursor().setOpacity(Float.parseFloat(args[1]));
+                       }
+                       if(args.length == 3){
+                           if(!(Float.parseFloat(args[1]) >= 0 && Float.parseFloat(args[1]) <= 100)){
+                               throw new OutOfRangeException("Opacity must be between 0 and 100");
+                           }
+                           cursorManager.getSelectedCursor().setOpacity(Float.parseFloat(args[1])/100);
                        }
                        break;
 
@@ -246,11 +283,18 @@ public class Interpreter {
                        if(args.length != 2){
                            throw  new InvalidNumberArgumentsException();
                        }
+                       cursorManager.getSelectedCursor().setThickness(Float.parseFloat(args[1]));
                        break;
 
                    case "LOOKAT" :
-                       if(!(args.length == 2 || args.length == 3)){
+                       if(!(lineWithoutPercents.length != 2 && lineWithoutPercents.length != 3)){
                            throw  new InvalidNumberArgumentsException();
+                       }
+                       if(lineWithoutPercents.length == 2){
+                           cursorManager.getSelectedCursor().lookAt(cursorManager.getSelectedCursor().getPosX(),cursorManager.getSelectedCursor().getPosY());
+                       }
+                       if(lineWithoutPercents.length == 3){
+                           cursorManager.getSelectedCursor().lookAt(Integer.parseInt(lineWithoutPercents[1]),Integer.parseInt(lineWithoutPercents[2]));
                        }
                        break;
 
@@ -259,11 +303,19 @@ public class Interpreter {
                        if(args.length != 2){
                            throw new InvalidNumberArgumentsException();
                         }
+                       if (cursorManager.cursorExist(Long.parseLong(args[1]))){
+                           throw new CursorAlreadyExistingException();
+                       }
+                       cursorManager.addCursor(Long.parseLong(args[1]));
                        break;
                    case "SELECT" :
                        if(args.length != 2){
                            throw new InvalidNumberArgumentsException();
                        }
+                       if(!(cursorManager.cursorExist(Long.parseLong(args[1])))){
+                           throw new MissingCursorException("The selected cursor does not exist.");
+                       }
+                       cursorManager.selectCursor(Long.parseLong(args[1]));
                        break;
                    case "REMOVE" :
                        if(args.length != 2){
@@ -297,7 +349,7 @@ public class Interpreter {
                        }
                        break;
                    case "MIRROR" :
-                       if(!(args.length == 5 || args.length == 3)){
+                       if(!(lineWithoutPercents.length != 2 && lineWithoutPercents.length != 4)){
                            throw new InvalidNumberArgumentsException();
                        }
                        break;
@@ -321,10 +373,33 @@ public class Interpreter {
                        if(!(args.length == 2 || args.length == 4)){
                            throw new InvalidNumberArgumentsException();
                        }
+                       if(!args[2].equals("=")){
+                           throw new InvalidSymbolException("The format should be : STR name = word/sentence");
+                       }
+                       if(args.length == 4) {
+                           varList.addVariableString(args[1],args[3]);
+                       }
+                       if(args.length == 2){
+                           varList.addVariableString(args[1]);
+                       }
                        break;
                    case "BOOL" :
-                       if(!(args.length == 2 || args.length == 3)){
+                       if(!(args.length == 2 || args.length == 4)){
                            throw new InvalidNumberArgumentsException();
+                       }
+                       if(!args[2].equals("=")){
+                           throw new InvalidSymbolException("The format should be : BOOL name = true/false.");
+                       }
+                       if(args.length == 4) {
+                           if (args[3].equals("TRUE")) {
+                               varList.addVariableBool(args[1], true);
+                           }
+                           if (args[3].equals("FALSE")) {
+                               varList.addVariableBool(args[1]);
+                           }
+                       }
+                       if(args.length == 2){
+                           varList.addVariableBool(args[1]);
                        }
                        break;
                    case "DEL" :
@@ -371,10 +446,10 @@ public class Interpreter {
     }
 
     public void add(String command){
-        info.add(command);
+        instructions.add(command);
     }
 
     public void remove(String command) {
-        info.remove(command);
+        instructions.remove(command);
     }
 }
