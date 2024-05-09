@@ -1,5 +1,13 @@
 package chromatynk.chromatynk_g6;
 
+import chromatynk.chromatynk_g6.exceptions.*;
+import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorAlreadyExistingException;
+import chromatynk.chromatynk_g6.exceptions.cursorExceptions.InvalidColorException;
+import chromatynk.chromatynk_g6.exceptions.cursorExceptions.MissingCursorException;
+import chromatynk.chromatynk_g6.exceptions.variableExceptions.InvalidVariableTypeException;
+import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
+import javafx.scene.paint.Color;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Queue;
@@ -81,13 +89,83 @@ public class Interpreter {
     }
 
     /**
+     * Check if the argument is a hexadecimal color
+     * @param arg
+     * @return True if the argument has a valid hexadecimal format
+     */
+    public static boolean isHexa(String arg){
+        if (arg.length() == 7){
+            char c = arg.charAt(0);
+            if(c != '#'){
+                return false;
+            }
+            for(int i = 1; i < arg.length(); i++){
+                c = arg.charAt(i);
+                int value = Character.getNumericValue(c);
+                if (value < 0 || value > 15){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Searches for the max value within an array of float.
+     * @param args the array of float to search from
+     * @return the maw value of the array
+     */
+    public static float MaxValue(float[] args){
+        float max = args[0];
+        for(int i=1;i<args.length;i++){
+            if(max<args[i]){
+                max=args[i];
+            }
+        }
+        return max;
+    }
+
+    /**
+     * Check if the color is on the format 0-1 or 0-255
+     * @param args the line passed in the interpreter with COLOR as args[0]
+     * @return True if the Color format is correct (between 0 and 1).
+     */
+    public static boolean isFloatColor(String args) throws OutOfRangeException{
+        if(Float.parseFloat(args) < 0 || Float.parseFloat(args) > 255){
+            throw new OutOfRangeException("The numbers for the color must be between 0 and 1 or between 0 and 255");
+        }
+        if( Float.parseFloat(args) >= 1 || Float.parseFloat(args) <= 255){
+            return false;
+        }
+    return true;
+    }
+
+    public static int[] intColor(String[] args) throws  OutOfRangeException{
+        float red = Float.parseFloat(args[1]);
+        float green = Float.parseFloat(args[2]);
+        float blue = Float.parseFloat(args[3]);
+        int[] valRGB = new int[3];
+        for(int i = 1; i < args.length; i++) {
+            if(isFloatColor(args[i])){
+                valRGB[i] = (int)(Float.parseFloat(args[i])*255);
+            }
+            else{
+                valRGB[i] = Integer.parseInt(args[i]);
+            }
+        }
+        return valRGB;
+    }
+
+
+    /**
      * Execute all the command stored in instructions in one shot, ignoring errors if they happened.
      *
      * @throws <code>InvalidNumberArgumentsException</code>
      * @throws <code>NegativeNumberException</code>
      */
 
-    public void executeAllInfo(long id) throws InvalidNumberArgumentsException, NegativeNumberException, CursorAlreadyExistingException, VariableDoesNotExistException, InvalidNameException, InvalidSymbolException { //in the main, the first id is 0
+    public void executeAllInfo() throws InvalidNumberArgumentsException, NegativeNumberException, CursorAlreadyExistingException, VariableDoesNotExistException, InvalidNameException, InvalidSymbolException, InvalidColorException, OutOfRangeException, MissingCursorException { //in the main, the first id is 0
         while (! instructions.isEmpty()){
            String command = instructions.remove();
            String[] args =command.toUpperCase().split(" ");
@@ -129,12 +207,14 @@ public class Interpreter {
                        if(args.length != 1){
                            throw  new InvalidNumberArgumentsException();
                        }
+                       cursorManager.getSelectedCursor().hide();
                        break;
 
                    case "SHOW" :
                        if(args.length != 1){
                            throw  new InvalidNumberArgumentsException();
                        }
+                       cursorManager.getSelectedCursor().show();
                        break;
 
                    case "PRESS" :
@@ -147,6 +227,19 @@ public class Interpreter {
                        if(!(args.length == 2 || args.length == 4)){
                            throw  new InvalidNumberArgumentsException();
                        }
+                        if(args.length == 2){
+                            if(!isHexa(args[1])){
+                                throw new InvalidColorException();
+                            }
+                            else{
+                                cursorManager.getSelectedCursor().setColor(Color.web(args[1]));
+                            }
+                        }
+                        if(args.length == 4){
+
+
+
+                        }
                        break;
 
                    case "THICK" :
@@ -176,6 +269,11 @@ public class Interpreter {
                        if(args.length != 2){
                            throw new InvalidNumberArgumentsException();
                        }
+                       long selectedId = Long.parseLong(args[1]);
+                       if(!(cursorManager.cursorExist(selectedId))){
+                           throw new MissingCursorException("This cursor does not exist");
+                       }
+                       cursorManager.removeCursor(selectedId);
                        break;
                         //Instruction block
                    case "IF" :
@@ -205,12 +303,22 @@ public class Interpreter {
                        break;
                         //Variables and properties
                    case "NUM" :
-                       if(!(args.length == 2 || args.length == 3)){
+                       if(!(args.length == 2 || args.length == 4)){
                            throw new InvalidNumberArgumentsException();
+                       }
+                       if(!args[2].equals("=")){
+                           throw new InvalidSymbolException("The format should be : STR NUM = number");
+                       }
+                       if(args.length == 4) {
+                           double newVariable = Double.parseDouble(args[3].trim());
+                           varList.addVariableDouble(args[1], newVariable);
+                       }
+                       if(args.length == 2){
+                           varList.addVariableDouble(args[1]);
                        }
                        break;
                    case "STR" :
-                       if(!(args.length == 2 || args.length == 3)){
+                       if(!(args.length == 2 || args.length == 4)){
                            throw new InvalidNumberArgumentsException();
                        }
                        break;

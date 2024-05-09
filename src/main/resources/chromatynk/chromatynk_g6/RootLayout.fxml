@@ -12,6 +12,7 @@
             <items>
               <MenuItem mnemonicParsing="false" text="Close" />
               <MenuItem mnemonicParsing="false" text="Import" />
+              <MenuItem mnemonicParsing="false" text="Export" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">

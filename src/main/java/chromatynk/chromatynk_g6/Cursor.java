@@ -1,7 +1,9 @@
 package chromatynk.chromatynk_g6;
 
+import chromatynk.chromatynk_g6.exceptions.OutOfRangeException;
 import javafx.scene.paint.Color;
 import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;
+
 
 public class Cursor {
     /**
@@ -106,7 +108,16 @@ public class Cursor {
         return thickness;
     }
 
-    public void setThickness(float thickness) {
+    /**
+     * Set the <code>thickness</code> to another value.
+     * @param thickness
+     * @throws <code>NegativeNumberException</code> verify the cursor is not out of the canvas.
+     */
+    public void setThickness(float thickness) throws NegativeNumberException {
+        if(thickness < 0){
+            throw new NegativeNumberException();
+        }
+        //Add the verification for the canvas
         this.thickness = thickness;
     }
 
@@ -115,6 +126,7 @@ public class Cursor {
     }
 
     public void setRotationAngle(float rotationAngle) {
+        rotationAngle = rotationAngle%360;
         this.rotationAngle = rotationAngle;
     }
 
@@ -130,7 +142,10 @@ public class Cursor {
         return opacity;
     }
 
-    public void setOpacity(float opacity) {
+    public void setOpacity(float opacity) throws OutOfRangeException {
+        if(opacity < 0 || opacity > 1){
+            throw new OutOfRangeException();
+        }
         this.opacity = opacity;
     }
 
@@ -162,6 +177,7 @@ public class Cursor {
      * Place the cursor on the Canva when user uses pixels
      * @param posX the position on horizontal axe.
      * @param posY the position on vertical axe.
+     * @throws NegativeNumberException verify the cursor is not out of the canvas
      */
     public void placeCursor(int posX,int posY) throws NegativeNumberException{
         if(posY < 0 || posX < 0) {
@@ -177,19 +193,30 @@ public class Cursor {
      * Move the cursor on the Canva using the relative position
      * @param posX the amount to move in pixel on the horizontal axe.
      * @param posY the amount to move in pixel on the vertical axe.
+     * @throws NegativeNumberException verify the cursor is not out of the canvas
      */
-    public void moveCursor(int posX, int posY) throws NegativeNumberException{
+    public void moveCursor(int posX, int posY) throws NegativeNumberException {
         int newPosX = this.posX + posX;
         int newPosY = this.posY + posY;
 
-        if( newPosX < 0|| newPosX <0){
+        if (newPosX < 0 || newPosY < 0) {
             throw new NegativeNumberException("The position : (" + newPosX + "x ; " + newPosY + " y) is out of the Canvas!");
         }
 
 
         //Add the verification for the canvas
+        this.posX = newPosX;
+        this.posY = newPosY;
+    }
 
-        this.posX= newPosX;
-        this.posY= newPosY;
+    /**
+     * Rotate the cursor
+     * @param degree the rotation
+     */
+    public void rotateCursor(float degree){
+        //Over 360 degrees, the cursor comes in the original position
+        this.rotationAngle += degree;
+        //The rotationAngle is always between -360 and 360
+        this.rotationAngle = this.rotationAngle%360;
     }
 }
