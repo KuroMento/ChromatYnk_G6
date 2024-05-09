@@ -1,4 +1,4 @@
-package chromatynk.chromatynk_g6.exceptions;
+package chromatynk.chromatynk_g6.exceptions.cursorExceptions;
 
 public class CursorException extends Exception{
 

@@ -1,7 +1,7 @@
 package chromatynk.chromatynk_g6;
 
-import chromatynk.chromatynk_g6.exceptions.CursorAlreadyExistingException;
-import chromatynk.chromatynk_g6.exceptions.MissingCursorException;
+import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorAlreadyExistingException;
+import chromatynk.chromatynk_g6.exceptions.cursorExceptions.MissingCursorException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,12 @@ public class CursorManager {
     /**
      * A map to track the cursors that are active within the Canvas
      */
-    private Map<Long,Cursor> activeCursors;
+    private Map<Long,Cursor> cursors;
+
+    /**
+     * The id of the selected cursors
+     */
+    private long selectedCursorId;
 
     /**
      * Constructor of CursorManager adding by default a generic cursor to the list of active cursors.
@@ -23,24 +28,22 @@ public class CursorManager {
     }
 
     // Getters/Setters
-    public Map<Long,Cursor> getActiveCursors(){
-        return this.activeCursors;
+    public Map<Long,Cursor> getCursors(){
+        return this.cursors;
     }
-    public void setActiveCursors(Map<Long, Cursor> activeCursors) {
-        this.activeCursors = activeCursors;
+    public void setCursors(Map<Long, Cursor> cursors) {
+        this.cursors = cursors;
     }
+
+    public long getSelectedCursorId() { return this.selectedCursorId;}
+    private void setSelectedCursorId(long id) { this.selectedCursorId = id; }
 
     /**
      * Grabs a cursor within those active.
-     * @param id The id of the wanted cursor
      * @return The <code>Cursor</code> which as <code>id</code> for identification.
-     * @throws <code>MissingCursorException</code>
      */
-    public Cursor getCursor(long id) throws MissingCursorException{
-        if( !cursorExist(id) ){
-            throw new MissingCursorException("Cursor n°" + id + " is missing or doesn't exist.");
-        }
-        return this.activeCursors.get(id);
+    public Cursor getSelectedCursor() {
+        return this.cursors.get(this.selectedCursorId);
     }
 
     /**
@@ -49,7 +52,7 @@ public class CursorManager {
      * @return True if the cursor is active and exist
      */
     public boolean cursorExist(long id){
-        return this.activeCursors.containsKey(id);
+        return this.cursors.containsKey(id);
     }
 
     /**
@@ -57,9 +60,9 @@ public class CursorManager {
      * @return A new id of type long
      */
     public long createCursorId(){
-        Set<Long> idSet = this.activeCursors.keySet();
+        Set<Long> idSet = this.cursors.keySet();
         long newId = (long) (idSet.size() + 1);
-        while( this.activeCursors.containsKey(newId)){
+        while( this.cursors.containsKey(newId)){
             newId += 1l;
         }
         return newId;
@@ -70,7 +73,7 @@ public class CursorManager {
      */
     public void addCursor(){
         long newId = createCursorId();
-        this.activeCursors.put(newId,new Cursor(newId));
+        this.cursors.put(newId,new Cursor(newId));
     }
 
     /**
@@ -82,7 +85,7 @@ public class CursorManager {
         if( cursorExist(id) ){
             throw new CursorAlreadyExistingException("Cursor n°" + id + " already exists.");
         }
-        this.activeCursors.put(id,new Cursor(id));
+        this.cursors.put(id,new Cursor(id));
     }
 
     /**
@@ -94,6 +97,18 @@ public class CursorManager {
         if( !cursorExist(id) ){
             throw new MissingCursorException("Cursor does not exist anymore!");
         }
-        this.activeCursors.remove(id,this.activeCursors.get(id));
+        this.cursors.remove(id,this.cursors.get(id));
+    }
+
+    /**
+     * Allows to select a cursor within the existing cursors
+     * @param id The identification of the wanted cursor
+     * @throws <code>MissingCursorException</code>
+     */
+    public void selectCursor(long id) throws MissingCursorException{
+        if( !cursorExist(id) ){
+            throw new MissingCursorException("This cursor does not exist.");
+        }
+        setSelectedCursorId(id);
     }
 }

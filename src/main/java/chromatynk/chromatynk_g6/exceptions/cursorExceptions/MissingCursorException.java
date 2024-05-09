@@ -1,4 +1,6 @@
-package chromatynk.chromatynk_g6.exceptions;
+package chromatynk.chromatynk_g6.exceptions.cursorExceptions;
+
+import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorException;
 
 public class MissingCursorException extends CursorException {
     public MissingCursorException(String msg){

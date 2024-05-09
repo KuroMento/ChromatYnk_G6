@@ -1,4 +1,4 @@
-package chromatynk.chromatynk_g6.exceptions;
+package chromatynk.chromatynk_g6.exceptions.variableExceptions;
 
 import chromatynk.chromatynk_g6.Variable;
 

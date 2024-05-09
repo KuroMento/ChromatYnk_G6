@@ -4,8 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Queue;
 public class Interpreter {
-    CursorManager cursorList = new CursorManager();
-    Map<Long,Cursor> cursors = cursorList.getActiveCursors();
+    CursorManager cursorManager = new CursorManager();
     VariableManager varList = new VariableManager();
     /**
      * Define the way the interpreter will handle instructions at runtime.
@@ -84,7 +83,6 @@ public class Interpreter {
     /**
      * Execute all the command stored in instructions in one shot, ignoring errors if they happened.
      *
-     * @param id the id of the selected cursor.
      * @throws <code>InvalidNumberArgumentsException</code>
      * @throws <code>NegativeNumberException</code>
      */
@@ -225,7 +223,13 @@ public class Interpreter {
                        if(args.length != 2){
                            throw new InvalidNumberArgumentsException();
                        }
+                       varList.delete(args[1]);
                         break;
+                   case "NOT" :
+                       if(args.length != 2){
+                           throw new InvalidNumberArgumentsException();
+                       }
+                       break;
                    default:
                        System.out.println("Command not found/Unknown command");
                        break;

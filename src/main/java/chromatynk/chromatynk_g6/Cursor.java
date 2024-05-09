@@ -40,7 +40,7 @@ public class Cursor {
     private boolean isVisible;
 
     /**
-     * Constructor of the class Cursor :
+     * Complete Constructor of the class <code>Cursor</code> :
      * @param id the identification of the cursor.
      * @param posX the position on horizontal axe.
      * @param posY the position on vertical axe.
@@ -62,12 +62,20 @@ public class Cursor {
     }
 
     /**
-     * creates a default cursor for initialisation
+     * A Constructor of the class <code>Cursor</code> with a predefined id.
+     * @param id The id of the newly created Cursor
      */
-    public Cursor(){
-        Color defaultColor = Color.rgb(0,0,0);
-        Cursor defaultCursor = new Cursor(0l,0,0,1,0,defaultColor, 1,true); //parameters of the default cursor
+    public Cursor(long id){
+        this.id = id;
+        this.posX = 0;
+        this.posY = 0;
+        this.thickness = 1;
+        this.rotationAngle = 0;
+        this.color = Color.rgb(0,0,0);
+        this.opacity = 1;
+        this.isVisible = true;
     }
+
     //Getters and Setters
 
     public long getId() {
