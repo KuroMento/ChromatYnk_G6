@@ -4,16 +4,27 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Queue;
 public class Interpreter {
+    CursorManager cursorList = new CursorManager();
+    Map<Long,Cursor> cursors = cursorList.getActiveCursors();
+    VariableManager varList = new VariableManager();
     /**
      * Define the way the interpreter will handle instructions at runtime.
      */
     private Behaviour behaviour;
-
     /**
      * Stock the different instructions to be executed from a line edit or a loaded file using FIFO as standard.
      */
     private Queue<String> info;
 
+    // Constructor (JavaDoc to do when better implementation)
+    public Interpreter(){
+    }
+
+    public Interpreter(String path){ //temporary constructor, will be removed when interpreter will be more advanced
+        this.instructions = null;
+        read(path);
+    }
+    
     // Getter/Setter
     public Behaviour getBehaviour() {
         return behaviour;
@@ -71,12 +82,16 @@ public class Interpreter {
     }
 
     /**
-     * Execute all the command stored in info
+     * Execute all the command stored in instructions in one shot, ignoring errors if they happened.
+     *
+     * @param id the id of the selected cursor.
      * @throws <code>InvalidNumberArgumentsException</code>
+     * @throws <code>NegativeNumberException</code>
      */
-    public void executeInfo() throws InvalidNumberArgumentsException, NegativeNumberException {
-        while (! info.isEmpty()){
-           String command = info.remove();
+
+    public void executeAllInfo(long id) throws InvalidNumberArgumentsException, NegativeNumberException, CursorAlreadyExistingException, VariableDoesNotExistException, InvalidNameException, InvalidSymbolException { //in the main, the first id is 0
+        while (! instructions.isEmpty()){
+           String command = instructions.remove();
            String[] args =command.toUpperCase().split(" ");
            
            //for (int i= 0; i < args.length; i++){

@@ -61,6 +61,13 @@ public class Cursor {
         this.isVisible = isVisible;
     }
 
+    /**
+     * creates a default cursor for initialisation
+     */
+    public Cursor(){
+        Color defaultColor = Color.rgb(0,0,0);
+        Cursor defaultCursor = new Cursor(0l,0,0,1,0,defaultColor, 1,true); //parameters of the default cursor
+    }
     //Getters and Setters
 
     public long getId() {
