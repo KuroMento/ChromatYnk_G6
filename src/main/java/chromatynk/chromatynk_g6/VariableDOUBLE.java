@@ -4,12 +4,26 @@ public final class VariableDOUBLE extends Variable{
     //Double value of the variable
     private double value;
 
-    public VariableDOUBLE(String name){
-        super(name);
+    /**
+     * Default constructor of VariableDouble setting the value at 0
+     */
+    public VariableDOUBLE(){
         this.value = 0;
     }
-    public VariableDOUBLE(String name, double value){
-        super(name);
+
+    /**
+     * Constructor of VariableDouble
+     * @param value set a double as the value of the variable
+     */
+    public VariableDOUBLE(double value){
+        this.value = value;
+    }
+
+    public double getValue(){
+        return value;
+    }
+
+    public void setValue(double value){
         this.value = value;
     }
 }

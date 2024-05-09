@@ -4,12 +4,19 @@ public final class VariableSTR extends Variable{
     //String value of the variable
     private String value;
 
-    public VariableSTR(String name, String value){
-        super(name);
+    /**
+     * Constructor of VariableSTR
+     * @param value set a String as the value of the variable
+     */
+    public VariableSTR(String value){
         this.value = value;
     }
 
-    public void setValue(String value) {
+    public String getValue(){
+        return value;
+    }
+
+    public void setValue(String value){
         this.value = value;
     }
 }

@@ -96,7 +96,7 @@ public class Interpreter {
                switch(args[0]) {
                         //Simple Instruction
                    case "FWD" :
-                       if (args.length != 2) {
+                       if (lineWithoutPercents.length != 2){
                            throw new InvalidNumberArgumentsException();
                        }
                        cursorList.get(0).forward(Integer.parseInt(args[1]));
@@ -237,6 +237,30 @@ public class Interpreter {
         }
     }
 
+    public boolean notVariable(String[] line){}
+/*
+    public boolean andVariable(String[] line){}
+
+    public boolean orVariable(String[] line){}*/
+
+    public boolean ifVariable(String[] line){
+        if(line.length == 0){
+            return true;
+        }
+        try {
+            if(line[0] == "NOT") {
+                return notVariable(line);
+            } else {
+                if (line[1] == "AND") {
+                }
+                if (line[1] == "OR") {
+                }
+            }
+        }
+        catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("Unexpected argument in command line + " + line.toString());
+        }
+    }
 
     public void add(String command){
         info.add(command);
