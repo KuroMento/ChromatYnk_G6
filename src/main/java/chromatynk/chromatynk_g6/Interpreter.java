@@ -19,6 +19,7 @@ import java.util.Queue;
 public class Interpreter {
     CursorManager cursorManager = new CursorManager();
     VariableManager varList = new VariableManager();
+    Console console = new Console();
     /**
      * Define the way the interpreter will handle instructions at runtime.
      */
@@ -180,6 +181,7 @@ public class Interpreter {
     public void executeAllInfo() throws InvalidNumberArgumentsException, NegativeNumberException, CursorException, VariableDoesNotExistException, InvalidNameException, InvalidSymbolException, InvalidColorException, OutOfRangeException { //in the main, the first id is 0
         while (! instructions.isEmpty()){
            String command = instructions.remove();
+           console.addLine(command);
            String[] args = command.toUpperCase().split(" ");
            String[] lineWithoutPercents = percentUsed(args);
            //for (int i= 0; i < args.length; i++){
@@ -195,13 +197,14 @@ public class Interpreter {
                        break;
                    case "BWD":
                         if(lineWithoutPercents.length != 2){
+                            console.addLine("The line should be on the format : 'BWD value' ");
                             throw new InvalidNumberArgumentsException();
                         }
                        cursorManager.getSelectedCursor().backward(Integer.parseInt(lineWithoutPercents[1]));
                        break;
-
                    case "TURN":
                        if(args.length != 2){
+                           console.addLine("The line should be on the format : 'TURN value' ");
                            throw  new InvalidNumberArgumentsException();
                        }
                        cursorManager.getSelectedCursor().rotateCursor(Float.parseFloat(args[1]));
@@ -209,6 +212,7 @@ public class Interpreter {
 
                    case "MOV" :
                        if(!(lineWithoutPercents.length != 3)){
+                           console.addLine("The line should be on the format : 'MOV value (%) value (%)' ");
                            throw new InvalidNumberArgumentsException();
                        }
                        cursorManager.getSelectedCursor().moveCursor(Integer.parseInt(lineWithoutPercents[1]),Integer.parseInt(lineWithoutPercents[2]));
@@ -216,6 +220,7 @@ public class Interpreter {
 
                    case "POS" :
                        if(!(args.length != 3)){
+                           console.addLine("The line should be on the format : 'POS value (%) value (%)' ");
                            throw  new InvalidNumberArgumentsException();
                        }
                        cursorManager.getSelectedCursor().placeCursor(Integer.parseInt(lineWithoutPercents[1]),Integer.parseInt(lineWithoutPercents[2]));
@@ -423,29 +428,37 @@ public class Interpreter {
         return(args);
     }
 
-    public boolean nextOperation(String[] line){
+    /**
+     * Takes a line of command in argument and choose the boolean operation to do.
+     * @param line The line of command.
+     * @return if the operation is true or false
+     * @throws InvalidInputException
+     */
+    public boolean nextOperation(String[] line) throws InvalidInputException{
         if(line[0] == "NOT"){
             return notVariable(subArray(line, 1, line.length-1));
         }
         switch (line[1]) {
             case "AND":
                 return andVariable(line[0], subArray(line, 2, line.length-1));
-                break;
             case "OR":
                 return orVariable(line[0], subArray(line, 2, line.length-1));
-                break;
             case "==":
-                break;
+                return equalVariable(line[0], subArray(line, 2, line.length-1));
             case "!=":
-                break;
+                return !equalVariable(line[0], subArray(line, 2, line.length-1));
             case ">":
-                break;
+                return greaterThanVariable(line[0], subArray(line, 2, line.length-1));
             case "<":
-                break;
+                return !greaterThanOrEqualVariable(line[0], subArray(line, 2, line.length-1));
             case ">=":
-                break;
+                return greaterThanOrEqualVariable(line[0], subArray(line, 2, line.length-1));
             case "<=":
-                break;
+                return !greaterThanVariable(line[0], subArray(line, 2, line.length-1));
+            case ")":
+                return valueBool(line[0]);
+            default:
+                throw new InvalidInputException("The symbol entered is not recognised");
         }
     }
 
