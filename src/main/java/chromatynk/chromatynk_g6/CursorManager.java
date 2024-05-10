@@ -1,6 +1,7 @@
 package chromatynk.chromatynk_g6;
 
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorAlreadyExistingException;
+import chromatynk.chromatynk_g6.exceptions.cursorExceptions.MimicStackEmptyException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.MissingCursorException;
 
 import java.util.HashMap;
@@ -19,6 +20,11 @@ public class CursorManager {
     private long selectedCursorId;
 
     /**
+     * A map to track the total amount of duplicated and temporary cursors
+     */
+    private Map<Long,Cursor> temporaryCursors;
+
+    /**
      * Constructor of CursorManager adding by default a generic cursor to the list of active cursors.
      */
     public CursorManager(){
@@ -26,6 +32,7 @@ public class CursorManager {
         this.selectedCursorId = defaultCursor.getId();
         this.cursors = new HashMap<Long,Cursor>();
         this.cursors.put(defaultCursor.getId(),defaultCursor);
+        this.temporaryCursors = new HashMap<Long,Cursor>();
     }
 
     // Getters/Setters
@@ -38,6 +45,13 @@ public class CursorManager {
 
     public long getSelectedCursorId() { return this.selectedCursorId;}
     private void setSelectedCursorId(long id) { this.selectedCursorId = id; }
+
+    public Map<Long,Cursor> getTemporaryCursors(){
+        return this.cursors;
+    }
+    public void setTemporaryCursors(Map<Long, Cursor> cursors) {
+        this.cursors = cursors;
+    }
 
     /**
      * Grabs a cursor within those active.
@@ -111,5 +125,40 @@ public class CursorManager {
             throw new MissingCursorException("This cursor does not exist.");
         }
         setSelectedCursorId(id);
+    }
+
+
+    /**
+     * Add a temporary cursor for the selected and the other temporary cursors when a MIMIC/MIRROR instruction is used.
+     */
+    public void addMimics(){
+        // Creates and add a temporary cursor to the selected one
+        long id = createCursorId();
+        Cursor cursor = new Cursor(id);
+        getSelectedCursor().addMimic(cursor);
+
+        // If there is other temporary cursors, they are also duplicated
+        for( long key : this.temporaryCursors.keySet()){
+            long idMimic = createCursorId();
+            Cursor newDuplicatedCursor = new Cursor(idMimic);
+            Cursor cursorMimic = this.temporaryCursors.get(key);
+            cursorMimic.addMimic(newDuplicatedCursor);
+            temporaryCursors.put(newDuplicatedCursor.getId(),newDuplicatedCursor);
+        }
+
+        this.temporaryCursors.put(cursor.getId(),cursor); // Add at the end to avoid duplicating one more cursor
+    }
+
+    /**
+     * Deletes all the temporary cursors created by one specific MIMIC/MIRROR instruction.
+     * @throws <code>MimicStackEmptyException</code>
+     */
+    public void deleteMimics() throws MimicStackEmptyException {
+        long deleteSelectedId = getSelectedCursor().deleteMimic();
+        this.temporaryCursors.remove(deleteSelectedId,this.temporaryCursors.get(deleteSelectedId));
+        for( long key : this.temporaryCursors.keySet()){
+            long deleteId = this.temporaryCursors.get(key).deleteMimic();
+            this.temporaryCursors.remove(deleteId, this.temporaryCursors.get(key));
+        }
     }
 }

@@ -4,6 +4,8 @@ import chromatynk.chromatynk_g6.exceptions.OutOfRangeException;
 import javafx.scene.paint.Color;
 import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;
 
+import java.util.Stack;
+
 
 public class Cursor {
     /**
@@ -42,6 +44,11 @@ public class Cursor {
     private boolean isVisible;
 
     /**
+     * A stack that keeps track of duplicated cursors when the user call MIMIC or MIRROR
+     */
+    private Stack<Cursor> mimics;
+
+    /**
      * Complete Constructor of the class <code>Cursor</code> :
      * @param id the identification of the cursor.
      * @param posX the position on horizontal axe.
@@ -61,6 +68,7 @@ public class Cursor {
         this.color = color;
         this.opacity = opacity;
         this.isVisible = isVisible;
+        this.mimics = new Stack<Cursor>();
     }
 
     /**
@@ -288,6 +296,24 @@ public class Cursor {
         this.rotationAngle = (float)(Math.atan2(dx, dy) * 180 / Math.PI)-90;
     }
 
+    /**
+     * Add a mimic cursor that will be used for an instruction block MIMIC/MIRROR
+     * @param cursor the added cursor
+     */
+    public void addMimic(Cursor cursor){
+        mimics.push(cursor);
+    }
+
+    /**
+     * Delete the last duplicated mimic after the end of an instruction block for MIMIC/MIRROR
+     * @return The id of the deleted mimic
+     * @throws <code>MimicStackEmptyException</code>
+     */
+    public long deleteMimic() throws MimicStackEmptyException {
+        if( this.mimics.isEmpty() ) throw new MimicStackEmptyException();
+        Cursor cursor = this.mimics.pop();
+        return cursor.getId();
+    }
 
     /**
      * Method toString for the Cursor class
