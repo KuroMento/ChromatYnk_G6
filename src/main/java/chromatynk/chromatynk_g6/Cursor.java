@@ -167,6 +167,8 @@ public class Cursor {
         isVisible = visible;
     }
 
+    public Stack<Cursor> getMimics(){ return this.mimics;}
+
     //Methods
 
     /**

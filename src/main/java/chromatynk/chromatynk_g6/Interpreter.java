@@ -2,6 +2,7 @@ package chromatynk.chromatynk_g6;
 
 import chromatynk.chromatynk_g6.exceptions.*;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorAlreadyExistingException;
+import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.InvalidColorException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.MissingCursorException;
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.InvalidVariableTypeException;
@@ -176,7 +177,7 @@ public class Interpreter {
      * @throws <code>NegativeNumberException</code>
      */
 
-    public void executeAllInfo() throws InvalidNumberArgumentsException, NegativeNumberException, CursorAlreadyExistingException, VariableDoesNotExistException, InvalidNameException, InvalidSymbolException, InvalidColorException, OutOfRangeException, MissingCursorException { //in the main, the first id is 0
+    public void executeAllInfo() throws InvalidNumberArgumentsException, NegativeNumberException, CursorException, VariableDoesNotExistException, InvalidNameException, InvalidSymbolException, InvalidColorException, OutOfRangeException { //in the main, the first id is 0
         while (! instructions.isEmpty()){
            String command = instructions.remove();
            String[] args = command.toUpperCase().split(" ");
@@ -186,6 +187,8 @@ public class Interpreter {
                         //Simple Instruction
                    case "FWD" :
                        if (lineWithoutPercents.length != 2){
+                           // Console.addLine("Erreur")
+                           console.addLine("The line should be on the format : 'FWD value' ");
                            throw new InvalidNumberArgumentsException();
                        }
                        cursorManager.getSelectedCursor().forward(Integer.parseInt(lineWithoutPercents[1]));
@@ -446,31 +449,195 @@ public class Interpreter {
         }
     }
 
-    public boolean notVariable(String[] line){
-        if(varList.isVariable(line[0])){
-            //If there is only one operation
-            if(line.length == 2){
-                return varList.notVariable(line[0]);
-            }
-            //If there is more operation
-            if(line.length >= 3) {
-                line[0] = varList.notVariable(line[0]);
-                return nextOperation(line);
-            }
-        }
-        //If not is applied to an operation block
-        if(line[0].equals("(")){
-            return ;
+    /**
+     * Takes a line of command in argument and if there is a mathematical computation between the () to do then return the result.
+     * @param line The line of command.
+     * @return Return the result of the operation between the () so the boolean comparison can be done after.
+     * @throws InvalidInputException
+     */
+    public double nextOperationMath(String[] line) throws InvalidInputException{
+        switch (line[1]){
+            case "+":
+                return addMath(line[0], subArray(line, 2, line.length-1));
+            case "-":
+                return substractionMath(line[0], subArray(line, 2, line.length-1));
+            case "/":
+                return divisionMath(line[0], subArray(line, 2, line.length-1));
+            case "*":
+                return multiplicationMath(line[0], subArray(line, 2, line.length-1));
+            case ")":
+                return valueMath(line[0]);
+            default:
+                throw new InvalidInputException("The symbol entered is not recognised");
         }
     }
 
-    public boolean andVariable(String var1, String[] line){
-        
+    /**
+     * Verify if the entry before and after the NOT is true or false.
+     * @param line The instruction remaining at the right of NOT
+     * @return
+     */
+    public boolean notVariable(String[] line) throws InvalidInputException{
+        try {
+            if (varList.isVariable(line[0])) {
+                //If there is only one operation
+                if (line.length == 1) {
+                    return varList.notVariable(line[0]);
+                }
+                //If there is more operation
+                if (line.length >= 2) {
+                    line[0] = String.valueOf(!varList.getVariableBool(line[0]));
+                    line[0].toUpperCase();
+                    return nextOperation(line);
+                }
+            }
+            //If not is applied to an operation block
+            if (line[0].equals("(")) {
+                return !nextOperation(subArray(line, 1, line.length - 1));
+            }
+        }
     }
 
-    public boolean orVariable(String var1, String[] line){}
+    /**
+     * Verify if the entry before and after the AND is true or false.
+     * @param var1 String variable name at the left of AND
+     * @param line The instruction remaining at the right of AND
+     * @return
+     * @throws InvalidInputException
+     */
+    public boolean andVariable(String var1, String[] line) throws InvalidInputException{
+        try {
+            if(varList.isVariable(line[0])){
+                //If there is only one operation
+                if(line.length == 1){
+                    return varList.andVariable(var1,line[0]);
+                }
+                if(line.length >= 2){
+                    line[0] = String.valueOf(varList.andVariable(var1,line[0]));
+                    line[0].toUpperCase();
+                    return nextOperation(line);
+                }
+            }
+            if(line[0].equals("(")){
+                return nextOperation(subArray(line,1,line.length-1));
+            }
+        }
+        catch (VariableDoesNotExistException e){
+            System.out.println("A variable given does not exist");
+        }
+        catch (InvalidVariableTypeException e){
+            System.out.println("A variable is not of expected type");
+        }
+        return false;
+    }
 
-    public boolean ifVariable(String[] line){
+    /**
+     * Verify if the entry before and after the OR is true or false.
+     * @param var1 String variable name at the left of OR
+     * @param line The instruction remaining at the right of OR
+     * @return
+     * @throws InvalidInputException
+     */
+    public boolean orVariable(String var1, String[] line) throws InvalidInputException{
+        try{
+            if(varList.isVariable(line[0])){
+                //If there is only one variable
+                if(line.length == 1){
+                    return varList.orVariable(var1, line[0]);
+                }
+                //If there is more content
+                if(line.length >= 2){
+                    line[0] = String.valueOf(varList.orVariable(var1, line[0])).toUpperCase();
+                    return nextOperation(line);
+                }
+            }
+            if(line[0].equals("(")){
+                return varList.orVariable(var1, String.valueOf(nextOperation(subArray(line, 1, line.length-1))).toUpperCase());
+            }
+        }
+        catch(VariableDoesNotExistException e){
+            System.out.println("A variable given does not exist");
+        }
+        catch(InvalidVariableTypeException e){
+            System.out.println("A variable is not of expected type");
+        }
+        return false;
+    }
+
+    /**
+     * Verify if the entry before and after the == is true or false.
+     * @param var1 String variable name at the left of ==
+     * @param line The instruction remaining at the right of ==
+     * @return
+     * @throws InvalidInputException
+     */
+    public boolean equalVariable(String var1, String[] line) throws InvalidInputException{
+        try {
+            if(varList.isVariable(line[0])){
+                //If there is only one operation
+                if(line.length == 1){
+                    return varList.equalVariable(var1,line[0]);
+                }
+                if(line.length >= 2){
+                    line[0] = String.valueOf(varList.equalVariable(var1,line[0]));
+                    line[0].toUpperCase();
+                    return nextOperation(line);
+                }
+            }
+            if(line[0].equals("(")){
+                return varList.equalVariable(var1, String.valueOf(nextOperationMath(subArray(line, 1, line.length-1))));
+            }
+        }
+        catch (VariableDoesNotExistException e){
+            System.out.println("A variable given does not exist");
+        }
+        catch (InvalidVariableTypeException e){
+            System.out.println("A variable is not of expected type");
+        }
+        return false;
+    }
+
+    /**
+     * Verify if the entry before and after the > is true or false.
+     * @param var1 String variable name at the left of >
+     * @param line The instruction remaining at the right of >
+     * @return
+     * @throws InvalidInputException
+     */
+    public boolean greaterThanVariable(String var1, String[] line) throws InvalidInputException{
+        try {
+            if(varList.isVariable(line[0])){
+                //If there is only one operation
+                if(line.length == 1){
+                    return varList.greaterThan(var1,line[0]);
+                }
+                if(line.length >= 2){
+                    line[0] = String.valueOf(varList.greaterThan(var1,line[0]));
+                    line[0].toUpperCase();
+                    return nextOperation(line);
+                }
+            }
+            if(line[0].equals("(")){
+                return varList.greaterThan(var1, String.valueOf(nextOperationMath(subArray(line, 1, line.length-1))));
+            }
+        }
+        catch (VariableDoesNotExistException e){
+            System.out.println("A variable given does not exist");
+        }
+        catch (InvalidVariableTypeException e){
+            System.out.println("A variable is not of expected type");
+        }
+        return false;
+    }
+
+    /**
+     * Verify if the entry before and after the >= is true or false.
+     * @param var1 String variable name at the left of >=
+     * @param line The instruction remaining at the right of >=
+     * @return
+     * @throws InvalidInputException
+     */
+    public boolean greaterThanOrEqualVariable(String var1, String[] line) throws InvalidInputException{
         try {
             //if first element is a variable
             if(varList.isVariable(line[0])){

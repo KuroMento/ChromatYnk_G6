@@ -1,8 +1,12 @@
 package chromatynk.chromatynk_g6;
 
+import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;
+import chromatynk.chromatynk_g6.exceptions.OutOfRangeException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorAlreadyExistingException;
+import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.MimicStackEmptyException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.MissingCursorException;
+import javafx.scene.paint.Color;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -108,9 +112,12 @@ public class CursorManager {
      * @param id The id of the cursor to remove
      * @throws <code>MissingCursorException</code>
      */
-    public void removeCursor(long id) throws MissingCursorException {
+    public void removeCursor(long id) throws MissingCursorException, CursorException {
         if( !cursorExist(id) ){
             throw new MissingCursorException("Cursor does not exist anymore!");
+        }
+        if( id == getSelectedCursorId()){
+            throw new CursorException("The cursor n°" + id + " is selected and cannot be removed");
         }
         this.cursors.remove(id,this.cursors.get(id));
     }
@@ -119,12 +126,19 @@ public class CursorManager {
      * Allows to select a cursor within the existing cursors
      * @param id The identification of the wanted cursor
      * @throws <code>MissingCursorException</code>
+     * @throws <code>CursorException</code>
      */
-    public void selectCursor(long id) throws MissingCursorException{
+    public void selectCursor(long id) throws MissingCursorException, CursorException {
         if( !cursorExist(id) ){
             throw new MissingCursorException("This cursor does not exist.");
         }
-        setSelectedCursorId(id);
+        // Trying to select another cursor as the current one has been duplicated
+        if( !getSelectedCursor().getMimics().isEmpty() && id != getSelectedCursorId()){
+            throw new CursorException("The cursor is being used in a MIMIC/MIRROR block");
+        }
+        getSelectedCursor().hide(); // hiding the current cursor
+        setSelectedCursorId(id); // selecting the new cursor
+        getSelectedCursor().show(); // showing the newly selected cursor
     }
 
 
@@ -161,4 +175,126 @@ public class CursorManager {
             this.temporaryCursors.remove(deleteId, this.temporaryCursors.get(key));
         }
     }
+
+    /**
+     * Delete every single temporary cursors created by a MIMIC/MIRROR instruction.
+     * @throws <code>MimicStackEmptyException</code>
+     */
+    public void deleteAllMimics() throws MimicStackEmptyException {
+        while( !(getSelectedCursor().getMimics().isEmpty()) ){
+            deleteMimics();
+        }
+    }
+
+    // The methods used by the Interpreter to modify cursors properties.
+    /**
+     * Move forward every active cursor (Selected and Temporary).
+     * @param value The distance to move forward
+     * @throws <code>NegativeNumberException</code>
+     */
+    public void forward(int value) throws NegativeNumberException {
+        getSelectedCursor().forward(value);
+        for(long key : this.temporaryCursors.keySet()){
+            this.temporaryCursors.get(key).forward(value);
+        }
+    }
+
+    /**
+     * Move backward every active cursor (Selected and Temporary).
+     * @param value The distance to move backward
+     * @throws <code>NegativeNumberException</code>
+     */
+    public void backward(int value) throws NegativeNumberException {
+        getSelectedCursor().backward(value);
+        for(long key : this.temporaryCursors.keySet()){
+            this.temporaryCursors.get(key).backward(value);
+        }
+    }
+
+    /**
+     * Rotates every active cursors of the amount passed in argument.
+     * @param value Corresponds to the amount to add in degrees
+     */
+    public void turn(float value){
+        getSelectedCursor().rotateCursor(value);
+        for(long key : this.temporaryCursors.keySet()){
+            this.temporaryCursors.get(key).rotateCursor(value);
+        }
+    }
+
+    /**
+     * Add to every cursor's position the amount passed in the parameters. (i.e. Moves the cursor based on its relative position)
+     * @param x value to add on the horizontal axis
+     * @param y value to add on the vertical axis
+     * @throws <code>NegativeNumberException</code>
+     */
+    public void move(int x, int y) throws NegativeNumberException {
+        getSelectedCursor().moveCursor(x,y);
+        for(long key : this.temporaryCursors.keySet()){
+            this.temporaryCursors.get(key).moveCursor(x,y);
+        }
+    }
+
+    /**
+     * Hides the selected cursor
+     */
+    public void hide(){
+        getSelectedCursor().hide();
+    }
+
+    /**
+     * Shows the selected cursor
+     */
+    public void show(){
+        getSelectedCursor().show();
+    }
+
+    /**
+     * Set the opacity of every active cursor.
+     * @param value The new opacity value
+     * @throws <code>OutOfRangeException</code>
+     */
+    public void press(float value) throws OutOfRangeException {
+        getSelectedCursor().setOpacity(value);
+        for(long key : this.temporaryCursors.keySet()){
+            this.temporaryCursors.get(key).setOpacity(value);
+        }
+    }
+
+    /**
+     * Set the thickness of every active cursor.
+     * @param value The new thickness value
+     * @throws <code>NegativeNumberException</code>
+     */
+    public void thick(float value) throws NegativeNumberException {
+        getSelectedCursor().setThickness(value);
+        for(long key : this.temporaryCursors.keySet()){
+            this.temporaryCursors.get(key).setThickness(value);
+        }
+    }
+
+    /**
+     * Set the color of every active cursor.
+     * @param color The new color of the cursors
+     */
+    public void color(Color color){
+        getSelectedCursor().setColor(color);
+        for(long key : this.temporaryCursors.keySet()){
+            this.temporaryCursors.get(key).setColor(color);
+        }
+    }
+
+    /**
+     * The active cursors look at the point whose position is given with the parameters.
+     * @param x the position on the horizontal axis
+     * @param y the position on the vertical axis
+     */
+    public void lookAt(int x, int y){
+        getSelectedCursor().lookAt(x,y);
+        for(long key : this.temporaryCursors.keySet()){
+            // TODO: lookAtMirror if needed.
+            this.temporaryCursors.get(key).lookAt(x,y);
+        }
+    }
+
 }
