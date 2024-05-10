@@ -26,4 +26,12 @@ public final class VariableDOUBLE extends Variable{
     public void setValue(double value){
         this.value = value;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if( obj instanceof VariableDOUBLE){
+            return this.value == ((VariableDOUBLE) obj).value;
+        }
+        return false;
+    }
 }

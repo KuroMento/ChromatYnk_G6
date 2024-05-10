@@ -55,6 +55,70 @@ public class VariableManager {
         return false;
     }
 
+    public boolean isSameType(Variable var1, Variable var2){
+        if(var1 instanceof VariableSTR && var2 instanceof VariableSTR){
+            return true;
+        }
+        if(var1 instanceof VariableDOUBLE && var2 instanceof VariableDOUBLE){
+            return true;
+        }
+        if(var1 instanceof VariableBOOL && var2 instanceof VariableBOOL){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * get if name1 and name2 variable are equal
+     * @param name1 String name of the variable 1
+     * @param name2 String name of the variable 2
+     * @return boolean true if name1 and name2 are equal
+     * @throws VariableDoesNotExistException the variable name does not exist
+     * @throws InvalidVariableTypeException the variable name1 and name2 are not of the same type
+     */
+    public boolean equalVariable(String name1, String name2) throws VariableDoesNotExistException, InvalidVariableTypeException {
+        //If one of the variable does not exist
+        if (!variableArray.containsKey(name1))
+            throw new VariableDoesNotExistException("The variable " + name1 + " does not exist");
+        if (!variableArray.containsKey(name2))
+            throw new VariableDoesNotExistException("The variable " + name2 + " does not exist");
+        //If the variables exist
+        Variable var1 = variableArray.get(name1);
+        Variable var2 = variableArray.get(name1);
+        //If the variable are not of same type
+        if (!isSameType(var1, var2)) {
+            throw new InvalidVariableTypeException("The variable " + name1 + " is not of same type of variable " + name2);
+        }
+        return var1.equals(var2);
+    }
+
+    /**
+     * Check if name1 variable is greater than name2 variable
+     * @param name1 String name of the variable 1
+     * @param name2 String name of the variable 2
+     * @return boolean true if name1 > name2
+     * @throws VariableDoesNotExistException the variable name does not exist
+     * @throws InvalidVariableTypeException
+     */
+    public boolean greaterThan(String name1, String name2) throws VariableDoesNotExistException, InvalidVariableTypeException {
+        //If one of the variable does not exist
+        if (!variableArray.containsKey(name1))
+            throw new VariableDoesNotExistException("The variable " + name1 + " does not exist");
+        if (!variableArray.containsKey(name2))
+            throw new VariableDoesNotExistException("The variable " + name2 + " does not exist");
+        //If the variables exist
+        Variable var1 = variableArray.get(name1);
+        Variable var2 = variableArray.get(name2);
+
+        if (!isSameType(var1, var2)) {
+            throw new InvalidVariableTypeException("The variable " + name1 + " is not of same type of variable " + name2);
+        }
+        if(var1 instanceof VariableDOUBLE){
+            return ((VariableDOUBLE) var1).getValue() > ((VariableDOUBLE) var2).getValue();
+        }
+        return false;
+    }
+
     /**
      * Add the variable name of String value
      * @param name String name of the variable

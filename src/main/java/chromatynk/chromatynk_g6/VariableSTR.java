@@ -19,4 +19,12 @@ public final class VariableSTR extends Variable{
     public void setValue(String value){
         this.value = value;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof VariableSTR){
+            return this.value.equals(((VariableSTR) obj).getValue());
+        }
+        return false;
+    }
 }

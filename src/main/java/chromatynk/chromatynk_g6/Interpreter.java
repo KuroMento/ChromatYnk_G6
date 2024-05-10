@@ -132,20 +132,7 @@ public class Interpreter {
         return false;
     }
 
-    /**
-     * Searches for the max value within an array of float.
-     * @param args the array of float to search from
-     * @return the maw value of the array
-     */
-    public static float MaxValue(float[] args){
-        float max = args[0];
-        for(int i=1;i<args.length;i++){
-            if(max<args[i]){
-                max=args[i];
-            }
-        }
-        return max;
-    }
+
 
     /**
      * Check if the color is on the format 0-1 or 0-255
@@ -162,10 +149,13 @@ public class Interpreter {
     return true;
     }
 
+    /**
+     * Transform float colors in RGB colors
+     * @param args colors to check
+     * @return  colors between 0 and 255
+     * @throws OutOfRangeException the entered are not a color
+     */
     public static int[] intColor(String[] args) throws  OutOfRangeException{
-        float red = Float.parseFloat(args[1]);
-        float green = Float.parseFloat(args[2]);
-        float blue = Float.parseFloat(args[3]);
         int[] valRGB = new int[3];
         for(int i = 1; i < args.length; i++) {
             if(isFloatColor(args[i])){
@@ -273,9 +263,8 @@ public class Interpreter {
                             }
                         }
                         if(args.length == 4){
-
-
-
+                                int[] RGB = intColor(args);
+                                cursorManager.getSelectedCursor().setColor(Color.rgb(RGB[1], RGB[2], RGB[3]));
                         }
                        break;
 

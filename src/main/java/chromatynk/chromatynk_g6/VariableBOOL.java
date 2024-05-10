@@ -19,4 +19,12 @@ public final class VariableBOOL extends Variable{
     public void setValue(boolean value){
         this.value = value;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof VariableBOOL){
+            return this.value == ((VariableBOOL) obj).value;
+        }
+        return false;
+    }
 }
