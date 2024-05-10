@@ -18,13 +18,15 @@ public class VariableManager {
      */
     private final String[] banList = {"FWD", "BWD", "TURN", "MOV", "POS", "HIDE", "SHOW", "PRESS", "COLOR", "THICK",
             "LOOKAT", "CURSOR", "SELECT", "REMOVE", "IF", "FOR", "WHILE", "MIMIC", "MIRROR", "NUM", "STR", "BOOL",
-            "DEL", "FROM", "TO", "STEP", "AND", "OR", "NOT"};
+            "DEL", "FROM", "TO", "STEP", "AND", "OR", "NOT", "TRUE", "FALSE"};
 
     /**
      * Constructor of CommandVariable
      */
     public VariableManager(){
         this.variableArray = new HashMap<>();
+        variableArray.put("TRUE", new VariableBOOL(true));
+        variableArray.put("FALSE", new VariableBOOL(false));
     }
 
     /**
@@ -78,6 +80,23 @@ public class VariableManager {
     }
 
     /**
+     * Give if name is a double value
+     * @param val String to test
+     * @return boolean true if val is a double value
+     */
+    public boolean isDoubleValue(String val){
+        try
+        {
+            Double.parseDouble(val);
+        }
+        catch(NumberFormatException e)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * get if name1 and name2 variable are equal
      * @param name1 String name of the variable 1
      * @param name2 String name of the variable 2
@@ -91,18 +110,35 @@ public class VariableManager {
             throw new VariableDoesNotExistException("The variable " + name1 + " does not exist");
         if (!variableArray.containsKey(name2))
             throw new VariableDoesNotExistException("The variable " + name2 + " does not exist");
-        //If the variables exist
-        Variable var1 = variableArray.get(name1);
-        Variable var2 = variableArray.get(name1);
-        //If the variable are not of same type
-        if (!isSameType(var1, var2)) {
-            throw new InvalidVariableTypeException("The variable " + name1 + " is not of same type of variable " + name2);
+        //If the variable name1 exist
+        if(variableArray.containsKey(name1)){
+            Variable var1 = variableArray.get(name1);
+            //If the variable name2 exist
+            if(variableArray.containsKey(name2)) {
+                Variable var2 = variableArray.get(name2);
+                return var1.equals(var2);
+            }
+            //If name2 is a value
+            else{
+                return name2.equals(var1.toString());
+            }
         }
-        return var1.equals(var2);
+        //If name1 is a double value
+        else{
+            //If the variable name2 exist
+            if(variableArray.containsKey(name2)) {
+                Variable var2 = variableArray.get(name2);
+                return name1.equals(var2.toString());
+            }
+            //If name2 is a double value
+            else{
+                return name1.equals(name2);
+            }
+        }
     }
 
     /**
-     * Check if name1 variable is greater than name2 variable
+     * Check if name1 variable or value is greater than name2 variable or value
      * @param name1 String name of the variable 1
      * @param name2 String name of the variable 2
      * @return boolean true if name1 > name2
@@ -111,21 +147,35 @@ public class VariableManager {
      */
     public boolean greaterThan(String name1, String name2) throws VariableDoesNotExistException, InvalidVariableTypeException {
         //If one of the variable does not exist
-        if (!variableArray.containsKey(name1))
+        if (!variableArray.containsKey(name1) || !isDoubleValue(name1))
             throw new VariableDoesNotExistException("The variable " + name1 + " does not exist");
-        if (!variableArray.containsKey(name2))
+        if (!variableArray.containsKey(name2) || !isDoubleValue(name2))
             throw new VariableDoesNotExistException("The variable " + name2 + " does not exist");
-        //If the variables exist
-        Variable var1 = variableArray.get(name1);
-        Variable var2 = variableArray.get(name2);
-
-        if (!isSameType(var1, var2)) {
-            throw new InvalidVariableTypeException("The variable " + name1 + " is not of same type of variable " + name2);
+        //If the variable name1 exist
+        if(variableArray.containsKey(name1)){
+            Variable var1 = variableArray.get(name1);
+            //If the variable name2 exist
+            if(variableArray.containsKey(name2)) {
+                Variable var2 = variableArray.get(name2);
+                return ((VariableDOUBLE) var1).getValue() > ((VariableDOUBLE) var2).getValue();
+            }
+            //If name2 is a double value
+            else{
+                return ((VariableDOUBLE) var1).getValue() > Double.parseDouble(name2);
+            }
         }
-        if(var1 instanceof VariableDOUBLE){
-            return ((VariableDOUBLE) var1).getValue() > ((VariableDOUBLE) var2).getValue();
+        //If name1 is a double value
+        else{
+            //If the variable name2 exist
+            if(variableArray.containsKey(name2)) {
+                Variable var2 = variableArray.get(name2);
+                return (Double.parseDouble(name1) > ((VariableDOUBLE) var2).getValue());
+            }
+            //If name2 is a double value
+            else{
+                return (Double.parseDouble(name1) > Double.parseDouble(name2));
+            }
         }
-        return false;
     }
 
     /**
@@ -381,6 +431,113 @@ public class VariableManager {
             throw new InvalidVariableTypeException("The variable " + name + " is not a boolean variable");
         }
         return !((VariableBOOL) var).getValue();
+    }
+
+    /**
+     * Add two double variable
+     * @param name1 String name of the first variable
+     * @param name2 String name of the second variable
+     * @return name1 + name2
+     * @throws VariableDoesNotExistException the variable does not exist
+     * @throws InvalidVariableTypeException the variable name is not a boolean variable
+     */
+    public double addMath(String name1, String name2) throws VariableDoesNotExistException, InvalidVariableTypeException{
+        //If one of the variable does not exist
+        if(!variableArray.containsKey(name1)) throw new VariableDoesNotExistException("The variable " + name1 + " does not exist");
+        if(!variableArray.containsKey(name2)) throw new VariableDoesNotExistException("The variable " + name2 + " does not exist");
+        //If the variables exist
+        Variable var1 = variableArray.get(name1);
+        Variable var2 = variableArray.get(name2);
+        //If the variable 1 is not boolean
+        if(!(var1 instanceof VariableDOUBLE)){
+            throw new InvalidVariableTypeException("The variable " + name1 + " is not a double variable");
+        }
+        //If the variable 2 is not boolean
+        if(!(var2 instanceof VariableDOUBLE)){
+            throw new InvalidVariableTypeException("The variable " + name2 + " is not a double variable");
+        }
+
+        return (((VariableDOUBLE) var1).getValue() + ((VariableDOUBLE) var2).getValue());
+    }
+
+    /**
+     * Substract two double variable
+     * @param name1 String name of the first variable
+     * @param name2 String name of the second variable
+     * @return name1 - name2
+     * @throws VariableDoesNotExistException the variable does not exist
+     * @throws InvalidVariableTypeException the variable name is not a boolean variable
+     */
+    public double substractMath(String name1, String name2) throws VariableDoesNotExistException, InvalidVariableTypeException{
+        //If one of the variable does not exist
+        if(!variableArray.containsKey(name1)) throw new VariableDoesNotExistException("The variable " + name1 + " does not exist");
+        if(!variableArray.containsKey(name2)) throw new VariableDoesNotExistException("The variable " + name2 + " does not exist");
+        //If the variables exist
+        Variable var1 = variableArray.get(name1);
+        Variable var2 = variableArray.get(name2);
+        //If the variable 1 is not boolean
+        if(!(var1 instanceof VariableDOUBLE)){
+            throw new InvalidVariableTypeException("The variable " + name1 + " is not a double variable");
+        }
+        //If the variable 2 is not boolean
+        if(!(var2 instanceof VariableDOUBLE)){
+            throw new InvalidVariableTypeException("The variable " + name2 + " is not a double variable");
+        }
+
+        return (((VariableDOUBLE) var1).getValue() - ((VariableDOUBLE) var2).getValue());
+    }
+
+    /**
+     * Multiply two double variable
+     * @param name1 String name of the first variable
+     * @param name2 String name of the second variable
+     * @return name1 * name2
+     * @throws VariableDoesNotExistException the variable does not exist
+     * @throws InvalidVariableTypeException the variable name is not a boolean variable
+     */
+    public double multiplyMath(String name1, String name2) throws VariableDoesNotExistException, InvalidVariableTypeException{
+        //If one of the variable does not exist
+        if(!variableArray.containsKey(name1)) throw new VariableDoesNotExistException("The variable " + name1 + " does not exist");
+        if(!variableArray.containsKey(name2)) throw new VariableDoesNotExistException("The variable " + name2 + " does not exist");
+        //If the variables exist
+        Variable var1 = variableArray.get(name1);
+        Variable var2 = variableArray.get(name2);
+        //If the variable 1 is not boolean
+        if(!(var1 instanceof VariableDOUBLE)){
+            throw new InvalidVariableTypeException("The variable " + name1 + " is not a double variable");
+        }
+        //If the variable 2 is not boolean
+        if(!(var2 instanceof VariableDOUBLE)){
+            throw new InvalidVariableTypeException("The variable " + name2 + " is not a double variable");
+        }
+        return (((VariableDOUBLE) var1).getValue() * ((VariableDOUBLE) var2).getValue());
+    }
+
+    /**
+     * Divide two double variable
+     * @param name1 String name of the first variable
+     * @param name2 String name of the second variable
+     * @return name1 / name2
+     * @throws VariableDoesNotExistException the variable does not exist
+     * @throws InvalidVariableTypeException the variable name is not a boolean variable
+     */
+    public double divideMath(String name1, String name2) throws VariableDoesNotExistException, InvalidVariableTypeException{
+        //If one of the variable does not exist
+        if(!variableArray.containsKey(name1)) throw new VariableDoesNotExistException("The variable " + name1 + " does not exist");
+        if(!variableArray.containsKey(name2)) throw new VariableDoesNotExistException("The variable " + name2 + " does not exist");
+        //If the variables exist
+        Variable var1 = variableArray.get(name1);
+        Variable var2 = variableArray.get(name2);
+        //If the variable 1 is not boolean
+        if(!(var1 instanceof VariableDOUBLE)){
+            throw new InvalidVariableTypeException("The variable " + name1 + " is not a double variable");
+        }
+        //If the variable 2 is not boolean
+        if(!(var2 instanceof VariableDOUBLE)){
+            throw new InvalidVariableTypeException("The variable " + name2 + " is not a double variable");
+        }
+
+        return (((VariableDOUBLE) var1).getValue() / ((VariableDOUBLE) var2).getValue());
     }
 }
 

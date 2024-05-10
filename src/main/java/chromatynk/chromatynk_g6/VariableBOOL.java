@@ -27,4 +27,9 @@ public final class VariableBOOL extends Variable{
         }
         return false;
     }
+
+    @Override
+    public String toString(){
+        return(String.valueOf(this.value).toUpperCase());
+    }
 }

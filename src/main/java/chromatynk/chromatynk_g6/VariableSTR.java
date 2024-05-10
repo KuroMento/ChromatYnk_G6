@@ -27,4 +27,9 @@ public final class VariableSTR extends Variable{
         }
         return false;
     }
+
+    @Override
+    public String toString(){
+        return(this.value);
+    }
 }

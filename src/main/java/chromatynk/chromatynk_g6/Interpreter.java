@@ -509,6 +509,13 @@ public class Interpreter {
                 return !nextOperation(subArray(line, 1, line.length - 1));
             }
         }
+        catch(VariableDoesNotExistException e){
+            System.out.println("A variable given does not exist");
+        }
+        catch(InvalidVariableTypeException e){
+            System.out.println("A variable is not of expected type");
+        }
+        return false;
     }
 
     /**
@@ -652,25 +659,229 @@ public class Interpreter {
      */
     public boolean greaterThanOrEqualVariable(String var1, String[] line) throws InvalidInputException{
         try {
-            //if first element is a variable
             if(varList.isVariable(line[0])){
-                //if the line contains more than just the variable
-                if(line.length >= 2) {
-
+                //If there is only one operation
+                if(line.length == 1){
+                    return varList.greaterThan(var1,line[0]) || varList.equalVariable(var1,line[0]);
                 }
-                //if the line contains only the variable
-                return varList.getVariableBool(line[0]);
+                if(line.length >= 2){
+                    line[0] = String.valueOf(varList.greaterThan(var1,line[0]) || varList.equalVariable(var1,line[0]));
+                    line[0].toUpperCase();
+                    return nextOperation(line);
+                }
             }
+            if(line[0].equals("(")){
+                return varList.greaterThan(var1, String.valueOf(nextOperationMath(subArray(line, 1, line.length-1))));
             }
+        }
+        catch (VariableDoesNotExistException e){
+            System.out.println("A variable given does not exist");
+        }
+        catch (InvalidVariableTypeException e){
+            System.out.println("A variable is not of expected type");
+        }
+        return false;
+    }
 
+    /**
+     * Add two string arguments as double
+     * @param var1 The first element
+     * @param line The instruction remaining at the right of AND
+     * @return
+     */
+    public double addMath(String var1, String[] line) throws InvalidInputException{
+        try {
+            //if var1 is a variable
+            if (varList.isVariable(var1)) {
+                //if line[0] is a second variable
+                if (varList.isVariable(line[0])) {
+                    line[0] = String.valueOf(varList.addMath(var1, line[0])); // 1:variable 2:variable
+                    return nextOperationMath(line);
+                } else {
+                    line[0] = String.valueOf(varList.getVariableDouble(var1) + Integer.valueOf(line[0])); // 1:variable 2:value
+                    return nextOperationMath(line);
+                }
+            } else {
+                //if line[0] is a variable
+                if (varList.isVariable(line[0])) {
+                    line[0] = String.valueOf(Integer.valueOf(var1) + varList.getVariableDouble(line[0])); //1: value 2 : variable
+                    return nextOperationMath(line);
+                } else {
+                    line[0] = String.valueOf(Integer.valueOf(var1) + Integer.valueOf(line[0])); // 1:value 2:value
+                    return nextOperationMath(line);
+                }
+            }
         }
-        catch(ArrayIndexOutOfBoundsException e){
-            System.out.println("Unexpected argument in command line + " + line.toString());
+        catch(InvalidInputException e){
+            System.out.println("The command is not recognised");
+        }
+        catch(VariableDoesNotExistException e){
+            System.out.println("A variable does not exist in line " + line);
+        }
+        catch(InvalidVariableTypeException e){
+            System.out.println("A variable is not of expected double type");
+        }
+        return 0;
+    }
+
+    /**
+     * Substract two string arguments as double
+     * @param var1 The first element
+     * @param line The instruction remaining at the right of AND
+     * @return
+     */
+    public double substractionMath(String var1, String[] line) throws InvalidInputException{
+        try {
+            //if var1 is a variable
+            if (varList.isVariable(var1)) {
+                //if line[0] is a second variable
+                if (varList.isVariable(line[0])) {
+                    line[0] = String.valueOf(varList.substractMath(var1, line[0]));
+                    return nextOperationMath(line);
+                } else {
+                    line[0] = String.valueOf(varList.getVariableDouble(var1) - Integer.valueOf(line[0]));
+                    return nextOperationMath(line);
+                }
+            } else {
+                //if line[0] is a variable
+                if (varList.isVariable(line[0])) {
+                    line[0] = String.valueOf(Integer.valueOf(var1) - varList.getVariableDouble(line[0]));
+                    return nextOperationMath(line);
+                } else {
+                    line[0] = String.valueOf(Integer.valueOf(var1) - Integer.valueOf(line[0]));
+                    return nextOperationMath(line);
+                }
+            }
+        }
+        catch(InvalidInputException e){
+            System.out.println("The command is not recognised");
+        }
+        catch(VariableDoesNotExistException e){
+            System.out.println("A variable does not exist in line " + line);
+        }
+        catch(InvalidVariableTypeException e){
+            System.out.println("A variable is not of expected double type");
+        }
+        return 0;
+    }
+
+    /**
+     * Multiply two string arguments as double
+     * @param var1 The first element
+     * @param line The instruction remaining at the right of AND
+     * @return
+     */
+    public double multiplicationMath(String var1, String[] line) throws InvalidInputException{
+        try {
+            //if var1 is a variable
+            if (varList.isVariable(var1)) {
+                //if line[0] is a second variable
+                if (varList.isVariable(line[0])) {
+                    line[0] = String.valueOf(varList.multiplyMath(var1, line[0]));
+                    return nextOperationMath(line);
+                } else {
+                    line[0] = String.valueOf(varList.getVariableDouble(var1) * Integer.valueOf(line[0]));
+                    return nextOperationMath(line);
+                }
+            } else {
+                //if line[0] is a variable
+                if (varList.isVariable(line[0])) {
+                    line[0] = String.valueOf(Integer.valueOf(var1) * varList.getVariableDouble(line[0]));
+                    return nextOperationMath(line);
+                } else {
+                    line[0] = String.valueOf(Integer.valueOf(var1) * Integer.valueOf(line[0]));
+                    return nextOperationMath(line);
+                }
+            }
+        }
+        catch(InvalidInputException e){
+            System.out.println("The command is not recognised");
+        }
+        catch(VariableDoesNotExistException e){
+            System.out.println("A variable does not exist in line " + line);
+        }
+        catch(InvalidVariableTypeException e){
+            System.out.println("A variable is not of expected double type");
+        }
+        return 0;
+    }
+
+    /**
+     * Divide two string arguments as double
+     * @param var1 The first element
+     * @param line The instruction remaining at the right of AND
+     * @return
+     */
+    public double divisionMath(String var1, String[] line) throws InvalidInputException{
+        try {
+            //if var1 is a variable
+            if (varList.isVariable(var1)) {
+                //if line[0] is a second variable
+                if (varList.isVariable(line[0])) {
+                    line[0] = String.valueOf(varList.divideMath(var1, line[0]));
+                    return nextOperationMath(line);
+                } else {
+                    line[0] = String.valueOf(varList.getVariableDouble(var1) / Integer.valueOf(line[0]));
+                    return nextOperationMath(line);
+                }
+            } else {
+                //if line[0] is a variable
+                if (varList.isVariable(line[0])) {
+                    line[0] = String.valueOf(Integer.valueOf(var1) / varList.getVariableDouble(line[0]));
+                    return nextOperationMath(line);
+                } else {
+                    line[0] = String.valueOf(Integer.valueOf(var1) / Integer.valueOf(line[0]));
+                    return nextOperationMath(line);
+                }
+            }
+        }
+        catch(InvalidInputException e){
+            System.out.println("The command is not recognised");
+        }
+        catch(VariableDoesNotExistException e){
+            System.out.println("A variable does not exist in line " + line);
+        }
+        catch(InvalidVariableTypeException e){
+            System.out.println("A variable is not of expected double type");
+        }
+        return 0;
+    }
+
+    /**
+     * Get the double value of a string
+     * @param name String name of the variable or value
+     * @return double value of name
+     */
+    public double valueMath(String name){
+        try {
+            if (varList.isVariable(name)) {
+                return varList.getVariableDouble(name);
+            }
+            return Double.valueOf(name);
+        }
+        catch(VariableDoesNotExistException e){
+            System.out.println("Variable " + name + " does not exist");
+        }
+        catch(InvalidVariableTypeException e){
+            System.out.println("Variable " + name + " is not of double type");
+        }
+        return 0;
+    }
+
+    /**
+     * Get the boolean value of a string
+     * @param name String name of the variable or value
+     * @return boolean value of name
+     */
+    public boolean valueBool(String name){
+        try {
+            return varList.getVariableBool(name);
         } catch (InvalidVariableTypeException e) {
-            throw new RuntimeException(e);
+            System.out.println("Variable " + name + " is not of boolean type");
         } catch (VariableDoesNotExistException e) {
-            throw new RuntimeException(e);
+            System.out.println("Variable " + name + " does not exist");
         }
+        return false;
     }
 
     public void add(String command){

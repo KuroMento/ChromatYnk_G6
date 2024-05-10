@@ -34,4 +34,9 @@ public final class VariableDOUBLE extends Variable{
         }
         return false;
     }
+
+    @Override
+    public String toString(){
+        return(String.valueOf(this.value));
+    }
 }
