@@ -42,6 +42,15 @@ public class VariableManager {
     }
 
     /**
+     * Check if name is a variable
+     * @param name String name of variable
+     * @return boolean true if name is a variable
+     */
+    public boolean isVariable(String name){
+        return variableArray.containsKey(name);
+    }
+
+    /**
      * Return if name is an illegal variable name
      * @param name String name to verify
      * @return boolean true if name is illegal
@@ -365,7 +374,7 @@ public class VariableManager {
     public boolean notVariable(String name) throws VariableDoesNotExistException, InvalidVariableTypeException{
         //If the variable does not exist
         if(!variableArray.containsKey(name)) throw new VariableDoesNotExistException("The variable " + name + " does not exist");
-        //If the variables exist
+        //If the variable exist
         Variable var = variableArray.get(name);
         //If the variable is not boolean
         if(!(var instanceof VariableBOOL)){
@@ -374,3 +383,5 @@ public class VariableManager {
         return !((VariableBOOL) var).getValue();
     }
 }
+
+

@@ -397,11 +397,6 @@ public class Interpreter {
                        }
                        varList.delete(args[1]);
                         break;
-                   case "NOT" :
-                       if(args.length != 2){
-                           throw new InvalidNumberArgumentsException();
-                       }
-                       break;
                    default:
                        System.out.println("Command not found/Unknown command");
                        break;
@@ -409,28 +404,92 @@ public class Interpreter {
         }
     }
 
-    public boolean notVariable(String[] line){}
-/*
-    public boolean andVariable(String[] line){}
+    /**
+     * Get a subStringArray of line from start to end included
+     * @param line String[]
+     * @param start start of the new String[]
+     * @param end end of the new String[]
+     * @return the subarray of String from start to end
+     */
+    public static String[] subArray(String[] line, int start, int end){
+        String result = "";
+        for(int i=start; i<=end; i++){
+            result = result + line[i] + " ";
+        }
+        String[] args = result.split(" ");
+        return(args);
+    }
 
-    public boolean orVariable(String[] line){}*/
+    public boolean nextOperation(String[] line){
+        if(line[0] == "NOT"){
+            return notVariable(subArray(line, 1, line.length-1));
+        }
+        switch (line[1]) {
+            case "AND":
+                return andVariable(line[0], subArray(line, 2, line.length-1));
+                break;
+            case "OR":
+                return orVariable(line[0], subArray(line, 2, line.length-1));
+                break;
+            case "==":
+                break;
+            case "!=":
+                break;
+            case ">":
+                break;
+            case "<":
+                break;
+            case ">=":
+                break;
+            case "<=":
+                break;
+        }
+    }
+
+    public boolean notVariable(String[] line){
+        if(varList.isVariable(line[0])){
+            //If there is only one operation
+            if(line.length == 2){
+                return varList.notVariable(line[0]);
+            }
+            //If there is more operation
+            if(line.length >= 3) {
+                line[0] = varList.notVariable(line[0]);
+                return nextOperation(line);
+            }
+        }
+        //If not is applied to an operation block
+        if(line[0].equals("(")){
+            return ;
+        }
+    }
+
+    public boolean andVariable(String var1, String[] line){
+        
+    }
+
+    public boolean orVariable(String var1, String[] line){}
 
     public boolean ifVariable(String[] line){
-        if(line.length == 0){
-            return true;
-        }
         try {
-            if(line[0] == "NOT") {
-                return notVariable(line);
-            } else {
-                if (line[1] == "AND") {
+            //if first element is a variable
+            if(varList.isVariable(line[0])){
+                //if the line contains more than just the variable
+                if(line.length >= 2) {
+
                 }
-                if (line[1] == "OR") {
-                }
+                //if the line contains only the variable
+                return varList.getVariableBool(line[0]);
             }
+            }
+
         }
         catch(ArrayIndexOutOfBoundsException e){
             System.out.println("Unexpected argument in command line + " + line.toString());
+        } catch (InvalidVariableTypeException e) {
+            throw new RuntimeException(e);
+        } catch (VariableDoesNotExistException e) {
+            throw new RuntimeException(e);
         }
     }
 
