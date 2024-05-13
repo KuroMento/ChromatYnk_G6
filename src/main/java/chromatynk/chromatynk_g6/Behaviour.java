@@ -6,5 +6,12 @@ public enum Behaviour {
     ONEBYONETIMER(2);
 
     private final int index;
-    Behaviour(int index){ this.index = index;}
+
+    Behaviour(int index){
+        this.index = index;
+    }
+
+    public int getBehaviour(){
+        return this.index;
+    }
 }

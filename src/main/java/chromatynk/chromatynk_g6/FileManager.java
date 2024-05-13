@@ -1,8 +1,6 @@
 package chromatynk.chromatynk_g6;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class FileManager {
     /**

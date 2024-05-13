@@ -37,13 +37,6 @@ public class Interpreter {
     }
     
     // Getter/Setter
-    public Behaviour getBehaviour() {
-        return behaviour;
-    }
-
-    public void setBehaviour(Behaviour behaviour) {
-        this.behaviour = behaviour;
-    }
 
     public Queue<String> getInfo() {
         return instructions;
@@ -53,25 +46,10 @@ public class Interpreter {
         this.instructions = info;
     }
 
-    /**
-     * allows to read an imported script and to stock the lines in memory.
-     * @param path the path to the script.
-     */
-    public void read(String path) { //used to read an imported script
-        try {
-            FileReader fr = new FileReader(path);
-            BufferedReader br = new BufferedReader(fr);
-            String temp;
-            while (br.ready()) {
-                temp = br.readLine();
-                System.out.println(temp);
-                instructions.add(temp); //allows to stock entries in the history
-            }
-            br.close();
-            System.out.println();
-        } catch (Exception e) {
-            System.out.println("Erreur :" + e);
-        }
+
+
+    public Console getConsole(){
+        return this.console;
     }
 
     /**
@@ -724,7 +702,7 @@ public class Interpreter {
     }
 
     /**
-     * Substract two string arguments as double
+     * Subtract two string arguments as double
      * @param var1 The first element
      * @param line The instruction remaining at the right of AND
      * @return
