@@ -9,8 +9,6 @@ import chromatynk.chromatynk_g6.exceptions.variableExceptions.InvalidVariableTyp
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
 import javafx.scene.paint.Color;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.*;
 
 
@@ -451,10 +449,16 @@ public class Interpreter {
      * @return if the operation is true or false
      * @throws InvalidInputException A variable is not of expected type
      */
-    public boolean nextOperation(String[] line) throws InvalidInputException{
+    public boolean nextOperationBool(String[] line) throws InvalidInputException{
+        //if there is only one argument
+        if(line.length == 1){
+            return valueBool(line[0]);
+        }
+        //if the boolean operation start with not
         if(line[0].equals("NOT")){
             return notVariable(subArray(line, 1, line.length-1));
         }
+        //if an operation is the second object
         switch (line[1]) {
             case "AND":
                 return andVariable(line[0], subArray(line, 2, line.length-1));
@@ -518,12 +522,12 @@ public class Interpreter {
                 if (line.length >= 2) {
                     line[0] = String.valueOf(!varList.getVariableBool(line[0]));
                     line[0] = line[0].toUpperCase();
-                    return nextOperation(line);
+                    return nextOperationBool(line);
                 }
             }
             //If not is applied to an operation block
             if (line[0].equals("(")) {
-                return !nextOperation(subArray(line, 1, line.length - 1));
+                return !nextOperationBool(subArray(line, 1, line.length - 1));
             }
         }
         catch(VariableDoesNotExistException e){
@@ -552,11 +556,11 @@ public class Interpreter {
                 if(line.length >= 2){
                     line[0] = String.valueOf(varList.andVariable(var1,line[0]));
                     line[0] = line[0].toUpperCase();
-                    return nextOperation(line);
+                    return nextOperationBool(line);
                 }
             }
             if(line[0].equals("(")){
-                return nextOperation(subArray(line,1,line.length-1));
+                return nextOperationBool(subArray(line,1,line.length-1));
             }
         }
         catch (VariableDoesNotExistException e){
@@ -585,11 +589,11 @@ public class Interpreter {
                 //If there is more content
                 if(line.length >= 2){
                     line[0] = String.valueOf(varList.orVariable(var1, line[0])).toUpperCase();
-                    return nextOperation(line);
+                    return nextOperationBool(line);
                 }
             }
             if(line[0].equals("(")){
-                return varList.orVariable(var1, String.valueOf(nextOperation(subArray(line, 1, line.length-1))).toUpperCase());
+                return varList.orVariable(var1, String.valueOf(nextOperationBool(subArray(line, 1, line.length-1))).toUpperCase());
             }
         }
         catch(VariableDoesNotExistException e){
@@ -618,7 +622,7 @@ public class Interpreter {
                 if(line.length >= 2){
                     line[0] = String.valueOf(varList.equalVariable(var1,line[0]));
                     line[0] = line[0].toUpperCase();
-                    return nextOperation(line);
+                    return nextOperationBool(line);
                 }
             }
             if(line[0].equals("(")){
@@ -650,7 +654,7 @@ public class Interpreter {
                 }
                 line[0] = String.valueOf(varList.greaterThan(var1, line[0]));
                 line[0] = line[0].toUpperCase();
-                return nextOperation(line);
+                return nextOperationBool(line);
             }
             if(line[0].equals("(")){
                 return varList.greaterThan(var1, String.valueOf(nextOperationMath(subArray(line, 1, line.length-1))));
@@ -682,7 +686,7 @@ public class Interpreter {
                 if(line.length >= 2){
                     line[0] = String.valueOf(varList.greaterThan(var1,line[0]) || varList.equalVariable(var1,line[0]));
                     line[0] = line[0].toUpperCase();
-                    return nextOperation(line);
+                    return nextOperationBool(line);
                 }
             }
             if(line[0].equals("(")){
@@ -897,6 +901,35 @@ public class Interpreter {
             System.out.println("Variable " + name + " does not exist");
         }
         return false;
+    }
+
+    public void ifVariable(String[] line){
+        try {
+            if(nextOperationBool(line)){
+                String command = instructions.remove();
+                console.addLine(command);
+                String[] args = command.toUpperCase().split(" ");
+                nextOperation(args);
+            }
+        } catch (InvalidInputException e) {
+            System.out.println("Unexpected argument in line " + line);
+        } catch (NegativeNumberException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidNameException e) {
+            throw new RuntimeException(e);
+        } catch (CursorException e) {
+            throw new RuntimeException(e);
+        } catch (VariableDoesNotExistException e) {
+            throw new RuntimeException(e);
+        } catch (OutOfRangeException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidColorException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidNumberArgumentsException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidSymbolException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void add(String command){
