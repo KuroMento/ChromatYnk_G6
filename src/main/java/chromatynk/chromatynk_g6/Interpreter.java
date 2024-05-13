@@ -119,7 +119,7 @@ public class Interpreter {
      */
     public static boolean isFloatColor(String args) throws OutOfRangeException{
         if(Float.parseFloat(args) < 0 || Float.parseFloat(args) > 255){
-            throw new OutOfRangeException("The numbers for the color must be between 0 and 1 or between 0 and 255");
+            throw new OutOfRangeException("The numbers for the color must be between 0 and 1 or between 0 and 255.");
         }
         if( Float.parseFloat(args) >= 1 || Float.parseFloat(args) <= 255){
             return false;
@@ -187,8 +187,8 @@ public class Interpreter {
                        break;
 
                    case "MOV" :
-                       if(!(lineWithoutPercents.length != 3)){
-                           console.addLine("The line should be on the format : 'MOV value (%) value (%)' ");
+                       if(lineWithoutPercents.length != 3){
+                           console.addLine("The line should be on the following format : 'MOV value (%) value (%)'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        cursorManager.getSelectedCursor().moveCursor(Integer.parseInt(lineWithoutPercents[1]),Integer.parseInt(lineWithoutPercents[2]));
@@ -204,6 +204,7 @@ public class Interpreter {
 
                    case "HIDE" :
                        if(args.length != 1){
+                           console.addLine("The line should be on the following format : 'HIDE'.");
                            throw  new InvalidNumberArgumentsException();
                        }
                        cursorManager.getSelectedCursor().hide();
@@ -211,6 +212,7 @@ public class Interpreter {
 
                    case "SHOW" :
                        if(args.length != 1){
+                           console.addLine("The line should be on the following format : 'SHOW'.");
                            throw  new InvalidNumberArgumentsException();
                        }
                        cursorManager.getSelectedCursor().show();
@@ -218,17 +220,20 @@ public class Interpreter {
 
                    case "PRESS" :
                        if(args.length != 2 && args.length != 3){
+                           console.addLine("The line should be on the following format : 'PRESS value (%)'.");
                            throw  new InvalidNumberArgumentsException();
                        }
                        if(args.length == 2){
                            if(!(Float.parseFloat(args[1]) >= 0 && Float.parseFloat(args[1]) <= 1)){
-                               throw new OutOfRangeException("Opacity must be between 0 and 1");
+                               console.addLine("Opacity must be between 0 and 1.");
+                               throw new OutOfRangeException("Opacity must be between 0 and 1.");
                            }
                            cursorManager.getSelectedCursor().setOpacity(Float.parseFloat(args[1]));
                        }
                        if(args.length == 3){
                            if(!(Float.parseFloat(args[1]) >= 0 && Float.parseFloat(args[1]) <= 100)){
-                               throw new OutOfRangeException("Opacity must be between 0 and 100");
+                               console.addLine("Opacity must be between 0 and 100.");
+                               throw new OutOfRangeException("Opacity must be between 0 and 100.");
                            }
                            cursorManager.getSelectedCursor().setOpacity(Float.parseFloat(args[1])/100);
                        }
@@ -236,10 +241,12 @@ public class Interpreter {
 
                    case "COLOR" :
                        if(!(args.length == 2 || args.length == 4)){
+                           console.addLine("The line should be on the following format : 'COLOR #RRGGBB' or 'COLOR red green blue'.");
                            throw  new InvalidNumberArgumentsException();
                        }
                         if(args.length == 2){
                             if(!isHexa(args[1])){
+                                console.addLine("The color entered is not on the correct hexadecimal format.");
                                 throw new InvalidColorException();
                             }
                             else{
@@ -254,6 +261,7 @@ public class Interpreter {
 
                    case "THICK" :
                        if(args.length != 2){
+                           console.addLine("The line should be on the following format : 'THICK value'.");
                            throw  new InvalidNumberArgumentsException();
                        }
                        cursorManager.getSelectedCursor().setThickness(Float.parseFloat(args[1]));
@@ -261,6 +269,7 @@ public class Interpreter {
 
                    case "LOOKAT" :
                        if(!(lineWithoutPercents.length != 2 && lineWithoutPercents.length != 3)){
+                           console.addLine("The line should be on the following format : 'LOOKAT cursorID' or 'LOOKAT x (%) y (%)'.");
                            throw  new InvalidNumberArgumentsException();
                        }
                        if(lineWithoutPercents.length == 2){
@@ -274,55 +283,66 @@ public class Interpreter {
                        //Cursor Management
                    case "CURSOR" :
                        if(args.length != 2){
+                           console.addLine("The line should be on the following format : 'CURSOR cursorID'.");
                            throw new InvalidNumberArgumentsException();
                         }
                        if (cursorManager.cursorExist(Long.parseLong(args[1]))){
+                           console.addLine("The cursor you tried to create already exists.");
                            throw new CursorAlreadyExistingException();
                        }
                        cursorManager.addCursor(Long.parseLong(args[1]));
                        break;
                    case "SELECT" :
                        if(args.length != 2){
+                           console.addLine("The line should be on the following format : 'SELECT cursorID'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        if(!(cursorManager.cursorExist(Long.parseLong(args[1])))){
+                           console.addLine("The selected cursor does not exist.");
                            throw new MissingCursorException("The selected cursor does not exist.");
                        }
                        cursorManager.selectCursor(Long.parseLong(args[1]));
                        break;
                    case "REMOVE" :
                        if(args.length != 2){
+                           console.addLine("The line should be on the following format : 'REMOVE cursorID'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        long selectedId = Long.parseLong(args[1]);
                        if(!(cursorManager.cursorExist(selectedId))){
-                           throw new MissingCursorException("This cursor does not exist");
+                           console.addLine("This cursor does not exist.");
+                           throw new MissingCursorException("This cursor does not exist.");
                        }
                        cursorManager.removeCursor(selectedId);
                        break;
                         //Instruction block
                    case "IF" :
                        if(args.length != 2){
+                           console.addLine("The line should be on the following format : 'IF boolean'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        break;
                    case "FOR" :
                        if(!(args.length == 4 || args.length == 6 || args.length == 8)){
+                           console.addLine("The line should be on the following format : 'FOR name (FROM v1) TO v2 (step v3)'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        break;
                    case "WHILE" :
                        if(args.length != 2){
+                           console.addLine("The line should be on the following format : 'WHILE boolean'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        break;
                    case "MIMIC" :
                        if(args.length != 2){
+                           console.addLine("The line should be on the following format : 'MIMIC cursorID'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        break;
                    case "MIRROR" :
                        if(!(lineWithoutPercents.length != 2 && lineWithoutPercents.length != 4)){
+                           console.addLine("The line should be on the following format : 'MIRROR x (%) y (%)' or 'MIRROR x1 (%) y1 (%) x2(%) y2 (%)'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        break;
@@ -333,7 +353,8 @@ public class Interpreter {
                            throw new InvalidNumberArgumentsException();
                        }
                        if(!args[2].equals("=")){
-                           throw new InvalidSymbolException("The format should be : STR NUM = number");
+                           console.addLine("The format should be : 'NUM name = value'.");
+                           throw new InvalidSymbolException("The format should be : 'NUM name = value'.");
                        }
                        if(args.length == 4) {
                            double newVariable = Double.parseDouble(args[3].trim());
@@ -349,7 +370,8 @@ public class Interpreter {
                            throw new InvalidNumberArgumentsException();
                        }
                        if(!args[2].equals("=")){
-                           throw new InvalidSymbolException("The format should be : STR name = word/sentence");
+                           console.addLine("The format should be : 'STR name = word/sentence'.");
+                           throw new InvalidSymbolException("The format should be : 'STR name = word/sentence'.");
                        }
                        if(args.length == 4) {
                            varList.addVariableString(args[1],args[3]);
@@ -364,7 +386,8 @@ public class Interpreter {
                            throw new InvalidNumberArgumentsException();
                        }
                        if(!args[2].equals("=")){
-                           throw new InvalidSymbolException("The format should be : BOOL name = true/false.");
+                           console.addLine("The format should be : 'BOOL name = true/false'.");
+                           throw new InvalidSymbolException("The format should be : 'BOOL name = true/false'.");
                        }
                        if(args.length == 4) {
                            if (args[3].equals("TRUE")) {
@@ -380,12 +403,14 @@ public class Interpreter {
                        break;
                    case "DEL" :
                        if(args.length != 2){
+                           console.addLine("The line should be on the following format : 'DEL name'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        varList.delete(args[1]);
                         break;
                    default:
-                       System.out.println("Command not found/Unknown command");
+                       console.addLine("Command not found/Unknown command.");
+                       System.out.println("Command not found/Unknown command.");
                        break;
            }
         }
