@@ -166,21 +166,21 @@ public class Interpreter {
                    case "FWD" :
                        if (lineWithoutPercents.length != 2){
                            // Console.addLine("Erreur")
-                           console.addLine("The line should be on the format : 'FWD value' ");
+                           console.addLine("The line should be on the following format : 'FWD value'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        cursorManager.getSelectedCursor().forward(Integer.parseInt(lineWithoutPercents[1]));
                        break;
                    case "BWD":
                         if(lineWithoutPercents.length != 2){
-                            console.addLine("The line should be on the format : 'BWD value' ");
+                            console.addLine("The line should be on the following format : 'BWD value'.");
                             throw new InvalidNumberArgumentsException();
                         }
                        cursorManager.getSelectedCursor().backward(Integer.parseInt(lineWithoutPercents[1]));
                        break;
                    case "TURN":
                        if(args.length != 2){
-                           console.addLine("The line should be on the format : 'TURN value' ");
+                           console.addLine("The line should be on the following format : 'TURN value'.");
                            throw  new InvalidNumberArgumentsException();
                        }
                        cursorManager.getSelectedCursor().rotateCursor(Float.parseFloat(args[1]));
