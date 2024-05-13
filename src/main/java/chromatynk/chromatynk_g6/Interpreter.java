@@ -57,7 +57,7 @@ public class Interpreter {
      * @param line the line of command
      */
     public static String[] percentUsed(String[] line){
-        ArrayList<Integer> resolution = new ArrayList<Integer>(); // store the height and width of the image
+        ArrayList<Integer> resolution = new ArrayList<>(); // store the height and width of the image
         resolution.add(1920); //temporary resolution, will be replaced by the exact resolution of the canvas
         resolution.add(1080);
         int resolutionAxis = 0; // 0: x-axis of the image; 1: y-axis of the image
@@ -66,21 +66,21 @@ public class Interpreter {
             //If a % is detected the previous value in percent is replaced by its pixel value
             if(line[i].equals("%")){
                 try {
-                    val = (int) ((Double.valueOf(line[i - 1]) / 100) * resolution.get(resolutionAxis));
+                    val = (int) ((Double.parseDouble(line[i - 1]) / 100) * resolution.get(resolutionAxis));
                     line[i - 1] = String.valueOf(val);
                     line[i] = "";
                     resolutionAxis = (resolutionAxis + 1) % 2;
                 }
                 //If the value to apply % is not a double
                 catch(NumberFormatException e){
-                    System.out.println("Expected a value to apply % in " + line.toString());
+                    System.out.println("Expected a value to apply % in " + Arrays.toString(line));
                 }
             }
         }
-        List<String> list = new ArrayList<String>();
-        for(int i = 0; i< line.length; i++) {
-            if(!line[i].equals("")) {
-                list.add(line[i]);
+        List<String> list = new ArrayList<>();
+        for (String s : line) {
+            if (!s.equals("")) {
+                list.add(s);
             }
         }
         String[] stringArray = list.toArray(new String[0]);
@@ -89,7 +89,7 @@ public class Interpreter {
 
     /**
      * Check if the argument is a hexadecimal color
-     * @param arg
+     * @param arg String of a value
      * @return True if the argument has a valid hexadecimal format
      */
     public static boolean isHexa(String arg){
@@ -121,10 +121,7 @@ public class Interpreter {
         if(Float.parseFloat(args) < 0 || Float.parseFloat(args) > 255){
             throw new OutOfRangeException("The numbers for the color must be between 0 and 1 or between 0 and 255.");
         }
-        if( Float.parseFloat(args) >= 1 || Float.parseFloat(args) <= 255){
-            return false;
-        }
-    return true;
+        return !(Float.parseFloat(args) >= 1) && !(Float.parseFloat(args) <= 255);
     }
 
     /**
@@ -162,7 +159,7 @@ public class Interpreter {
            String[] lineWithoutPercents = percentUsed(args);
            //for (int i= 0; i < args.length; i++){
                switch(args[0]) {
-                        //Simple Instruction
+                   //Simple Instruction
                    case "FWD" :
                        if (lineWithoutPercents.length != 2){
                            // Console.addLine("Erreur")
@@ -195,8 +192,8 @@ public class Interpreter {
                        break;
 
                    case "POS" :
-                       if(!(args.length != 3)){
-                           console.addLine("The line should be on the format : 'POS value (%) value (%)' ");
+                       if(args.length != 3){
+                           console.addLine("The line should be on the following format : 'POS value (%) value (%)'.");
                            throw  new InvalidNumberArgumentsException();
                        }
                        cursorManager.getSelectedCursor().placeCursor(Integer.parseInt(lineWithoutPercents[1]),Integer.parseInt(lineWithoutPercents[2]));
@@ -436,10 +433,10 @@ public class Interpreter {
      * Takes a line of command in argument and choose the boolean operation to do.
      * @param line The line of command.
      * @return if the operation is true or false
-     * @throws InvalidInputException
+     * @throws InvalidInputException A variable is not of expected type
      */
     public boolean nextOperation(String[] line) throws InvalidInputException{
-        if(line[0] == "NOT"){
+        if(line[0].equals("NOT")){
             return notVariable(subArray(line, 1, line.length-1));
         }
         switch (line[1]) {
@@ -470,14 +467,14 @@ public class Interpreter {
      * Takes a line of command in argument and if there is a mathematical computation between the () to do then return the result.
      * @param line The line of command.
      * @return Return the result of the operation between the () so the boolean comparison can be done after.
-     * @throws InvalidInputException
+     * @throws InvalidInputException A variable is not of expected type
      */
     public double nextOperationMath(String[] line) throws InvalidInputException{
         switch (line[1]){
             case "+":
                 return addMath(line[0], subArray(line, 2, line.length-1));
             case "-":
-                return substractionMath(line[0], subArray(line, 2, line.length-1));
+                return subtractionMath(line[0], subArray(line, 2, line.length-1));
             case "/":
                 return divisionMath(line[0], subArray(line, 2, line.length-1));
             case "*":
@@ -492,7 +489,7 @@ public class Interpreter {
     /**
      * Verify if the entry before and after the NOT is true or false.
      * @param line The instruction remaining at the right of NOT
-     * @return
+     * @return line with the first value being the valuation of not
      */
     public boolean notVariable(String[] line) throws InvalidInputException{
         try {
@@ -504,7 +501,7 @@ public class Interpreter {
                 //If there is more operation
                 if (line.length >= 2) {
                     line[0] = String.valueOf(!varList.getVariableBool(line[0]));
-                    line[0].toUpperCase();
+                    line[0] = line[0].toUpperCase();
                     return nextOperation(line);
                 }
             }
@@ -526,8 +523,8 @@ public class Interpreter {
      * Verify if the entry before and after the AND is true or false.
      * @param var1 String variable name at the left of AND
      * @param line The instruction remaining at the right of AND
-     * @return
-     * @throws InvalidInputException
+     * @return line with the first value being the valuation of and
+     * @throws InvalidInputException A variable is not of expected type
      */
     public boolean andVariable(String var1, String[] line) throws InvalidInputException{
         try {
@@ -538,7 +535,7 @@ public class Interpreter {
                 }
                 if(line.length >= 2){
                     line[0] = String.valueOf(varList.andVariable(var1,line[0]));
-                    line[0].toUpperCase();
+                    line[0] = line[0].toUpperCase();
                     return nextOperation(line);
                 }
             }
@@ -559,8 +556,8 @@ public class Interpreter {
      * Verify if the entry before and after the OR is true or false.
      * @param var1 String variable name at the left of OR
      * @param line The instruction remaining at the right of OR
-     * @return
-     * @throws InvalidInputException
+     * @return line with the first value being the valuation of if
+     * @throws InvalidInputException A variable is not of expected type
      */
     public boolean orVariable(String var1, String[] line) throws InvalidInputException{
         try{
@@ -592,8 +589,8 @@ public class Interpreter {
      * Verify if the entry before and after the == is true or false.
      * @param var1 String variable name at the left of ==
      * @param line The instruction remaining at the right of ==
-     * @return
-     * @throws InvalidInputException
+     * @return line with the first value being the valuation of equal
+     * @throws InvalidInputException A variable is not of expected type
      */
     public boolean equalVariable(String var1, String[] line) throws InvalidInputException{
         try {
@@ -604,7 +601,7 @@ public class Interpreter {
                 }
                 if(line.length >= 2){
                     line[0] = String.valueOf(varList.equalVariable(var1,line[0]));
-                    line[0].toUpperCase();
+                    line[0] = line[0].toUpperCase();
                     return nextOperation(line);
                 }
             }
@@ -625,8 +622,8 @@ public class Interpreter {
      * Verify if the entry before and after the > is true or false.
      * @param var1 String variable name at the left of >
      * @param line The instruction remaining at the right of >
-     * @return
-     * @throws InvalidInputException
+     * @return line with the first value being the valuation of >
+     * @throws InvalidInputException A variable is not of expected type
      */
     public boolean greaterThanVariable(String var1, String[] line) throws InvalidInputException{
         try {
@@ -656,8 +653,8 @@ public class Interpreter {
      * Verify if the entry before and after the >= is true or false.
      * @param var1 String variable name at the left of >=
      * @param line The instruction remaining at the right of >=
-     * @return
-     * @throws InvalidInputException
+     * @return line with the first value being the valuation of >=
+     * @throws InvalidInputException A variable is not of expected type
      */
     public boolean greaterThanOrEqualVariable(String var1, String[] line) throws InvalidInputException{
         try {
@@ -668,7 +665,7 @@ public class Interpreter {
                 }
                 if(line.length >= 2){
                     line[0] = String.valueOf(varList.greaterThan(var1,line[0]) || varList.equalVariable(var1,line[0]));
-                    line[0].toUpperCase();
+                    line[0] = line[0].toUpperCase();
                     return nextOperation(line);
                 }
             }
@@ -688,8 +685,8 @@ public class Interpreter {
     /**
      * Add two string arguments as double
      * @param var1 The first element
-     * @param line The instruction remaining at the right of AND
-     * @return
+     * @param line The instruction remaining at the right of +
+     * @return line with the first value being the valuation of +
      */
     public double addMath(String var1, String[] line) throws InvalidInputException{
         try {
@@ -700,16 +697,16 @@ public class Interpreter {
                     line[0] = String.valueOf(varList.addMath(var1, line[0])); // 1:variable 2:variable
                     return nextOperationMath(line);
                 } else {
-                    line[0] = String.valueOf(varList.getVariableDouble(var1) + Integer.valueOf(line[0])); // 1:variable 2:value
+                    line[0] = String.valueOf(varList.getVariableDouble(var1) + Integer.parseInt(line[0])); // 1:variable 2:value
                     return nextOperationMath(line);
                 }
             } else {
                 //if line[0] is a variable
                 if (varList.isVariable(line[0])) {
-                    line[0] = String.valueOf(Integer.valueOf(var1) + varList.getVariableDouble(line[0])); //1: value 2 : variable
+                    line[0] = String.valueOf(Integer.parseInt(var1) + varList.getVariableDouble(line[0])); //1: value 2 : variable
                     return nextOperationMath(line);
                 } else {
-                    line[0] = String.valueOf(Integer.valueOf(var1) + Integer.valueOf(line[0])); // 1:value 2:value
+                    line[0] = String.valueOf(Integer.parseInt(var1) + Integer.parseInt(line[0])); // 1:value 2:value
                     return nextOperationMath(line);
                 }
             }
@@ -718,7 +715,7 @@ public class Interpreter {
             System.out.println("The command is not recognised");
         }
         catch(VariableDoesNotExistException e){
-            System.out.println("A variable does not exist in line " + line);
+            System.out.println("A variable does not exist in line " + Arrays.toString(line));
         }
         catch(InvalidVariableTypeException e){
             System.out.println("A variable is not of expected double type");
@@ -730,9 +727,9 @@ public class Interpreter {
      * Subtract two string arguments as double
      * @param var1 The first element
      * @param line The instruction remaining at the right of AND
-     * @return
+     * @return line with the first value being the valuation of -
      */
-    public double substractionMath(String var1, String[] line) throws InvalidInputException{
+    public double subtractionMath(String var1, String[] line) throws InvalidInputException{
         try {
             //if var1 is a variable
             if (varList.isVariable(var1)) {
@@ -741,16 +738,16 @@ public class Interpreter {
                     line[0] = String.valueOf(varList.substractMath(var1, line[0]));
                     return nextOperationMath(line);
                 } else {
-                    line[0] = String.valueOf(varList.getVariableDouble(var1) - Integer.valueOf(line[0]));
+                    line[0] = String.valueOf(varList.getVariableDouble(var1) - Integer.parseInt(line[0]));
                     return nextOperationMath(line);
                 }
             } else {
                 //if line[0] is a variable
                 if (varList.isVariable(line[0])) {
-                    line[0] = String.valueOf(Integer.valueOf(var1) - varList.getVariableDouble(line[0]));
+                    line[0] = String.valueOf(Integer.parseInt(var1) - varList.getVariableDouble(line[0]));
                     return nextOperationMath(line);
                 } else {
-                    line[0] = String.valueOf(Integer.valueOf(var1) - Integer.valueOf(line[0]));
+                    line[0] = String.valueOf(Integer.parseInt(var1) - Integer.parseInt(line[0]));
                     return nextOperationMath(line);
                 }
             }
@@ -759,7 +756,7 @@ public class Interpreter {
             System.out.println("The command is not recognised");
         }
         catch(VariableDoesNotExistException e){
-            System.out.println("A variable does not exist in line " + line);
+            System.out.println("A variable does not exist in line " + Arrays.toString(line));
         }
         catch(InvalidVariableTypeException e){
             System.out.println("A variable is not of expected double type");
@@ -771,7 +768,7 @@ public class Interpreter {
      * Multiply two string arguments as double
      * @param var1 The first element
      * @param line The instruction remaining at the right of AND
-     * @return
+     * @return line with the first value being the valuation of *
      */
     public double multiplicationMath(String var1, String[] line) throws InvalidInputException{
         try {
@@ -782,16 +779,16 @@ public class Interpreter {
                     line[0] = String.valueOf(varList.multiplyMath(var1, line[0]));
                     return nextOperationMath(line);
                 } else {
-                    line[0] = String.valueOf(varList.getVariableDouble(var1) * Integer.valueOf(line[0]));
+                    line[0] = String.valueOf(varList.getVariableDouble(var1) * Integer.parseInt(line[0]));
                     return nextOperationMath(line);
                 }
             } else {
                 //if line[0] is a variable
                 if (varList.isVariable(line[0])) {
-                    line[0] = String.valueOf(Integer.valueOf(var1) * varList.getVariableDouble(line[0]));
+                    line[0] = String.valueOf(Integer.parseInt(var1) * varList.getVariableDouble(line[0]));
                     return nextOperationMath(line);
                 } else {
-                    line[0] = String.valueOf(Integer.valueOf(var1) * Integer.valueOf(line[0]));
+                    line[0] = String.valueOf(Integer.parseInt(var1) * Integer.parseInt(line[0]));
                     return nextOperationMath(line);
                 }
             }
@@ -800,7 +797,7 @@ public class Interpreter {
             System.out.println("The command is not recognised");
         }
         catch(VariableDoesNotExistException e){
-            System.out.println("A variable does not exist in line " + line);
+            System.out.println("A variable does not exist in line " + Arrays.toString(line));
         }
         catch(InvalidVariableTypeException e){
             System.out.println("A variable is not of expected double type");
@@ -812,7 +809,7 @@ public class Interpreter {
      * Divide two string arguments as double
      * @param var1 The first element
      * @param line The instruction remaining at the right of AND
-     * @return
+     * @return line with the first value being the valuation of /
      */
     public double divisionMath(String var1, String[] line) throws InvalidInputException{
         try {
@@ -823,16 +820,16 @@ public class Interpreter {
                     line[0] = String.valueOf(varList.divideMath(var1, line[0]));
                     return nextOperationMath(line);
                 } else {
-                    line[0] = String.valueOf(varList.getVariableDouble(var1) / Integer.valueOf(line[0]));
+                    line[0] = String.valueOf(varList.getVariableDouble(var1) / Integer.parseInt(line[0]));
                     return nextOperationMath(line);
                 }
             } else {
                 //if line[0] is a variable
                 if (varList.isVariable(line[0])) {
-                    line[0] = String.valueOf(Integer.valueOf(var1) / varList.getVariableDouble(line[0]));
+                    line[0] = String.valueOf(Integer.parseInt(var1) / varList.getVariableDouble(line[0]));
                     return nextOperationMath(line);
                 } else {
-                    line[0] = String.valueOf(Integer.valueOf(var1) / Integer.valueOf(line[0]));
+                    line[0] = String.valueOf(Integer.parseInt(var1) / Integer.parseInt(line[0]));
                     return nextOperationMath(line);
                 }
             }
@@ -841,7 +838,7 @@ public class Interpreter {
             System.out.println("The command is not recognised");
         }
         catch(VariableDoesNotExistException e){
-            System.out.println("A variable does not exist in line " + line);
+            System.out.println("A variable does not exist in line " + Arrays.toString(line));
         }
         catch(InvalidVariableTypeException e){
             System.out.println("A variable is not of expected double type");
@@ -859,7 +856,7 @@ public class Interpreter {
             if (varList.isVariable(name)) {
                 return varList.getVariableDouble(name);
             }
-            return Double.valueOf(name);
+            return Double.parseDouble(name);
         }
         catch(VariableDoesNotExistException e){
             System.out.println("Variable " + name + " does not exist");
