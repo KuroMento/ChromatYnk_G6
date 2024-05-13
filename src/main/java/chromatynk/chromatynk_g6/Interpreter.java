@@ -11,15 +11,13 @@ import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 
 public class Interpreter {
-    CursorManager cursorManager = new CursorManager();
-    VariableManager varList = new VariableManager();
-    Console console = new Console();
+    private CursorManager cursorManager;
+    private VariableManager varList;
+    private Console console;
     /**
      * Define the way the interpreter will handle instructions at runtime.
      */
@@ -31,11 +29,11 @@ public class Interpreter {
 
     // Constructor (JavaDoc to do when better implementation)
     public Interpreter(){
-    }
-
-    public Interpreter(String path){ //temporary constructor, will be removed when interpreter will be more advanced
-        this.instructions = null;
-        read(path);
+        this.cursorManager = new CursorManager();
+        this.varList = new VariableManager();
+        this.console = new Console();
+        this.behaviour = Behaviour.DIRECT;
+        this.instructions = new ArrayDeque<>();
     }
     
     // Getter/Setter
@@ -352,7 +350,8 @@ public class Interpreter {
                        break;
                         //Variables and properties
                    case "NUM" :
-                       if(!(args.length == 2 || args.length == 4)){
+                       if(!(args.length == 2) || !(args.length == 4)){
+                           console.addLine("The line should be on the following format : 'NUM name (= value)'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        if(!args[2].equals("=")){
@@ -367,7 +366,8 @@ public class Interpreter {
                        }
                        break;
                    case "STR" :
-                       if(!(args.length == 2 || args.length == 4)){
+                       if(!(args.length == 2) || !(args.length == 4)){
+                           console.addLine("The line should be on the following format : 'STR name (= value)'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        if(!args[2].equals("=")){
@@ -381,7 +381,8 @@ public class Interpreter {
                        }
                        break;
                    case "BOOL" :
-                       if(!(args.length == 2 || args.length == 4)){
+                       if(!(args.length == 2) || !(args.length == 4)){
+                           console.addLine("The line should be on the following format : 'BOOL name (= value)'.");
                            throw new InvalidNumberArgumentsException();
                        }
                        if(!args[2].equals("=")){
@@ -631,11 +632,9 @@ public class Interpreter {
                 if(line.length == 1){
                     return varList.greaterThan(var1,line[0]);
                 }
-                if(line.length >= 2){
-                    line[0] = String.valueOf(varList.greaterThan(var1,line[0]));
-                    line[0].toUpperCase();
-                    return nextOperation(line);
-                }
+                line[0] = String.valueOf(varList.greaterThan(var1, line[0]));
+                line[0] = line[0].toUpperCase();
+                return nextOperation(line);
             }
             if(line[0].equals("(")){
                 return varList.greaterThan(var1, String.valueOf(nextOperationMath(subArray(line, 1, line.length-1))));
