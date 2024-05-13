@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Console{
     private Interpreter log;
     private ArrayList<String> history;
-    private int i = 0;
+    private int lineNumber;
     /*
     interpreter lit une ligne
     -> Ligne correcte => execution de ligne + ajout historique
@@ -14,7 +14,7 @@ public class Console{
      */
 
     public Console(){
-        history = new ArrayList<String>();
+        history = new ArrayList<>();
     }
 
     public ArrayList<String> getHistory(){
@@ -25,12 +25,12 @@ public class Console{
         this.history = history;
     }
 
-    public int getI(){
-        return this.i;
+    public int getLineNumber(){
+        return this.lineNumber;
     }
 
-    public void setI(int i){
-        this.i = i;
+    public void setLineNumber(int lineNumber){
+        this.lineNumber = lineNumber;
     }
 
     /**
@@ -39,7 +39,7 @@ public class Console{
      */
     public void addLine(String line){
         history.add(line);
-        System.out.println(this.i + history.get(this.i)); //temporary way to show the logged text, the historic will be shown into its own container when implemented
-        setI(this.i + 1);
+        System.out.println(this.lineNumber + history.get(this.lineNumber)); //temporary way to show the logged text, the historic will be shown into its own container when implemented
+        this.lineNumber += 1;
     }
 }
