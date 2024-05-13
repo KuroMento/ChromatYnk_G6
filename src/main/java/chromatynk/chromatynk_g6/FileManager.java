@@ -1,8 +1,12 @@
 package chromatynk.chromatynk_g6;
 
+import chromatynk.chromatynk_g6.exceptions.EmptyFileException;
+
 import java.io.*;
 
 public class FileManager {
+
+    private String currentFile;
     /**
      * The unique interpreter in the project to manage file and requests.
      */
@@ -14,7 +18,12 @@ public class FileManager {
 
     public Interpreter getInterpreter(){return this.interpreter;}
     private void setInterpreter(Interpreter interpreter) {this.interpreter = interpreter;}
-
+    public void  setCurrentFile(String file){
+        this.currentFile = file;
+    }
+    public String getCurrentFile(){
+        return this.currentFile;
+    }
     /**
      * allows to read an imported script and to stock the lines in memory.
      * @param path the path to the script.
@@ -37,19 +46,27 @@ public class FileManager {
         }
     }
 
-
-    public void export(String path){
+    /**
+     * Use the history to generate a file.
+     * @param path the path of new file.
+     */
+    public void save(String path) throws EmptyFileException {
         try {
+            if (this.interpreter.getConsole().getHistory().isEmpty()){
+                throw new EmptyFileException();
+            }
             FileWriter fw = new FileWriter(path);
             BufferedWriter bw = new BufferedWriter(fw);
 
             for (String line : this.interpreter.getConsole().getHistory()) {
-
-                // interpreter.getConsole().getHistory().get()
+                    bw.write(line);
+                    bw.newLine();
             }
+            bw.close();
         }
         catch (Exception e){
             System.out.println("Error " + e);
         }
     }
 }
+
