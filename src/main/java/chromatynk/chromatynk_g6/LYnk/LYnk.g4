@@ -29,14 +29,19 @@ statement : ifStatement
             | blockStatement
             ;
 
-booleanExpression: '(' booleanExpression ')'                                           #parenthesisVar
-                    | left=booleanExpression op=('AND' | 'OR') right=booleanExpression #andOrExpression
-                    | 'NOT' booleanExpression                                          #notExpression
-                    | comparison                                                       #comparisonExpression
-                    | BOOLEAN                                                          #booleanVar
-                    | IDENTIFICATION                                                   #identificationVar
+//ok
+booleanExpression: '(' booleanExpression ')'                                                       #parenthesisVar
+                    | left=booleanExpression op=('AND' | 'OR') right=booleanExpression             #andOrExpression
+                    | 'NOT' booleanExpression                                                      #notExpression
+                    | left=arithmeticExpression op=arithmeticOperator right=arithmeticExpression   #arithmeticComparison
+                    | left=booleanExpression op=boolOperator right=booleanExpression               #booleanComparison
+                    | left=(LITERAL | IDENTIFICATION) op=arithmeticOperator right=(LITERAL | IDENTIFICATION) #literalComparison
+                    | IDENTIFICATION                                                               #identificationVar
+                    | 'TRUE'                                                                       #trueVar
+                    | 'FALSE'                                                                      #falseVar
                     ;
 
+// ok
 arithmeticExpression : '(' arithmeticExpression ')'                                                         #parenthesisExpression
                         | left=arithmeticExpression op=(MULTIPLICATION|DIVISION) right=arithmeticExpression #mulDivExpression
                         | left=arithmeticExpression op=(PLUS|MINUS) right=arithmeticExpression              #plusMinusExpression
@@ -73,10 +78,8 @@ moveStatement : 'MOV' numParameter{2};
 positionStatement : 'POS' numParameter{2};
 boolDeclaration : 'BOOL' IDENTIFICATION ('=' BOOLEAN)?;
 stringDeclaration : 'STR' IDENTIFICATION ('=' LITERAL)?;
-numberDeclaration : 'NUM' IDENTIFICATION ('=' DOUBLE)?;
-
-
-
+numberDeclaration : 'NUM' IDENTIFICATION ('=' arithmeticExpression)?;
+deleteDeclaration : 'DEL' IDENTIFICATION;
 
 
 //Tokens
