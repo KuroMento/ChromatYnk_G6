@@ -46,37 +46,53 @@ arithmeticExpression : '(' arithmeticExpression ')'                             
                         | left=arithmeticExpression op=(MULTIPLICATION|DIVISION) right=arithmeticExpression #mulDivExpression
                         | left=arithmeticExpression op=(PLUS|MINUS) right=arithmeticExpression              #plusMinusExpression
                         | left=arithmeticExpression numOperator right=arithmeticExpression                  #compExpression
-                        | IDENTIFICATION                                                                    #identificationExpression
+                        | NUMBER                                                                            #numberExpression
+                        | LONG                                                                              #longExpression
                         | DOUBLE                                                                            #doubleExpression
+                        | IDENTIFICATION                                                                    #identificationExpression
                         ;
 
 
-blockStatement : '{' (statement)* '}' ;
-comparison : (IDENTIFICATION | BOOLEAN) boolOperator (IDENTIFICATION | BOOLEAN);
-boolOperator : EQUAL | GREATER | LESS | GREATER_OR_EQUAL | LESS_OR_EQUAL | NOT_EQUAL;
-numOperator : PLUS | MINUS | MULTIPLICATION | DIVISION;
+
+// ok
+arithmeticOperator : op=(EQUAL | GREATER | LESS | GREATER_OR_EQUAL | LESS_OR_EQUAL | NOT_EQUAL);
+boolOperator : op=( EQUAL | NOT_EQUAL );
+numOperator : op=(PLUS | MINUS | MULTIPLICATION | DIVISION);
+
+// ok
 ifStatement : 'IF' booleanExpression blockStatement;
 whileStatement : 'WHILE' booleanExpression blockStatement;
-forStatement : 'FOR' IDENTIFICATION ('FROM' NUMERAL)? 'TO' NUMERAL ('STEP' NUMERAL)?  blockStatement;
-mimicStatement : 'MIMIC' IDENTIFICATION;
-percentage : NUMERAL PERCENT | DOUBLE PERCENT;
-numParameter : NUMERAL | DOUBLE | percentage;
-mirrorStatement : 'MIRROR' (numParameter{2} | numParameter{4}) blockStatement;
-cursorStatement : 'CURSOR' NUMERAL;
-selectStatement : 'SELECT' NUMERAL;
-removeStatement : 'REMOVE' NUMERAL;
-hideStatement : 'HIDE' NUMERAL;
-showStatement : 'SHOW' NUMERAL;
-pressStatement : 'PRESS' percentage;
-thickStatement : 'THICK' NUMERAL;
-colorStatement : 'COLOR' HEXCODE | numParameter{3};
-lookAtStatement : 'LOOKAT' NUMERAL;
+
+
+numParameter : LONG | NUMBER | DOUBLE | PERCENTAGE;
+colorParameter : LONG | DOUBLE ;
+mimicStatement : 'MIMIC' LONG blockStatement;
+mirrorStatement : 'MIRROR' (numParameter numParameter | numParameter numParameter numParameter numParameter) blockStatement;
+
+
+
+
+// ok
+
 forwardStatement : 'FWD' numParameter;
 backwardStatement : 'BWD' numParameter;
-rotationStatement : 'TURN' NUMERAL | 'TURN' DOUBLE;
-moveStatement : 'MOV' numParameter{2};
-positionStatement : 'POS' numParameter{2};
-boolDeclaration : 'BOOL' IDENTIFICATION ('=' BOOLEAN)?;
+
+moveStatement : 'MOV' numParameter numParameter;
+positionStatement : 'POS' numParameter numParameter;
+boolDeclaration : 'BOOL' IDENTIFICATION ('=' booleanExpression)?;
+
+blockStatement : '{' (statement)* '}' ;
+forStatement : 'FOR' IDENTIFICATION ('FROM' (NUMBER|LONG))? 'TO' (NUMBER|LONG) ('STEP' (NUMBER|LONG))?  blockStatement;
+colorStatement : 'COLOR' (HEXCODE | (colorParameter colorParameter colorParameter) );
+cursorStatement : 'CURSOR' LONG;
+selectStatement : 'SELECT' LONG;
+removeStatement : 'REMOVE' LONG;
+pressStatement : 'PRESS' (PERCENTAGE | DOUBLE);
+thickStatement : 'THICK' LONG;
+lookAtStatement : 'LOOKAT' LONG;
+hideStatement : 'HIDE';
+showStatement : 'SHOW';
+rotationStatement : 'TURN' arithmeticExpression;
 stringDeclaration : 'STR' IDENTIFICATION ('=' LITERAL)?;
 numberDeclaration : 'NUM' IDENTIFICATION ('=' arithmeticExpression)?;
 deleteDeclaration : 'DEL' IDENTIFICATION;
@@ -84,21 +100,18 @@ deleteDeclaration : 'DEL' IDENTIFICATION;
 
 //Tokens
 
-LETTER : [a-zA-Z];
-NUMBER : '-'? [0-9];
-NUMERAL : '-'? [0-9]+;
-IDENTIFICATION : (LETTER)+ ;
+IDENTIFICATION : [a-zA-Z] [a-zA-Z_0-9]*;
+LONG : [0-9]+;
+NUMBER : '-'? [0-9]+;
+DOUBLE : NUMBER '.' LONG;
 LITERAL : '"' (~["])* '"' ;
-DOUBLE : (NUMERAL '.' NUMERAL) | NUMERAL;
-fragment BOOLEAN : 'TRUE' | 'FALSE';
-HEXLETTER : NUMBER | [A-F];
-HEXCODE : '#' HEXLETTER{6};
+PERCENTAGE : '-'? (NUMBER | DOUBLE) '%';
+HEXCODE : '#' [0-9A-F] [0-9A-F] [0-9A-F] [0-9A-F] [0-9A-F] [0-9A-F] ;
 
 MULTIPLICATION : '*';
 DIVISION : '/';
 PLUS : '+';
 MINUS : '-';
-PERCENT : '%';
 
 
 ASSIGN              : '=' ;
