@@ -29,7 +29,6 @@ statement : ifStatement
             | blockStatement
             ;
 
-//ok
 booleanExpression: '(' booleanExpression ')'                                                       #parenthesisVar
                     | left=booleanExpression op=('AND' | 'OR') right=booleanExpression             #andOrExpression
                     | 'NOT' booleanExpression                                                      #notExpression
@@ -41,7 +40,6 @@ booleanExpression: '(' booleanExpression ')'                                    
                     | 'FALSE'                                                                      #falseVar
                     ;
 
-// ok
 arithmeticExpression : '(' arithmeticExpression ')'                                                         #parenthesisExpression
                         | left=arithmeticExpression op=(MULTIPLICATION|DIVISION) right=arithmeticExpression #mulDivExpression
                         | left=arithmeticExpression op=(PLUS|MINUS) right=arithmeticExpression              #plusMinusExpression
@@ -52,9 +50,6 @@ arithmeticExpression : '(' arithmeticExpression ')'                             
                         | IDENTIFICATION                                                                    #identificationExpression
                         ;
 
-
-
-// ok
 arithmeticOperator : op=(EQUAL | GREATER | LESS | GREATER_OR_EQUAL | LESS_OR_EQUAL | NOT_EQUAL);
 boolOperator : op=( EQUAL | NOT_EQUAL );
 numOperator : op=(PLUS | MINUS | MULTIPLICATION | DIVISION);
@@ -62,7 +57,6 @@ numOperator : op=(PLUS | MINUS | MULTIPLICATION | DIVISION);
 // ok
 ifStatement : 'IF' booleanExpression blockStatement;
 whileStatement : 'WHILE' booleanExpression blockStatement;
-
 
 numParameter : LONG | NUMBER | DOUBLE | PERCENTAGE;
 colorParameter : LONG | DOUBLE ;
@@ -112,7 +106,6 @@ MULTIPLICATION : '*';
 DIVISION : '/';
 PLUS : '+';
 MINUS : '-';
-
 
 ASSIGN              : '=' ;
 EQUAL               : '==' ;
