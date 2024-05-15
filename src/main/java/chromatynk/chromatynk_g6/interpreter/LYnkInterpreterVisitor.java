@@ -84,7 +84,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
     @Override
     public Object visitAndOrExpression(LYnkParser.AndOrExpressionContext ctx){ //method needs to be completed
-        final Object conditionLeft = visit(ctx.left)
+        final Object conditionLeft = visit(ctx.left);
     }
 
     @Override
