@@ -64,7 +64,9 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
     @Override
-    public Object visitParenthesisVar(final LYnkParser.ParenthesisVarContext c)
+    public Object visitParenthesisVar(final LYnkParser.ParenthesisVarContext ctx){
+        return visit(ctx.booleanExpression());
+    }
     @Override
     public Object visitParenthesisExpression(final LYnkParser.ParenthesisExpressionContext ctx){
         return visit(ctx.arithmeticExpression());
