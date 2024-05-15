@@ -54,7 +54,6 @@ arithmeticOperator : op=(EQUAL | GREATER | LESS | GREATER_OR_EQUAL | LESS_OR_EQU
 boolOperator : op=( EQUAL | NOT_EQUAL );
 numOperator : op=(PLUS | MINUS | MULTIPLICATION | DIVISION);
 
-// ok
 ifStatement : 'IF' booleanExpression blockStatement;
 whileStatement : 'WHILE' booleanExpression blockStatement;
 
@@ -62,11 +61,6 @@ numParameter : LONG | NUMBER | DOUBLE | PERCENTAGE;
 colorParameter : LONG | DOUBLE ;
 mimicStatement : 'MIMIC' LONG blockStatement;
 mirrorStatement : 'MIRROR' (numParameter numParameter | numParameter numParameter numParameter numParameter) blockStatement;
-
-
-
-
-// ok
 
 forwardStatement : 'FWD' numParameter;
 backwardStatement : 'BWD' numParameter;
