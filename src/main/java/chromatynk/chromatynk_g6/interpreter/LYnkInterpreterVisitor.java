@@ -12,6 +12,7 @@ import static chromatynk.chromatynk_g6.interpreter.LYnkInterpreter.VOID;
 public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
     private Console console;
+    private LYnkVariable variableList ;
 
     public LYnkInterpreterVisitor(){
         super();
@@ -24,16 +25,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitProgram(final LYnkParser.ProgramContext ctx){
         return visitChildren(ctx);
-    }
-    @Override
-    public Object visitStringDeclaration(final LYnkParser.StringDeclarationContext ctx){
-        // return string literal (pas vraiment!)
-        return cleanStringLiteral(ctx.LITERAL().getText());
-    }
-
-    private String cleanStringLiteral(final String literal){
-        //remove string literal from the char sequence
-        return literal.length() > 1 ? literal.substring(1, literal.length() - 1) : literal;
     }
 
     @Override
@@ -57,11 +48,10 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     public Object visitNotExpression(LYnkParser.NotExpressionContext ctx) {
         final Object condition = visit(ctx.booleanExpression());
         if (condition instanceof Boolean) {
-            return ValidateInfo(BOOL, condition).asBoolean();
-        } else {
-            console.addLine("NOT needs a boolean comparison to function");
+            return ((Boolean) condition).booleanValue();
         }
-        return VOID;
+        console.addLine("NOT needs a boolean comparison to function");
+        throw new IllegalStateException("NOT needs a boolean comparison to function");
     }
 
     @Override
@@ -188,6 +178,58 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         if(Boolean.TRUE.equals(condition)){
             visit(ctx.blockStatement());
             visitWhileStatement(ctx);
+        }
+        return VOID;
+    }
+
+    @Override
+    public Object visitNumParameter(LYnkParser.NumParameterContext ctx){
+        if(ctx.getChild(0).getText().contains("%")){
+            return Double.parseDouble(ctx.getChild(0).getText());
+        }
+        else{
+            return (Number) ctx.getChild(0);
+        }
+    }
+
+    public Object visitBooleanDeclaration(LYnkParser.BoolDeclarationContext ctx){
+        if(ctx.booleanExpression().isEmpty()){
+            variableList.setBoolVarValue(ctx.IDENTIFICATION(),false);
+        }
+        else {
+            variableList.setBoolVarValue(ctx.IDENTIFICATION(), ctx.booleanExpression());
+        }
+        return VOID;
+
+    }
+    @Override
+    public Object visitStringDeclaration(LYnkParser.StringDeclarationContext ctx) {
+        if(ctx.LITERAL().getText().isEmpty()) {
+            variableList.setStrVarValue(ctx.IDENTIFICATION(),"" );
+        }
+        else {
+            variableList.setStrVarValue(ctx.IDENTIFICATION(), ctx.LITERAL());
+        }
+        return VOID;
+    }
+
+    @Override
+    public Object visitNumberDeclaration(LYnkParser.NumberDeclarationContext ctx) {
+        if(ctx.arithmeticExpression().isEmpty()) {
+            variableList.setNumVarValue(ctx.IDENTIFICATION(),0 );
+        }
+        else {
+            variableList.setNumVarValue(ctx.IDENTIFICATION(), ctx.arithmeticExpression());
+        }
+        return VOID;
+    }
+
+    @Override
+    public Object visitDeleteDeclaration(LYnkParser.DeleteDeclarationContext ctx){
+        try {
+            variableList.delete(ctx.IDENTIFICATION());
+        } catch (VariableDoesNotExistException e) {
+            throw new RuntimeException(e);
         }
         return VOID;
     }

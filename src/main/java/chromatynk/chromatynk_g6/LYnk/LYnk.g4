@@ -68,7 +68,7 @@ backwardStatement : 'BWD' numParameter;
 
 moveStatement : 'MOV' numParameter numParameter;
 positionStatement : 'POS' numParameter numParameter;
-boolDeclaration : 'BOOL' IDENTIFICATION ('=' booleanExpression)?;
+
 
 blockStatement : '{' (statement)* '}' ;
 colorStatement : 'COLOR' (HEXCODE | (colorParameter colorParameter colorParameter) );
@@ -82,6 +82,7 @@ hideStatement : 'HIDE';
 showStatement : 'SHOW';
 rotationStatement : 'TURN' arithmeticExpression;
 stringDeclaration : 'STR' IDENTIFICATION ('=' LITERAL)?;
+boolDeclaration : 'BOOL' IDENTIFICATION ('=' booleanExpression)?;
 numberDeclaration : 'NUM' IDENTIFICATION ('=' arithmeticExpression)?;
 deleteDeclaration : 'DEL' IDENTIFICATION;
 
