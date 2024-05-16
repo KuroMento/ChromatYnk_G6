@@ -55,6 +55,7 @@ boolOperator : op=( EQUAL | NOT_EQUAL );
 numOperator : op=(PLUS | MINUS | MULTIPLICATION | DIVISION);
 
 ifStatement : 'IF' booleanExpression blockStatement;
+forStatement : 'FOR' IDENTIFICATION ('FROM' (NUMBER|LONG))? 'TO' (NUMBER|LONG) ('STEP' (NUMBER|LONG))?  blockStatement;
 whileStatement : 'WHILE' booleanExpression blockStatement;
 
 numParameter : LONG | NUMBER | DOUBLE | PERCENTAGE;
@@ -70,7 +71,6 @@ positionStatement : 'POS' numParameter numParameter;
 boolDeclaration : 'BOOL' IDENTIFICATION ('=' booleanExpression)?;
 
 blockStatement : '{' (statement)* '}' ;
-forStatement : 'FOR' IDENTIFICATION ('FROM' (NUMBER|LONG))? 'TO' (NUMBER|LONG) ('STEP' (NUMBER|LONG))?  blockStatement;
 colorStatement : 'COLOR' (HEXCODE | (colorParameter colorParameter colorParameter) );
 cursorStatement : 'CURSOR' LONG;
 selectStatement : 'SELECT' LONG;
