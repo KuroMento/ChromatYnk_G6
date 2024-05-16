@@ -32,7 +32,7 @@ public class LYnkInterpreter {
         // create an AST-tree
         final LYnkParser parser = new LYnkParser(new CommonTokenStream(lexer));
         // create an object of the class LYnkInterpreterVisitor
-        final LYnkInterpreterVisitor interpreterVisitor = new LYnkInterpreterVisitor(new LYnkContextImpl(stdout));
+        final LYnkInterpreterVisitor interpreterVisitor = new LYnkInterpreterVisitor(new LYnkVariableImpl(stdout));
         // start the interpreter
         return interpreterVisitor.visitProgram(parser.program());
     }

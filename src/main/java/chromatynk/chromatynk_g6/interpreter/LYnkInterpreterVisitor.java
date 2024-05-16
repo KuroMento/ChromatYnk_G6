@@ -4,6 +4,7 @@ import chromatynk.chromatynk_g6.Console;
 import chromatynk.chromatynk_g6.LYnk.LYnkBaseVisitor;
 import chromatynk.chromatynk_g6.LYnk.LYnkParser;
 import chromatynk.chromatynk_g6.Variable;
+import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
 import chromatynk.chromatynk_g6.utils.BooleanUtil;
 import chromatynk.chromatynk_g6.utils.NumberUtil;
 
@@ -77,14 +78,38 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx){
-        final Object leftCondition =
-        final Object rightCondition =
+    public Object visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) throws VariableDoesNotExistException{
+        final int leftType = ctx.left.getType(); //the value of getType is 40 if we have a LITERAL or 36 if it is a IDENTIFICATION
+        final int rightType = ctx.right.getType();
+        final Object leftCondition;
+        final Object rightCondition;
+        if(leftType == 40 && rightType == 40){
+            leftCondition = ctx.left.getText();
+            rightCondition = ctx.right.getText();
+            return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+        }
+        if(leftType == 40 && rightType == 36){
+            leftCondition = ctx.left.getText();
+            rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
+            return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+        }
+        if(leftType == 36 && rightType == 40){
+            leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
+            rightCondition = ctx.right.getText();
+            return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+        }
+        if(leftType == 36 && rightType == 36){
+            leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
+            rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(1));
+            return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+        }
+        console.addLine("Operator " + "'" + ctx.op.getText() + "' " + "not supported for String");
+        return VOID;
     }
 
     @Override
-    public Object visitIdentificationVar(LYnkParser.IdentificationVarContext ctx){
-        return
+    public Object visitIdentificationVar(LYnkParser.IdentificationVarContext ctx) throws VariableDoesNotExistException {
+        return variableList.getVarValue(ctx.IDENTIFICATION());
     }
 
     @Override
@@ -148,8 +173,8 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitIdentificationExpression(final LYnkParser.IdentificationExpressionContext ctx){ //to be completed when variables will be available
-        return
+    public Object visitIdentificationExpression(final LYnkParser.IdentificationExpressionContext ctx) throws VariableDoesNotExistException{
+        return variableList.getVarValue(ctx.IDENTIFICATION());
     }
 
     @Override
@@ -166,6 +191,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
     @Override
     public Object visitForStatement(final LYnkParser.ForStatementContext ctx){
+        if(ctx.)
         return VOID;
     }
 

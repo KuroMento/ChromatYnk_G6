@@ -1,5 +1,6 @@
 // Generated from /home/cytech/_Cours/S2/Java/ChromatYnk_G6/src/main/java/chromatynk/chromatynk_g6/LYnk/LYnk.g4 by ANTLR 4.13.1
 package chromatynk.chromatynk_g6.LYnk;
+import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -35,7 +36,7 @@ public interface LYnkVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx);
+	T visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) throws VariableDoesNotExistException;
 	/**
 	 * Visit a parse tree produced by the {@code falseVar}
 	 * labeled alternative in {@link LYnkParser#booleanExpression}.
@@ -84,14 +85,14 @@ public interface LYnkVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIdentificationVar(LYnkParser.IdentificationVarContext ctx);
+	T visitIdentificationVar(LYnkParser.IdentificationVarContext ctx) throws VariableDoesNotExistException;
 	/**
 	 * Visit a parse tree produced by the {@code identificationExpression}
 	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIdentificationExpression(LYnkParser.IdentificationExpressionContext ctx);
+	T visitIdentificationExpression(LYnkParser.IdentificationExpressionContext ctx) throws VariableDoesNotExistException;
 	/**
 	 * Visit a parse tree produced by the {@code longExpression}
 	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.

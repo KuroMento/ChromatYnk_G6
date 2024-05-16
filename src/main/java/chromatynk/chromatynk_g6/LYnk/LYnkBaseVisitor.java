@@ -1,5 +1,6 @@
 // Generated from /home/cytech/_Cours/S2/Java/ChromatYnk_G6/src/main/java/chromatynk/chromatynk_g6/LYnk/LYnk.g4 by ANTLR 4.13.1
 package chromatynk.chromatynk_g6.LYnk;
+import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -39,7 +40,7 @@ public class LYnkBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements L
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) { return visitChildren(ctx); }
+	@Override public T visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) throws VariableDoesNotExistException { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -88,14 +89,14 @@ public class LYnkBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements L
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIdentificationVar(LYnkParser.IdentificationVarContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIdentificationVar(LYnkParser.IdentificationVarContext ctx) throws VariableDoesNotExistException { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitIdentificationExpression(LYnkParser.IdentificationExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitIdentificationExpression(LYnkParser.IdentificationExpressionContext ctx) throws VariableDoesNotExistException { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
