@@ -14,13 +14,17 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     private Console console;
 
     public LYnkInterpreterVisitor(){
+        super();
         //this.cursorManager = new CursorManager();
         //this.varList = new VariableManager();
         this.console = new Console();
         //this.behaviour = Behaviour.DIRECT;
         //this.instructions = new ArrayDeque<>();
     }
-
+    @Override
+    public Object visitProgram(final LYnkParser.ProgramContext ctx){
+        return visitChildren(ctx);
+    }
     @Override
     public Object visitStringDeclaration(final LYnkParser.StringDeclarationContext ctx){
         // return string literal (pas vraiment!)
