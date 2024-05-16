@@ -10,6 +10,8 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
 public class LYnkInterpreter {
+
+    public static final Object VOID = new VoidObject();
     private final PrintStream stdout;
 
     public LYnkInterpreter(final OutputStream stdoutStream){
@@ -35,4 +37,8 @@ public class LYnkInterpreter {
         return interpreterVisitor.visitProgram(parser.program());
     }
 
+    public static class VoidObject{
+        @Override
+        public String toString(){ return "VOID"; }
+    }
 }

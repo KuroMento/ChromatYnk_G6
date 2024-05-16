@@ -1,15 +1,13 @@
 package chromatynk.chromatynk_g6.interpreter;
 
-import chromatynk.chromatynk_g6.Behaviour;
 import chromatynk.chromatynk_g6.Console;
-import chromatynk.chromatynk_g6.CursorManager;
 import chromatynk.chromatynk_g6.LYnk.LYnkBaseVisitor;
-import chromatynk.chromatynk_g6.LYnk.LYnkLexer;
 import chromatynk.chromatynk_g6.LYnk.LYnkParser;
-import chromatynk.chromatynk_g6.VariableManager;
+import chromatynk.chromatynk_g6.Variable;
+import chromatynk.chromatynk_g6.utils.BooleanUtil;
+import chromatynk.chromatynk_g6.utils.NumberUtil;
 
-import java.util.ArrayDeque;
-import java.util.LinkedList;
+import static chromatynk.chromatynk_g6.interpreter.LYnkInterpreter.VOID;
 
 public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
@@ -59,40 +57,24 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
-    @Override
-    public Object visitForStatement(final LYnkParser.ForStatementContext ctx){
-        return VOID;
-    }
-    @Override
-    public Object visitParenthesisVar(final LYnkParser.ParenthesisVarContext ctx){
-        return visit(ctx.booleanExpression());
-    }
-    @Override
-    public Object visitParenthesisExpression(final LYnkParser.ParenthesisExpressionContext ctx){
-        return visit(ctx.arithmeticExpression());
-    }
-    @Override
-    public Object visitNotExpression(LYnkParser.NotExpressionContext ctx) {
-        final Object condition = visit(ctx.booleanExpression());
-        if (condition instanceof Boolean) {
-            return ValidateInfo(BOOL, condition).asBoolean();
-        } else {
-            console.addLine("NOT needs a boolean comparison to function");
+    private Object shouldBeNumber(final Object o){
+        if (o instanceof Number ){
+            return  o;
         }
-        return VOID;
+        console.addLine("Expected a number but found :" + getTypeName(o));
+        throw new IllegalStateException("Expected a number but found :" + getTypeName(o));
     }
 
-    @Override
-    public Object visitAndOrExpression(LYnkParser.AndOrExpressionContext ctx){ //method needs to be completed
-        final Object conditionLeft = visit(ctx.left);
+    private Object shouldBeBoolean(final Object o){
+        if(o instanceof Boolean){
+            return o;
+        }
+        console.addLine("Expected a boolean but found : " + getTypeName(o));
+        throw new IllegalStateException("Expected a boolean but found : " + getTypeName(o));
     }
 
-    @Override
-    public Object visitTrueVar(LYnkParser.TrueVarContext ctx) {
-        return Boolean.TRUE;
+    private static String getTypeName(final Object o){
+        return o != null ? o.getClass().getSimpleName() : "null";
     }
-    @Override
-    public Object visitFalseVar(LYnkParser.FalseVarContext ctx){
-        return Boolean.FALSE;
-    }
+
 }
