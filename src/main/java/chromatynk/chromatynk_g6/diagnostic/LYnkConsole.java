@@ -2,7 +2,9 @@ package chromatynk.chromatynk_g6.diagnostic;
 
 import chromatynk.chromatynk_g6.LYnk.LYnkBaseVisitor;
 import chromatynk.chromatynk_g6.LYnk.LYnkParser;
+import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
+import chromatynk.chromatynk_g6.utils.BooleanUtil;
 import chromatynk.chromatynk_g6.utils.NumberUtil;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
@@ -74,6 +76,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
     @Override
     public LYnkValidation visitMulDivExpression(LYnkParser.MulDivExpressionContext ctx){
+        // Either empty value or error already detected deeper in the tree
         final LYnkValidation left = visit(ctx.left);
         if(left.isSkipError() || !left.hasValue()){
             return SKIP_ERROR;
@@ -83,6 +86,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return SKIP_ERROR;
         }
 
+        // Left and Right are either a long or a double
         if( left.isNumeric() && right.isNumeric() ){
             if( ctx.op.getType() == LYnkParser.DIVISION && (right.value().equals(0))){
                 addIssue(IssueType.ERROR, ctx.op, "Division by 0!");
@@ -95,10 +99,278 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return LYnkValidation.number((Long) result);
         }
 
-        else if( left.isNumeric() && right.isIdentification() ){
-            if( this.varContext.hasVar(right.))
+        try {
+
+            // Left is a numeral and right is a variable
+            if (left.isNumeric() && right.isIdentification()) {
+                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                return LYnkValidation.doubleVar(varContext.getNumVarValue(right.asString()));
+            }
+
+            // Right is a numeral and left is a variable
+            if (left.isIdentification() && right.isNumeric()) {
+                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                return LYnkValidation.doubleVar(varContext.getNumVarValue(left.asString()));
+            }
+
+            // Left and right are variables
+            if (left.isIdentification() && right.isIdentification()) {
+                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                final var result = NumberUtil.evalBinaryOperator((Number) left.value(), (Number) right.value(), ctx.op);
+
+                if (!left.isDouble() && !right.isDouble()) {
+                    return LYnkValidation.number((Long) result);
+                }
+                return LYnkValidation.doubleVar((Double) result);
+            }
         }
+        catch( VariableDoesNotExistException e){
+            addIssue(IssueType.ERROR, ctx.op, "The variable does not exist in the current context!" );
+            return SKIP_ERROR;
+        }
+
+        return LYnkValidation.VOID;
     }
+
+    @Override
+    public LYnkValidation visitPlusMinusExpression(LYnkParser.PlusMinusExpressionContext ctx){
+        // Either empty value or error already detected deeper in the tree
+        final LYnkValidation left = visit(ctx.left);
+        if(left.isSkipError() || !left.hasValue()){
+            return SKIP_ERROR;
+        }
+        final LYnkValidation right = visit(ctx.right);
+        if(right.isSkipError() || !right.hasValue()){
+            return SKIP_ERROR;
+        }
+
+        // Left and Right are either a long or a double
+        if( left.isNumeric() && right.isNumeric() ){
+            if( ctx.op.getType() == LYnkParser.DIVISION && (right.value().equals(0))){
+                addIssue(IssueType.ERROR, ctx.op, "Division by 0!");
+                return SKIP_ERROR;
+            }
+            final var result = NumberUtil.evalBinaryOperator((Number) left.value(), (Number) right.value(), ctx.op);
+            if( left.isDouble() || right.isDouble()){
+                return LYnkValidation.doubleVar((Double) result);
+            }
+            return LYnkValidation.number((Long) result);
+        }
+
+        try {
+
+            // Left is a numeral and right is a variable
+            if (left.isNumeric() && right.isIdentification()) {
+                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                return LYnkValidation.doubleVar(varContext.getNumVarValue(right.asString()));
+            }
+
+            // Right is a numeral and left is a variable
+            if (left.isIdentification() && right.isNumeric()) {
+                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                return LYnkValidation.doubleVar(varContext.getNumVarValue(left.asString()));
+            }
+
+            // Left and right are variables
+            if (left.isIdentification() && right.isIdentification()) {
+                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                final var result = NumberUtil.evalBinaryOperator((Number) left.value(), (Number) right.value(), ctx.op);
+
+                if (!left.isDouble() && !right.isDouble()) {
+                    return LYnkValidation.number((Long) result);
+                }
+                return LYnkValidation.doubleVar((Double) result);
+            }
+        }
+        catch( VariableDoesNotExistException e){
+            addIssue(IssueType.ERROR, ctx.op, "The variable does not exist in the current context!" );
+            return SKIP_ERROR;
+        }
+
+        return LYnkValidation.VOID;
+    }
+
+    @Override
+    public LYnkValidation visitCompExpression(LYnkParser.CompExpressionContext ctx){
+        // Either empty value or error already detected deeper in the tree
+        final LYnkValidation left = visit(ctx.left);
+        if(left.isSkipError() || !left.hasValue()){
+            return SKIP_ERROR;
+        }
+        final LYnkValidation right = visit(ctx.right);
+        if(right.isSkipError() || !right.hasValue()){
+            return SKIP_ERROR;
+        }
+
+        // Left and Right are either a long or a double
+        if( left.isNumeric() && right.isNumeric() ){
+            if( ctx.numOperator().op.getType() == LYnkParser.DIVISION && (right.value().equals(0))){
+                addIssue(IssueType.ERROR, ctx.numOperator().op, "Division by 0!");
+                return SKIP_ERROR;
+            }
+            final var result = NumberUtil.evalBinaryOperator((Number) left.value(), (Number) right.value(), ctx.numOperator().op);
+            if( left.isDouble() || right.isDouble()){
+                return LYnkValidation.doubleVar((Double) result);
+            }
+            return LYnkValidation.number((Long) result);
+        }
+
+        try {
+
+            // Left is a numeral and right is a variable
+            if (left.isNumeric() && right.isIdentification()) {
+                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                return LYnkValidation.doubleVar(varContext.getNumVarValue(right.asString()));
+            }
+
+            // Right is a numeral and left is a variable
+            if (left.isIdentification() && right.isNumeric()) {
+                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                return LYnkValidation.doubleVar(varContext.getNumVarValue(left.asString()));
+            }
+
+            // Left and right are variables
+            if (left.isIdentification() && right.isIdentification()) {
+                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean) || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean) || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                    return SKIP_ERROR;
+                }
+                final var result = NumberUtil.evalBinaryOperator((Number) left.value(), (Number) right.value(), ctx.numOperator().op);
+
+                if (!left.isDouble() && !right.isDouble()) {
+                    return LYnkValidation.number((Long) result);
+                }
+                return LYnkValidation.doubleVar((Double) result);
+            }
+        }
+        catch (VariableDoesNotExistException e){
+            addIssue(IssueType.ERROR, ctx.numOperator().op, "The variable does not exist in the current context!" );
+            return SKIP_ERROR;
+        }
+
+        return LYnkValidation.VOID;
+    }
+
+    @Override
+    public LYnkValidation visitNumberExpression(LYnkParser.NumberExpressionContext ctx) {
+        Long value = Long.parseLong(ctx.NUMBER().getText());
+        return LYnkValidation.number(value);
+    }
+
+    @Override
+    public LYnkValidation visitLongExpression(LYnkParser.LongExpressionContext ctx){
+        Long value = Long.parseLong(ctx.LONG().getText());
+        return LYnkValidation.number(value);
+    }
+
+    @Override
+    public LYnkValidation visitIdentificationExpression(LYnkParser.IdentificationExpressionContext ctx){
+        String value = ctx.IDENTIFICATION().getText();
+        return LYnkValidation.identification(value);
+    }
+
+    @Override
+    public LYnkValidation visitDoubleExpression(LYnkParser.DoubleExpressionContext ctx){
+        Double value = Double.parseDouble(ctx.DOUBLE().getText());
+        return LYnkValidation.doubleVar(value);
+    }
+    // Boolean Expression
+    @Override
+    public LYnkValidation visitParenthesisVar(LYnkParser.ParenthesisVarContext ctx){
+        return visit(ctx.booleanExpression());
+    }
+
+    @Override
+    public LYnkValidation visitNotExpression(LYnkParser.NotExpressionContext ctx){
+        return visit(ctx.booleanExpression());
+    }
+
+    @Override
+    public LYnkValidation visitAndOrExpression(LYnkParser.AndOrExpressionContext ctx){
+        // Either empty value or error already detected deeper in the tree
+        final LYnkValidation left = visit(ctx.left);
+        if(left.isSkipError() || !left.hasValue()){
+            return SKIP_ERROR;
+        }
+        final LYnkValidation right = visit(ctx.right);
+        if(right.isSkipError() || !right.hasValue()){
+            return SKIP_ERROR;
+        }
+
+        // Both boolean
+        if( left.isBoolean() && right.isBoolean() ){
+            final Boolean value = BooleanUtil.evalAndOrOperator((Boolean) left.value(), (Boolean) right.value(), ctx.op);
+            return LYnkValidation.bool(value);
+        }
+
+        try {
+
+            // left boolean right variable
+            if (left.isBoolean() && right.isIdentification()) {
+                if (!(this.varContext.getVarType(right.asString()) instanceof Boolean) || !this.varContext.hasVar(right.asString())) {
+                    return SKIP_ERROR;
+                }
+                final Boolean rightValue = varContext.getBoolVarValue(right.asString());
+                final Boolean value = BooleanUtil.evalAndOrOperator((Boolean) left.value(), rightValue, ctx.op);
+                return LYnkValidation.bool(value);
+            }
+
+            // right boolean left variable
+            if (right.isBoolean() && left.isIdentification()) {
+                if (!(this.varContext.getVarType(left.asString()) instanceof Boolean)) {
+                    return SKIP_ERROR;
+                }
+                final Boolean leftValue = varContext.getBoolVarValue(left.asString());
+                final Boolean value = BooleanUtil.evalAndOrOperator(leftValue, (Boolean) right.value(), ctx.op);
+                return LYnkValidation.bool(value);
+            }
+            
+            // left variable right variable
+            if( left.isIdentification() && right.isIdentification() ){
+                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && !this.varContext.getVarType(left.asString()) instanceof Boolean)) {
+                    return SKIP_ERROR;
+                }
+                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && !this.varContext.getVarType(right.asString()) instanceof Boolean)) {
+                    return SKIP_ERROR;
+                }
+                final Boolean leftValue = this.varContext.getBoolVarValue(left.asString());
+                final Boolean rightValue = this.varContext.getBoolVarValue(right.asString());
+                final Boolean value = BooleanUtil.evalAndOrOperator(leftValue, rightValue, ctx.op);
+                return LYnkValidation.bool(value);
+            }
+        }
+        catch (VariableDoesNotExistException e){
+            addIssue(IssueType.ERROR, ctx.op, "The variable does not exist in the current context!" );
+            return SKIP_ERROR;
+        }
+        return LYnkValidation.VOID;
+    }
+    
+    
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException re){

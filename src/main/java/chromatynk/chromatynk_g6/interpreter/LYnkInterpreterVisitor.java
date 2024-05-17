@@ -212,9 +212,15 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         if(){
 
         }
-        for(from, from<to, step){
-            visit(ctx.blockStatement());
-            visitForStatement(ctx);
+        if(!(stepCondition == null)){
+            step = Integer.parseInt(ctx.step.getText());
+        }
+        String variableName = ctx.IDENTIFICATION().getText();
+        int variableValue;
+        for(variableValue=from;variableValue<to ; variableValue += step){
+            if(variableList.setNumVarValue(variableName, variableValue)){
+                visit(ctx.blockStatement());
+            };
         }
         return VOID;
     }
@@ -270,10 +276,10 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitBoolDeclaration(LYnkParser.BoolDeclarationContext ctx){
         if(ctx.booleanExpression().isEmpty()){
-            variableList.setBoolVarValue(ctx.IDENTIFICATION(),false);
+            variableList.setBoolVarValue(ctx.IDENTIFICATION().getText(),false);
         }
         else {
-            variableList.setBoolVarValue(ctx.IDENTIFICATION(), ctx.booleanExpression());
+            variableList.setBoolVarValue(ctx.IDENTIFICATION().getText(), ctx.booleanExpression());
         }
         return VOID;
 
@@ -303,7 +309,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitDeleteDeclaration(LYnkParser.DeleteDeclarationContext ctx){
         try {
-            variableList.delete(ctx.IDENTIFICATION());
+            variableList.delete(ctx.IDENTIFICATION().getText());
         } catch (VariableDoesNotExistException e) {
             throw new RuntimeException(e);
         }

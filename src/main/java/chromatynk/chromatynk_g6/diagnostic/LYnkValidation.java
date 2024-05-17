@@ -29,7 +29,7 @@ public record LYnkValidation(LYnkType type, Object value) {
         return value.toString();
     }
 
-    public double numericAsDouble(Number value){
+    public static double numericAsDouble(Number value){
         if( value instanceof Double dbl){
             return dbl;
         }
