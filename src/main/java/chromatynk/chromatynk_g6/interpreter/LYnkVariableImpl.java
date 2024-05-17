@@ -116,7 +116,7 @@ public class LYnkVariableImpl implements LYnkVariable{
 
     /**
      * Verify if the variable exist
-     * @param identifier the variable name
+     * @param identifiev r the variable name
      * @return boolean if the variable exist
      */
     @Override

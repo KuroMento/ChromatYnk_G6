@@ -233,7 +233,33 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         }
     }
 
-    public Object visitBooleanDeclaration(LYnkParser.BoolDeclarationContext ctx){
+    @Override
+    public Object visitColorParameter(LYnkParser.ColorParameterContext ctx){
+        if(!ctx.DOUBLE().getText().isEmpty()){
+            return Double.valueOf(ctx.DOUBLE().getText());
+        }
+        if(!ctx.LONG().getText().isEmpty()){
+            return Long.valueOf(ctx.LONG().getText());
+        }
+        return VOID;
+    }
+
+    @Override
+    public Object visitColorStatement(LYnkParser.ColorStatementContext ctx){
+        if(!(ctx.HEXCODE().getText().isEmpty())){
+            //change the cursor color in HEX
+        }
+        else{
+            final Object red = visit(ctx.colorParameter(0));
+            final Object green = visit(ctx.colorParameter(1));
+            final Object blue = visit(ctx.colorParameter(2));
+
+            //change the cursor color in RGB
+        }
+        return VOID;
+    }
+    @Override
+    public Object visitBoolDeclaration(LYnkParser.BoolDeclarationContext ctx){
         if(ctx.booleanExpression().isEmpty()){
             variableList.setBoolVarValue(ctx.IDENTIFICATION(),false);
         }
