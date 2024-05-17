@@ -51,7 +51,7 @@ public class LYnkVariableImpl implements LYnkVariable{
     public void delete(final TerminalNode identifier) throws VariableDoesNotExistException{
         //If the variable does not exist
         if(!variableMap.containsKey(identifier.getText())) throw new VariableDoesNotExistException("Variable " + identifier.getText() + " does not exist");
-            //If the variable exist we remove it
+        //If the variable exist we remove it
         else{
             variableMap.remove(identifier.getText());
         }
@@ -115,13 +115,36 @@ public class LYnkVariableImpl implements LYnkVariable{
     }
 
     /**
+     * Get the type of variable identifier
+     * @param identifier the variable to check
+     * @return the type of the variable
+     * @throws VariableDoesNotExistException the variable does not exist
+     */
+    @Override
+    public Object getVarType(final TerminalNode identifier) throws VariableDoesNotExistException{
+        if(variableMap.containsKey(identifier.getText())){
+            Variable var = variableMap.get(identifier.getText());
+            if(var instanceof VariableSTR){
+                return new String();
+            }
+            if(var instanceof VariableBOOL){
+                return Boolean.TRUE;
+            }
+            if(var instanceof VariableDOUBLE){
+                return 0d;
+            }
+        }
+        throw new VariableDoesNotExistException();
+    }
+
+    /**
      * Verify if the variable exist
      * @param identifiev r the variable name
      * @return boolean if the variable exist
      */
     @Override
-    public boolean hasVar(final TerminalNode identifier){
-        return variableMap.containsKey(identifier.getText());
+    public boolean hasVar(String name){
+        return variableMap.containsKey(name);
     }
 
     /**

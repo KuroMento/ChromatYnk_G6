@@ -40,7 +40,7 @@ public class LYnkBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements L
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) throws VariableDoesNotExistException { return visitChildren(ctx); }
+	@Override public T visitLiteralComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.LiteralComparisonContext ctx) throws VariableDoesNotExistException { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

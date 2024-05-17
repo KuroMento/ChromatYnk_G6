@@ -55,7 +55,7 @@ boolOperator : op=( EQUAL | NOT_EQUAL );
 numOperator : op=(PLUS | MINUS | MULTIPLICATION | DIVISION);
 
 ifStatement : 'IF' booleanExpression blockStatement;
-forStatement : 'FOR' IDENTIFICATION ('FROM' (NUMBER|LONG))? 'TO' (NUMBER|LONG) ('STEP' (NUMBER|LONG))?  blockStatement;
+forStatement : 'FOR' IDENTIFICATION ('FROM' from=(NUMBER|LONG))? 'TO' to=(NUMBER|LONG) ('STEP' step=(NUMBER|LONG))?  blockStatement;
 whileStatement : 'WHILE' booleanExpression blockStatement;
 
 numParameter : LONG | NUMBER | DOUBLE | PERCENTAGE;

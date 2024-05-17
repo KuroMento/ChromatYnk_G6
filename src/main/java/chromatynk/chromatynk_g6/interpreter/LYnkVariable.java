@@ -14,6 +14,7 @@ public interface LYnkVariable {
     Boolean getBoolVarValue(final TerminalNode identifier) throws VariableDoesNotExistException;
     void setBoolVarValue(final TerminalNode identifier, final Object value);
     Double getNumVarValue(final TerminalNode identifier) throws VariableDoesNotExistException;
+    Object getVarType(String name) throws VariableDoesNotExistException;
     void setNumVarValue(final TerminalNode identifier, final Object value);
 
 }

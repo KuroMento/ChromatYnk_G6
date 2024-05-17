@@ -79,6 +79,12 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Compare to string together and returns the result of the comparison
+     * @param ctx the parse tree
+     * @return The result of the comparison
+     * @throws VariableDoesNotExistException the variable does not exist
+     */
     @Override
     public Object visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) throws VariableDoesNotExistException{
         final int leftType = ctx.left.getType();
