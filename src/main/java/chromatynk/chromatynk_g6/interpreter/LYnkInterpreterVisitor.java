@@ -6,6 +6,7 @@ import chromatynk.chromatynk_g6.CursorManager;
 import chromatynk.chromatynk_g6.LYnk.LYnkBaseVisitor;
 import chromatynk.chromatynk_g6.LYnk.LYnkParser;
 import chromatynk.chromatynk_g6.Variable;
+import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
 import chromatynk.chromatynk_g6.utils.BooleanUtil;
 import chromatynk.chromatynk_g6.utils.NumberUtil;
@@ -202,19 +203,23 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitForStatement(final LYnkParser.ForStatementContext ctx){
+    public Object visitForStatement(final LYnkParser.ForStatementContext ctx) throws VariableDoesNotExistException{
         final Object fromCondition = ctx.from;
         final String toCondition = ctx.to.getText();
         final Object stepCondition = ctx.step;
-        if(variableList.hasVar(ctx.IDENTIFICATION())){
+        int from = 0;
+        int step = 1;
+        if(variableList.hasVar(ctx.IDENTIFICATION().getText())){
             console.addLine("the variable used for the for statement already exists");
             return VOID;
         }
-        int from = Integer.parseInt(ctx.from.getText());
+        if(toCondition.isEmpty()){
+            console.addLine("the TO in the for statement cannot be empty");
+            return VOID;
+        }
         int to = Integer.parseInt(ctx.to.getText());
-        int step = Integer.parseInt(ctx.step.getText());
-        if(){
-
+        if(!(fromCondition == null)){
+            from = Integer.parseInt(ctx.from.getText());
         }
         if(!(stepCondition == null)){
             step = Integer.parseInt(ctx.step.getText());

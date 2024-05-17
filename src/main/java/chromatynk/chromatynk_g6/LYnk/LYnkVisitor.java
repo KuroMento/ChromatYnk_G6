@@ -171,7 +171,7 @@ public interface LYnkVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitForStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ForStatementContext ctx);
+	T visitForStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ForStatementContext ctx) throws VariableDoesNotExistException;
 	/**
 	 * Visit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#whileStatement}.
 	 * @param ctx the parse tree
