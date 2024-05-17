@@ -1,6 +1,8 @@
 package chromatynk.chromatynk_g6.interpreter;
 
 import chromatynk.chromatynk_g6.Console;
+import chromatynk.chromatynk_g6.Cursor;
+import chromatynk.chromatynk_g6.CursorManager;
 import chromatynk.chromatynk_g6.LYnk.LYnkBaseVisitor;
 import chromatynk.chromatynk_g6.LYnk.LYnkParser;
 import chromatynk.chromatynk_g6.Variable;
@@ -8,6 +10,7 @@ import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExi
 import chromatynk.chromatynk_g6.utils.BooleanUtil;
 import chromatynk.chromatynk_g6.utils.NumberUtil;
 import chromatynk.chromatynk_g6.utils.StringUtil;
+import javafx.scene.paint.Color;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -20,12 +23,13 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
     private Console console;
     private LYnkVariable variableList ;
-
+    private CursorManager cursorManager;
     public LYnkInterpreterVisitor(){
         super();
         //this.cursorManager = new CursorManager();
         //this.varList = new VariableManager();
         this.console = new Console();
+        this.cursorManager = new CursorManager();
         //this.behaviour = Behaviour.DIRECT;
         //this.instructions = new ArrayDeque<>();
     }
@@ -200,7 +204,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitForStatement(final LYnkParser.ForStatementContext ctx){
         final Object fromCondition = ctx.from;
-        final Object toCondition = ctx.to;
+        final String toCondition = ctx.to.getText();
         final Object stepCondition = ctx.step;
         if(variableList.hasVar(ctx.IDENTIFICATION())){
             console.addLine("the variable used for the for statement already exists");
@@ -262,17 +266,79 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitColorStatement(LYnkParser.ColorStatementContext ctx){
         if(!(ctx.HEXCODE().getText().isEmpty())){
-            //change the cursor color in HEX
+            cursorManager.getSelectedCursor().setColor(Color.web(ctx.HEXCODE().getText()));
         }
         else{
             final Object red = visit(ctx.colorParameter(0));
             final Object green = visit(ctx.colorParameter(1));
             final Object blue = visit(ctx.colorParameter(2));
 
-            //change the cursor color in RGB
+            cursorManager.getSelectedCursor().setColor(Color.rgb(red, green, blue));
         }
         return VOID;
     }
+
+    @Override
+    public Object visitForwardStatement(LYnkParser.ForwardStatementContext ctx) throws NegativeNumberException {
+        if(!ctx.numParameter().PERCENTAGE().getText().isEmpty()) {
+            //the % is transformed into an int.
+        }
+        else{
+            cursorManager.getSelectedCursor().forward(Integer.parseInt(ctx.numParameter().getText()));
+        }
+        return VOID;
+    }
+
+    @Override
+    public Object visitBackwardStatement(LYnkParser.BackwardStatementContext ctx) throws NegativeNumberException{
+        if(!ctx.numParameter().PERCENTAGE().getText().isEmpty()){
+            //the % is transformed into an int
+            visitBackwardStatement(ctx); //we reuse the entry with the % transformed into an int.
+        }
+        else{
+            cursorManager.getSelectedCursor().backward(Integer.parseInt(ctx.numParameter().getText()));
+        }
+        return VOID;
+    }
+
+    @Override
+    public Object visitCursorStatement(LYnkParser.CursorStatementContext ctx){
+        cursorManager.addCursor(Long.parseLong(ctx.LONG().getText()));
+        return VOID;
+    }
+
+    @Override
+    public Object visitRemoveStatement(LYnkParser.RemoveStatementContext ctx){
+        cursorManager.removeCursor(Long.parseLong(ctx.LONG().getText()));
+        return VOID;
+    }
+
+    @Override
+    public Object visitSelectStatement(LYnkParser.SelectStatementContext ctx){
+        if(cursorManager.cursorExist(Long.parseLong(ctx.LONG().getText()))){
+            cursorManager.selectCursor(Long.parseLong(ctx.LONG().getText())));
+        }
+        return VOID;
+    }
+
+    @Override
+    public Object visitThickStatement(LYnkParser.ThickStatementContext ctx){
+        cursorManager.getSelectedCursor().setThickness(Long.parseLong(ctx.LONG().getText()));
+        return VOID;
+    }
+
+    @Override
+    public Object visitLookAtStatement(LYnkParser.LookAtStatementContext ctx){
+        //if the cursor to lookat exist
+        if(cursorManager.cursorExist(Long.parseLong(ctx.LONG().getText()))){
+            //the cursor to look at
+            Cursor cursorToLookAt = cursorManager.getCursor(Long.parseLong(ctx.LONG().getText()));
+            //the selected cursor look at the position x and y
+            cursorManager.getSelectedCursor().lookAt(cursorToLookAt.getPosX(),cursorToLookAt.getPosY());
+        }
+        return VOID;
+    }
+
     @Override
     public Object visitBoolDeclaration(LYnkParser.BoolDeclarationContext ctx){
         if(ctx.booleanExpression().isEmpty()){
