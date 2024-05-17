@@ -66,6 +66,14 @@ public class CursorManager {
     }
 
     /**
+     * Grabs a cursor.
+     * @return The <code>Cursor</code> which as <code>id</code> for identification.
+     */
+    public Cursor getCursor(long id) {
+        return this.cursors.get(id);
+    }
+
+    /**
      * Checks if a cursor exists within the Canvas.
      * @param id The id of the wanted cursor to check
      * @return True if the cursor is active and exist

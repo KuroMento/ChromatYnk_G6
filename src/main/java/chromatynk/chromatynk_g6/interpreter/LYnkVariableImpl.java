@@ -45,15 +45,16 @@ public class LYnkVariableImpl implements LYnkVariable{
 
     /**
      * Delete the variable identifier
-     * @param identifier variable
+     * @param name the variable name
      * @throws VariableDoesNotExistException the variable name does not exist
      */
-    public void delete(final TerminalNode identifier) throws VariableDoesNotExistException{
+    @Override
+    public void delete(String name) throws VariableDoesNotExistException{
         //If the variable does not exist
-        if(!variableMap.containsKey(identifier.getText())) throw new VariableDoesNotExistException("Variable " + identifier.getText() + " does not exist");
+        if(!variableMap.containsKey(name)) throw new VariableDoesNotExistException("Variable " + name + " does not exist");
         //If the variable exist we remove it
         else{
-            variableMap.remove(identifier.getText());
+            variableMap.remove(name);
         }
     }
 
@@ -74,9 +75,27 @@ public class LYnkVariableImpl implements LYnkVariable{
         throw new VariableDoesNotExistException();
     }
 
+    @Override
+    public Object getVarValue(String name) throws VariableDoesNotExistException{
+        if(variableMap.containsKey(name)){
+            Variable var = variableMap.get(name);
+            if(var instanceof VariableSTR){
+                return (((VariableSTR) var).getValue());
+            }
+            if(var instanceof VariableBOOL){
+                return (((VariableBOOL) var).getValue());
+            }
+            if(var instanceof VariableDOUBLE){
+                return (((VariableDOUBLE) var).getValue());
+            }
+        }
+        throw new VariableDoesNotExistException();
+    }
+
+
     /**
      * Get the value of a String variable
-     * @param identifier the String variable name
+     * @param identifier the variable
      * @return String value
      * @throws VariableDoesNotExistException the variable does not exist
      */
@@ -87,9 +106,23 @@ public class LYnkVariableImpl implements LYnkVariable{
         }
         throw new VariableDoesNotExistException();
     }
+
+    /**
+     * Get the value of a String variable
+     * @param name the String variable name
+     * @return String value
+     * @throws VariableDoesNotExistException the variable does not exist
+     */
+    @Override
+    public String getStrVarValue(String name) throws VariableDoesNotExistException{
+        if(variableMap.containsKey(name)) {
+            return ((VariableSTR) variableMap.get(name)).getValue();
+        }
+        throw new VariableDoesNotExistException();
+    }
     /**
      * Get the value of a boolean variable
-     * @param identifier the boolean variable name
+     * @param identifier the boolean variable
      * @return boolean value
      * @throws VariableDoesNotExistException the variable does not exist
      */
@@ -100,9 +133,23 @@ public class LYnkVariableImpl implements LYnkVariable{
         }
         throw new VariableDoesNotExistException();
     }
+
+    /**
+     * Get the value of a boolean variable
+     * @param name the boolean variable name
+     * @return boolean value
+     * @throws VariableDoesNotExistException the variable does not exist
+     */
+    @Override
+    public Boolean getBoolVarValue(String name) throws VariableDoesNotExistException{
+        if(variableMap.containsKey(name)) {
+            return ((VariableBOOL) variableMap.get(name)).getValue();
+        }
+        throw new VariableDoesNotExistException();
+    }
     /**
      * Get the value of a double variable
-     * @param identifier the double variable name
+     * @param identifier the double variable
      * @return double value
      * @throws VariableDoesNotExistException the variable does not exist
      */
@@ -110,6 +157,19 @@ public class LYnkVariableImpl implements LYnkVariable{
     public Double getNumVarValue(final TerminalNode identifier) throws VariableDoesNotExistException{
         if(variableMap.containsKey(identifier.getText())) {
             return ((VariableDOUBLE) variableMap.get(identifier.getText())).getValue();
+        }
+        throw new VariableDoesNotExistException();
+    }
+    /**
+     * Get the value of a double variable
+     * @param name the double variable name
+     * @return double value
+     * @throws VariableDoesNotExistException the variable does not exist
+     */
+    @Override
+    public Double getNumVarValue(String name) throws VariableDoesNotExistException{
+        if(variableMap.containsKey(name)) {
+            return ((VariableDOUBLE) variableMap.get(name)).getValue();
         }
         throw new VariableDoesNotExistException();
     }
@@ -136,10 +196,32 @@ public class LYnkVariableImpl implements LYnkVariable{
         }
         throw new VariableDoesNotExistException();
     }
+    /**
+     * Get the type of variable identifier
+     * @param name String name of the variable to check
+     * @return the type of the variable
+     * @throws VariableDoesNotExistException the variable does not exist
+     */
+    @Override
+    public Object getVarType(String name) throws VariableDoesNotExistException{
+        if(variableMap.containsKey(name)){
+            Variable var = variableMap.get(name);
+            if(var instanceof VariableSTR){
+                return new String();
+            }
+            if(var instanceof VariableBOOL){
+                return Boolean.TRUE;
+            }
+            if(var instanceof VariableDOUBLE){
+                return 0d;
+            }
+        }
+        throw new VariableDoesNotExistException();
+    }
 
     /**
      * Verify if the variable exist
-     * @param identifiev r the variable name
+     * @param name the variable name
      * @return boolean if the variable exist
      */
     @Override
@@ -149,37 +231,43 @@ public class LYnkVariableImpl implements LYnkVariable{
 
     /**
      * Set the value of a string variable
-     * @param identifier the variable name
+     * @param name the variable name
      * @param value the value of the variable
      */
     @Override
-    public void setStrVarValue(final TerminalNode identifier, final Object value){
-        if(isLegal(identifier.getText())){
-            variableMap.put(identifier.getText(),new VariableSTR((String) value));
+    public boolean setStrVarValue(String name, final Object value){
+        if(isLegal(name)){
+            variableMap.put(name,new VariableSTR((String) value));
+            return true;
         }
+        return false;
     }
 
     /**
      * Set the value of a boolean variable
-     * @param identifier the variable name
+     * @param name the variable name
      * @param value the value of the variable
      */
     @Override
-    public void setBoolVarValue(final TerminalNode identifier, final Object value){
-        if(isLegal(identifier.getText())){
-            variableMap.put(identifier.getText(),new VariableBOOL((Boolean) value));
+    public boolean setBoolVarValue(String name, final Object value){
+        if(isLegal(name)){
+            variableMap.put(name,new VariableBOOL((Boolean) value));
+            return true;
         }
+        return false;
     }
 
     /**
      * Set the value of a double variable
-     * @param identifier the variable name
+     * @param name the variable name
      * @param value the value of the variable
      */
     @Override
-    public void setNumVarValue(final TerminalNode identifier, final Object value){
-        if(isLegal(identifier.getText())){
-            variableMap.put(identifier.getText(),new VariableDOUBLE((Double) value));
+    public boolean setNumVarValue(String name, final Object value){
+        if(isLegal(name)){
+            variableMap.put(name,new VariableDOUBLE((Double) value));
+            return true;
         }
+        return false;
     }
 }

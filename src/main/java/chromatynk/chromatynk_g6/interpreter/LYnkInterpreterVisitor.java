@@ -231,6 +231,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
                 visit(ctx.blockStatement());
             };
         }
+        variableList.delete(variableName);
         return VOID;
     }
 
@@ -358,10 +359,10 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitStringDeclaration(LYnkParser.StringDeclarationContext ctx) {
         if(ctx.LITERAL().getText().isEmpty()) {
-            variableList.setStrVarValue(ctx.IDENTIFICATION(),"" );
+            variableList.setStrVarValue(ctx.IDENTIFICATION().getText(),"" );
         }
         else {
-            variableList.setStrVarValue(ctx.IDENTIFICATION(), ctx.LITERAL());
+            variableList.setStrVarValue(ctx.IDENTIFICATION().getText(), ctx.LITERAL());
         }
         return VOID;
     }
@@ -369,7 +370,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitNumberDeclaration(LYnkParser.NumberDeclarationContext ctx) {
         if(ctx.arithmeticExpression().isEmpty()) {
-            variableList.setNumVarValue(ctx.IDENTIFICATION(),0 );
+            variableList.setNumVarValue(ctx.IDENTIFICATION().getText(),0 );
         }
         else {
             variableList.setNumVarValue(ctx.IDENTIFICATION().getText(), ctx.arithmeticExpression());
