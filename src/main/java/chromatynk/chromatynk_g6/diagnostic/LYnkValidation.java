@@ -6,10 +6,9 @@ public record LYnkValidation(LYnkType type, Object value) {
 
     public boolean isBoolean(){return this.type == LYnkType.BOOLEAN;}
 
-    public boolean isNumber(){return this.type == LYnkType.NUMBER;}
+    public boolean isNumeric(){return this.type == LYnkType.NUMBER || this.type == LYnkType.DOUBLE;}
 
-    public boolean isDouble(){return this.type == LYnkType.DOUBLE;}
-
+    public boolean isDouble(){ return this.type == LYnkType.DOUBLE; }
     public boolean isString(){return this.type == LYnkType.LITERAL;}
 
     public boolean isIdentification(){return this.type == LYnkType.IDENTIFICATION;}
@@ -17,6 +16,29 @@ public record LYnkValidation(LYnkType type, Object value) {
     public boolean isVoid(){return this.type == LYnkType.VOID;}
 
     public boolean isSkipError(){return this.type == LYnkType.SKIP_ERROR; }
+
+    public boolean hasValue() {
+        return value != null;
+    }
+
+    public String asString() {
+        if (!hasValue()) {
+            throw new IllegalStateException("Expected String value");
+        }
+
+        return value.toString();
+    }
+
+    public double numericAsDouble(Number value){
+        if( value instanceof Double dbl){
+            return dbl;
+        }
+        else if (value instanceof Long lng) {
+            return lng.doubleValue();
+        } else {
+            throw new IllegalStateException("The object " + value + " is not suported!");
+        }
+    }
 
     public static LYnkValidation number(Long value){return new LYnkValidation(LYnkType.NUMBER, value);}
     public static LYnkValidation string(String value){return new LYnkValidation(LYnkType.LITERAL, value);}

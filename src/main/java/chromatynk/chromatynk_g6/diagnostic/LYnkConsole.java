@@ -3,6 +3,7 @@ package chromatynk.chromatynk_g6.diagnostic;
 import chromatynk.chromatynk_g6.LYnk.LYnkBaseVisitor;
 import chromatynk.chromatynk_g6.LYnk.LYnkParser;
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
+import chromatynk.chromatynk_g6.utils.NumberUtil;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -30,7 +31,13 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
     public LYnkConsole(){
         this.issues = new LinkedHashSet<>(0);
-        this.varContext = new LYnkVariableImpl(new PrintStream(stdout));
+        this.varContext = new LYnkVariableImpl();
+    }
+
+    private void addIssue(final IssueType issueType, final Token token, String message) {
+        final int line = token.getLine();
+        final int offset = token.getCharPositionInLine() + 1;
+        this.issues.add(new LYnkIssue(issueType, message, line, offset, ""));
     }
 
     /**
@@ -68,12 +75,28 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     @Override
     public LYnkValidation visitMulDivExpression(LYnkParser.MulDivExpressionContext ctx){
         final LYnkValidation left = visit(ctx.left);
-        if(left.isSkipError()){
+        if(left.isSkipError() || !left.hasValue()){
             return SKIP_ERROR;
         }
         final LYnkValidation right = visit(ctx.right);
-        if(right.isSkipError()){
+        if(right.isSkipError() || !right.hasValue()){
             return SKIP_ERROR;
+        }
+
+        if( left.isNumeric() && right.isNumeric() ){
+            if( ctx.op.getType() == LYnkParser.DIVISION && (right.value().equals(0))){
+                addIssue(IssueType.ERROR, ctx.op, "Division by 0!");
+                return SKIP_ERROR;
+            }
+            final var result = NumberUtil.evalBinaryOperator((Number) left.value(), (Number) right.value(), ctx.op);
+            if( left.isDouble() || right.isDouble()){
+                return LYnkValidation.doubleVar((Double) result);
+            }
+            return LYnkValidation.number((Long) result);
+        }
+
+        else if( left.isNumeric() && right.isIdentification() ){
+            if( this.varContext.hasVar(right.))
         }
     }
 
@@ -82,6 +105,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         if(!REPORT_SYNTAX_ERRORS){
             return;
         }
+        this.issues.add(new LYnkIssue(IssueType.ERROR, msg, charPositionInLine, line, ""));
 
         String sourceName = recognizer.getInputStream().getSourceName();
         if (!sourceName.isEmpty()) {

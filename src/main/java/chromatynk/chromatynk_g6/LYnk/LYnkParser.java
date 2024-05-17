@@ -3,11 +3,8 @@ package chromatynk.chromatynk_g6.LYnk;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.*;
 import org.antlr.v4.runtime.tree.*;
 import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
 public class LYnkParser extends Parser {
@@ -15,63 +12,63 @@ public class LYnkParser extends Parser {
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
-			new PredictionContextCache();
+		new PredictionContextCache();
 	public static final int
-			T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9,
-			T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17,
-			T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24,
-			T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31,
-			T__31=32, T__32=33, T__33=34, T__34=35, IDENTIFICATION=36, LONG=37, NUMBER=38,
-			DOUBLE=39, LITERAL=40, PERCENTAGE=41, HEXCODE=42, MULTIPLICATION=43, DIVISION=44,
-			PLUS=45, MINUS=46, ASSIGN=47, EQUAL=48, NOT_EQUAL=49, LESS=50, LESS_OR_EQUAL=51,
-			GREATER=52, GREATER_OR_EQUAL=53, SPACE=54;
+		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
+		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
+		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
+		T__31=32, T__32=33, T__33=34, T__34=35, IDENTIFICATION=36, LONG=37, NUMBER=38, 
+		DOUBLE=39, LITERAL=40, PERCENTAGE=41, HEXCODE=42, MULTIPLICATION=43, DIVISION=44, 
+		PLUS=45, MINUS=46, ASSIGN=47, EQUAL=48, NOT_EQUAL=49, LESS=50, LESS_OR_EQUAL=51, 
+		GREATER=52, GREATER_OR_EQUAL=53, SPACE=54;
 	public static final int
-			RULE_program = 0, RULE_statement = 1, RULE_booleanExpression = 2, RULE_arithmeticExpression = 3,
-			RULE_arithmeticOperator = 4, RULE_boolOperator = 5, RULE_numOperator = 6,
-			RULE_ifStatement = 7, RULE_whileStatement = 8, RULE_numParameter = 9,
-			RULE_colorParameter = 10, RULE_mimicStatement = 11, RULE_mirrorStatement = 12,
-			RULE_forwardStatement = 13, RULE_backwardStatement = 14, RULE_moveStatement = 15,
-			RULE_positionStatement = 16, RULE_boolDeclaration = 17, RULE_blockStatement = 18,
-			RULE_forStatement = 19, RULE_colorStatement = 20, RULE_cursorStatement = 21,
-			RULE_selectStatement = 22, RULE_removeStatement = 23, RULE_pressStatement = 24,
-			RULE_thickStatement = 25, RULE_lookAtStatement = 26, RULE_hideStatement = 27,
-			RULE_showStatement = 28, RULE_rotationStatement = 29, RULE_stringDeclaration = 30,
-			RULE_numberDeclaration = 31, RULE_deleteDeclaration = 32;
+		RULE_program = 0, RULE_statement = 1, RULE_booleanExpression = 2, RULE_arithmeticExpression = 3, 
+		RULE_arithmeticOperator = 4, RULE_boolOperator = 5, RULE_numOperator = 6, 
+		RULE_ifStatement = 7, RULE_forStatement = 8, RULE_whileStatement = 9, 
+		RULE_numParameter = 10, RULE_colorParameter = 11, RULE_mimicStatement = 12, 
+		RULE_mirrorStatement = 13, RULE_forwardStatement = 14, RULE_backwardStatement = 15, 
+		RULE_moveStatement = 16, RULE_positionStatement = 17, RULE_blockStatement = 18, 
+		RULE_colorStatement = 19, RULE_cursorStatement = 20, RULE_selectStatement = 21, 
+		RULE_removeStatement = 22, RULE_pressStatement = 23, RULE_thickStatement = 24, 
+		RULE_lookAtStatement = 25, RULE_hideStatement = 26, RULE_showStatement = 27, 
+		RULE_rotationStatement = 28, RULE_stringDeclaration = 29, RULE_boolDeclaration = 30, 
+		RULE_numberDeclaration = 31, RULE_deleteDeclaration = 32;
 	private static String[] makeRuleNames() {
 		return new String[] {
-				"program", "statement", "booleanExpression", "arithmeticExpression",
-				"arithmeticOperator", "boolOperator", "numOperator", "ifStatement", "whileStatement",
-				"numParameter", "colorParameter", "mimicStatement", "mirrorStatement",
-				"forwardStatement", "backwardStatement", "moveStatement", "positionStatement",
-				"boolDeclaration", "blockStatement", "forStatement", "colorStatement",
-				"cursorStatement", "selectStatement", "removeStatement", "pressStatement",
-				"thickStatement", "lookAtStatement", "hideStatement", "showStatement",
-				"rotationStatement", "stringDeclaration", "numberDeclaration", "deleteDeclaration"
+			"program", "statement", "booleanExpression", "arithmeticExpression", 
+			"arithmeticOperator", "boolOperator", "numOperator", "ifStatement", "forStatement", 
+			"whileStatement", "numParameter", "colorParameter", "mimicStatement", 
+			"mirrorStatement", "forwardStatement", "backwardStatement", "moveStatement", 
+			"positionStatement", "blockStatement", "colorStatement", "cursorStatement", 
+			"selectStatement", "removeStatement", "pressStatement", "thickStatement", 
+			"lookAtStatement", "hideStatement", "showStatement", "rotationStatement", 
+			"stringDeclaration", "boolDeclaration", "numberDeclaration", "deleteDeclaration"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-				null, "'('", "')'", "'AND'", "'OR'", "'NOT'", "'TRUE'", "'FALSE'", "'IF'",
-				"'WHILE'", "'MIMIC'", "'MIRROR'", "'FWD'", "'BWD'", "'MOV'", "'POS'",
-				"'BOOL'", "'{'", "'}'", "'FOR'", "'FROM'", "'TO'", "'STEP'", "'COLOR'",
-				"'CURSOR'", "'SELECT'", "'REMOVE'", "'PRESS'", "'THICK'", "'LOOKAT'",
-				"'HIDE'", "'SHOW'", "'TURN'", "'STR'", "'NUM'", "'DEL'", null, null,
-				null, null, null, null, null, "'*'", "'/'", "'+'", "'-'", "'='", "'=='",
-				"'!='", "'<'", "'<='", "'>'", "'>='"
+			null, "'('", "')'", "'AND'", "'OR'", "'NOT'", "'TRUE'", "'FALSE'", "'IF'", 
+			"'FOR'", "'FROM'", "'TO'", "'STEP'", "'WHILE'", "'MIMIC'", "'MIRROR'", 
+			"'FWD'", "'BWD'", "'MOV'", "'POS'", "'{'", "'}'", "'COLOR'", "'CURSOR'", 
+			"'SELECT'", "'REMOVE'", "'PRESS'", "'THICK'", "'LOOKAT'", "'HIDE'", "'SHOW'", 
+			"'TURN'", "'STR'", "'BOOL'", "'NUM'", "'DEL'", null, null, null, null, 
+			null, null, null, "'*'", "'/'", "'+'", "'-'", "'='", "'=='", "'!='", 
+			"'<'", "'<='", "'>'", "'>='"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-				null, null, null, null, null, null, null, null, null, null, null, null,
-				null, null, null, null, null, null, null, null, null, null, null, null,
-				null, null, null, null, null, null, null, null, null, null, null, null,
-				"IDENTIFICATION", "LONG", "NUMBER", "DOUBLE", "LITERAL", "PERCENTAGE",
-				"HEXCODE", "MULTIPLICATION", "DIVISION", "PLUS", "MINUS", "ASSIGN", "EQUAL",
-				"NOT_EQUAL", "LESS", "LESS_OR_EQUAL", "GREATER", "GREATER_OR_EQUAL",
-				"SPACE"
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			null, null, null, null, null, null, null, null, null, null, null, null, 
+			"IDENTIFICATION", "LONG", "NUMBER", "DOUBLE", "LITERAL", "PERCENTAGE", 
+			"HEXCODE", "MULTIPLICATION", "DIVISION", "PLUS", "MINUS", "ASSIGN", "EQUAL", 
+			"NOT_EQUAL", "LESS", "LESS_OR_EQUAL", "GREATER", "GREATER_OR_EQUAL", 
+			"SPACE"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -140,15 +137,15 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_program; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterProgram(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterProgram(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitProgram(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitProgram(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitProgram(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitProgram(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -160,22 +157,22 @@ public class LYnkParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(69);
+			setState(69);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 34357633792L) != 0)) {
+				{
+				{
+				setState(66);
+				statement();
+				}
+				}
+				setState(71);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 34352135936L) != 0)) {
-					{
-						{
-							setState(66);
-							statement();
-						}
-					}
-					setState(71);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				setState(72);
-				match(EOF);
+			}
+			setState(72);
+			match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -266,15 +263,15 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_statement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -286,169 +283,169 @@ public class LYnkParser extends Parser {
 			setState(97);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-				case T__7:
-					enterOuterAlt(_localctx, 1);
+			case T__7:
+				enterOuterAlt(_localctx, 1);
 				{
-					setState(74);
-					ifStatement();
+				setState(74);
+				ifStatement();
 				}
 				break;
-				case T__8:
-					enterOuterAlt(_localctx, 2);
+			case T__12:
+				enterOuterAlt(_localctx, 2);
 				{
-					setState(75);
-					whileStatement();
+				setState(75);
+				whileStatement();
 				}
 				break;
-				case T__18:
-					enterOuterAlt(_localctx, 3);
+			case T__8:
+				enterOuterAlt(_localctx, 3);
 				{
-					setState(76);
-					forStatement();
+				setState(76);
+				forStatement();
 				}
 				break;
-				case T__9:
-					enterOuterAlt(_localctx, 4);
+			case T__13:
+				enterOuterAlt(_localctx, 4);
 				{
-					setState(77);
-					mimicStatement();
+				setState(77);
+				mimicStatement();
 				}
 				break;
-				case T__10:
-					enterOuterAlt(_localctx, 5);
+			case T__14:
+				enterOuterAlt(_localctx, 5);
 				{
-					setState(78);
-					mirrorStatement();
+				setState(78);
+				mirrorStatement();
 				}
 				break;
-				case T__23:
-					enterOuterAlt(_localctx, 6);
+			case T__22:
+				enterOuterAlt(_localctx, 6);
 				{
-					setState(79);
-					cursorStatement();
+				setState(79);
+				cursorStatement();
 				}
 				break;
-				case T__24:
-					enterOuterAlt(_localctx, 7);
+			case T__23:
+				enterOuterAlt(_localctx, 7);
 				{
-					setState(80);
-					selectStatement();
+				setState(80);
+				selectStatement();
 				}
 				break;
-				case T__25:
-					enterOuterAlt(_localctx, 8);
+			case T__24:
+				enterOuterAlt(_localctx, 8);
 				{
-					setState(81);
-					removeStatement();
+				setState(81);
+				removeStatement();
 				}
 				break;
-				case T__29:
-					enterOuterAlt(_localctx, 9);
+			case T__28:
+				enterOuterAlt(_localctx, 9);
 				{
-					setState(82);
-					hideStatement();
+				setState(82);
+				hideStatement();
 				}
 				break;
-				case T__30:
-					enterOuterAlt(_localctx, 10);
+			case T__29:
+				enterOuterAlt(_localctx, 10);
 				{
-					setState(83);
-					showStatement();
+				setState(83);
+				showStatement();
 				}
 				break;
-				case T__26:
-					enterOuterAlt(_localctx, 11);
+			case T__25:
+				enterOuterAlt(_localctx, 11);
 				{
-					setState(84);
-					pressStatement();
+				setState(84);
+				pressStatement();
 				}
 				break;
-				case T__27:
-					enterOuterAlt(_localctx, 12);
+			case T__26:
+				enterOuterAlt(_localctx, 12);
 				{
-					setState(85);
-					thickStatement();
+				setState(85);
+				thickStatement();
 				}
 				break;
-				case T__22:
-					enterOuterAlt(_localctx, 13);
+			case T__21:
+				enterOuterAlt(_localctx, 13);
 				{
-					setState(86);
-					colorStatement();
+				setState(86);
+				colorStatement();
 				}
 				break;
-				case T__28:
-					enterOuterAlt(_localctx, 14);
+			case T__27:
+				enterOuterAlt(_localctx, 14);
 				{
-					setState(87);
-					lookAtStatement();
+				setState(87);
+				lookAtStatement();
 				}
 				break;
-				case T__11:
-					enterOuterAlt(_localctx, 15);
+			case T__15:
+				enterOuterAlt(_localctx, 15);
 				{
-					setState(88);
-					forwardStatement();
+				setState(88);
+				forwardStatement();
 				}
 				break;
-				case T__12:
-					enterOuterAlt(_localctx, 16);
+			case T__16:
+				enterOuterAlt(_localctx, 16);
 				{
-					setState(89);
-					backwardStatement();
+				setState(89);
+				backwardStatement();
 				}
 				break;
-				case T__31:
-					enterOuterAlt(_localctx, 17);
+			case T__30:
+				enterOuterAlt(_localctx, 17);
 				{
-					setState(90);
-					rotationStatement();
+				setState(90);
+				rotationStatement();
 				}
 				break;
-				case T__13:
-					enterOuterAlt(_localctx, 18);
+			case T__17:
+				enterOuterAlt(_localctx, 18);
 				{
-					setState(91);
-					moveStatement();
+				setState(91);
+				moveStatement();
 				}
 				break;
-				case T__14:
-					enterOuterAlt(_localctx, 19);
+			case T__18:
+				enterOuterAlt(_localctx, 19);
 				{
-					setState(92);
-					positionStatement();
+				setState(92);
+				positionStatement();
 				}
 				break;
-				case T__15:
-					enterOuterAlt(_localctx, 20);
+			case T__32:
+				enterOuterAlt(_localctx, 20);
 				{
-					setState(93);
-					boolDeclaration();
+				setState(93);
+				boolDeclaration();
 				}
 				break;
-				case T__33:
-					enterOuterAlt(_localctx, 21);
+			case T__33:
+				enterOuterAlt(_localctx, 21);
 				{
-					setState(94);
-					numberDeclaration();
+				setState(94);
+				numberDeclaration();
 				}
 				break;
-				case T__32:
-					enterOuterAlt(_localctx, 22);
+			case T__31:
+				enterOuterAlt(_localctx, 22);
 				{
-					setState(95);
-					stringDeclaration();
+				setState(95);
+				stringDeclaration();
 				}
 				break;
-				case T__16:
-					enterOuterAlt(_localctx, 23);
+			case T__19:
+				enterOuterAlt(_localctx, 23);
 				{
-					setState(96);
-					blockStatement();
+				setState(96);
+				blockStatement();
 				}
 				break;
-				default:
-					throw new NoViableAltException(this);
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -468,7 +465,7 @@ public class LYnkParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_booleanExpression; }
-
+	 
 		public BooleanExpressionContext() { }
 		public void copyFrom(BooleanExpressionContext ctx) {
 			super.copyFrom(ctx);
@@ -479,15 +476,15 @@ public class LYnkParser extends Parser {
 		public TrueVarContext(BooleanExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterTrueVar(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterTrueVar(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitTrueVar(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitTrueVar(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitTrueVar(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitTrueVar(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -510,15 +507,15 @@ public class LYnkParser extends Parser {
 		public LiteralComparisonContext(BooleanExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterLiteralComparison(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterLiteralComparison(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitLiteralComparison(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitLiteralComparison(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitLiteralComparison(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitLiteralComparison(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -527,15 +524,15 @@ public class LYnkParser extends Parser {
 		public FalseVarContext(BooleanExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterFalseVar(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterFalseVar(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitFalseVar(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitFalseVar(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitFalseVar(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitFalseVar(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -553,15 +550,15 @@ public class LYnkParser extends Parser {
 		public AndOrExpressionContext(BooleanExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterAndOrExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterAndOrExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitAndOrExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitAndOrExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitAndOrExpression(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitAndOrExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -573,15 +570,15 @@ public class LYnkParser extends Parser {
 		public NotExpressionContext(BooleanExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterNotExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterNotExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitNotExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitNotExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitNotExpression(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitNotExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -602,15 +599,15 @@ public class LYnkParser extends Parser {
 		public ArithmeticComparisonContext(BooleanExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterArithmeticComparison(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterArithmeticComparison(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitArithmeticComparison(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitArithmeticComparison(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitArithmeticComparison(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitArithmeticComparison(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -631,15 +628,15 @@ public class LYnkParser extends Parser {
 		public BooleanComparisonContext(BooleanExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterBooleanComparison(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterBooleanComparison(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitBooleanComparison(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitBooleanComparison(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitBooleanComparison(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitBooleanComparison(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -651,15 +648,15 @@ public class LYnkParser extends Parser {
 		public ParenthesisVarContext(BooleanExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterParenthesisVar(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterParenthesisVar(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitParenthesisVar(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitParenthesisVar(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitParenthesisVar(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitParenthesisVar(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -669,15 +666,15 @@ public class LYnkParser extends Parser {
 		public IdentificationVarContext(BooleanExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterIdentificationVar(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterIdentificationVar(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitIdentificationVar(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitIdentificationVar(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitIdentificationVar(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitIdentificationVar(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -698,160 +695,160 @@ public class LYnkParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(117);
-				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
-					case 1:
-					{
-						_localctx = new ParenthesisVarContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
+			setState(117);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
+			case 1:
+				{
+				_localctx = new ParenthesisVarContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 
-						setState(100);
-						match(T__0);
-						setState(101);
-						booleanExpression(0);
-						setState(102);
-						match(T__1);
-					}
-					break;
-					case 2:
-					{
-						_localctx = new NotExpressionContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
-						setState(104);
-						match(T__4);
-						setState(105);
-						booleanExpression(7);
-					}
-					break;
-					case 3:
-					{
-						_localctx = new ArithmeticComparisonContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
-						setState(106);
-						((ArithmeticComparisonContext)_localctx).left = arithmeticExpression(0);
-						setState(107);
-						((ArithmeticComparisonContext)_localctx).op = arithmeticOperator();
-						setState(108);
-						((ArithmeticComparisonContext)_localctx).right = arithmeticExpression(0);
-					}
-					break;
-					case 4:
-					{
-						_localctx = new LiteralComparisonContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
-						setState(110);
-						((LiteralComparisonContext)_localctx).left = _input.LT(1);
-						_la = _input.LA(1);
-						if ( !(_la==IDENTIFICATION || _la==LITERAL) ) {
-							((LiteralComparisonContext)_localctx).left = (Token)_errHandler.recoverInline(this);
-						}
-						else {
-							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-							_errHandler.reportMatch(this);
-							consume();
-						}
-						setState(111);
-						((LiteralComparisonContext)_localctx).op = arithmeticOperator();
-						setState(112);
-						((LiteralComparisonContext)_localctx).right = _input.LT(1);
-						_la = _input.LA(1);
-						if ( !(_la==IDENTIFICATION || _la==LITERAL) ) {
-							((LiteralComparisonContext)_localctx).right = (Token)_errHandler.recoverInline(this);
-						}
-						else {
-							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-							_errHandler.reportMatch(this);
-							consume();
-						}
-					}
-					break;
-					case 5:
-					{
-						_localctx = new IdentificationVarContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
-						setState(114);
-						match(IDENTIFICATION);
-					}
-					break;
-					case 6:
-					{
-						_localctx = new TrueVarContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
-						setState(115);
-						match(T__5);
-					}
-					break;
-					case 7:
-					{
-						_localctx = new FalseVarContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
-						setState(116);
-						match(T__6);
-					}
-					break;
+				setState(100);
+				match(T__0);
+				setState(101);
+				booleanExpression(0);
+				setState(102);
+				match(T__1);
 				}
-				_ctx.stop = _input.LT(-1);
-				setState(128);
+				break;
+			case 2:
+				{
+				_localctx = new NotExpressionContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(104);
+				match(T__4);
+				setState(105);
+				booleanExpression(7);
+				}
+				break;
+			case 3:
+				{
+				_localctx = new ArithmeticComparisonContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(106);
+				((ArithmeticComparisonContext)_localctx).left = arithmeticExpression(0);
+				setState(107);
+				((ArithmeticComparisonContext)_localctx).op = arithmeticOperator();
+				setState(108);
+				((ArithmeticComparisonContext)_localctx).right = arithmeticExpression(0);
+				}
+				break;
+			case 4:
+				{
+				_localctx = new LiteralComparisonContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(110);
+				((LiteralComparisonContext)_localctx).left = _input.LT(1);
+				_la = _input.LA(1);
+				if ( !(_la==IDENTIFICATION || _la==LITERAL) ) {
+					((LiteralComparisonContext)_localctx).left = (Token)_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
+				setState(111);
+				((LiteralComparisonContext)_localctx).op = arithmeticOperator();
+				setState(112);
+				((LiteralComparisonContext)_localctx).right = _input.LT(1);
+				_la = _input.LA(1);
+				if ( !(_la==IDENTIFICATION || _la==LITERAL) ) {
+					((LiteralComparisonContext)_localctx).right = (Token)_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
+				}
+				break;
+			case 5:
+				{
+				_localctx = new IdentificationVarContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(114);
+				match(IDENTIFICATION);
+				}
+				break;
+			case 6:
+				{
+				_localctx = new TrueVarContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(115);
+				match(T__5);
+				}
+				break;
+			case 7:
+				{
+				_localctx = new FalseVarContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(116);
+				match(T__6);
+				}
+				break;
+			}
+			_ctx.stop = _input.LT(-1);
+			setState(128);
+			_errHandler.sync(this);
+			_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					if ( _parseListeners!=null ) triggerExitRuleEvent();
+					_prevctx = _localctx;
+					{
+					setState(126);
+					_errHandler.sync(this);
+					switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
+					case 1:
+						{
+						_localctx = new AndOrExpressionContext(new BooleanExpressionContext(_parentctx, _parentState));
+						((AndOrExpressionContext)_localctx).left = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_booleanExpression);
+						setState(119);
+						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
+						setState(120);
+						((AndOrExpressionContext)_localctx).op = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==T__2 || _la==T__3) ) {
+							((AndOrExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(121);
+						((AndOrExpressionContext)_localctx).right = booleanExpression(9);
+						}
+						break;
+					case 2:
+						{
+						_localctx = new BooleanComparisonContext(new BooleanExpressionContext(_parentctx, _parentState));
+						((BooleanComparisonContext)_localctx).left = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_booleanExpression);
+						setState(122);
+						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
+						setState(123);
+						((BooleanComparisonContext)_localctx).op = boolOperator();
+						setState(124);
+						((BooleanComparisonContext)_localctx).right = booleanExpression(6);
+						}
+						break;
+					}
+					} 
+				}
+				setState(130);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
-				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-					if ( _alt==1 ) {
-						if ( _parseListeners!=null ) triggerExitRuleEvent();
-						_prevctx = _localctx;
-						{
-							setState(126);
-							_errHandler.sync(this);
-							switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
-								case 1:
-								{
-									_localctx = new AndOrExpressionContext(new BooleanExpressionContext(_parentctx, _parentState));
-									((AndOrExpressionContext)_localctx).left = _prevctx;
-									pushNewRecursionContext(_localctx, _startState, RULE_booleanExpression);
-									setState(119);
-									if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-									setState(120);
-									((AndOrExpressionContext)_localctx).op = _input.LT(1);
-									_la = _input.LA(1);
-									if ( !(_la==T__2 || _la==T__3) ) {
-										((AndOrExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-									}
-									else {
-										if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-										_errHandler.reportMatch(this);
-										consume();
-									}
-									setState(121);
-									((AndOrExpressionContext)_localctx).right = booleanExpression(9);
-								}
-								break;
-								case 2:
-								{
-									_localctx = new BooleanComparisonContext(new BooleanExpressionContext(_parentctx, _parentState));
-									((BooleanComparisonContext)_localctx).left = _prevctx;
-									pushNewRecursionContext(_localctx, _startState, RULE_booleanExpression);
-									setState(122);
-									if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-									setState(123);
-									((BooleanComparisonContext)_localctx).op = boolOperator();
-									setState(124);
-									((BooleanComparisonContext)_localctx).right = booleanExpression(6);
-								}
-								break;
-							}
-						}
-					}
-					setState(130);
-					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,4,_ctx);
-				}
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -871,7 +868,7 @@ public class LYnkParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_arithmeticExpression; }
-
+	 
 		public ArithmeticExpressionContext() { }
 		public void copyFrom(ArithmeticExpressionContext ctx) {
 			super.copyFrom(ctx);
@@ -883,15 +880,15 @@ public class LYnkParser extends Parser {
 		public IdentificationExpressionContext(ArithmeticExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterIdentificationExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterIdentificationExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitIdentificationExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitIdentificationExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitIdentificationExpression(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitIdentificationExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -901,15 +898,15 @@ public class LYnkParser extends Parser {
 		public LongExpressionContext(ArithmeticExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterLongExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterLongExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitLongExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitLongExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitLongExpression(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitLongExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -929,15 +926,15 @@ public class LYnkParser extends Parser {
 		public MulDivExpressionContext(ArithmeticExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterMulDivExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterMulDivExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitMulDivExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitMulDivExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitMulDivExpression(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitMulDivExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -957,15 +954,15 @@ public class LYnkParser extends Parser {
 		public PlusMinusExpressionContext(ArithmeticExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterPlusMinusExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterPlusMinusExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitPlusMinusExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitPlusMinusExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitPlusMinusExpression(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitPlusMinusExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -975,15 +972,15 @@ public class LYnkParser extends Parser {
 		public DoubleExpressionContext(ArithmeticExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterDoubleExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterDoubleExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitDoubleExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitDoubleExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitDoubleExpression(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitDoubleExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1003,15 +1000,15 @@ public class LYnkParser extends Parser {
 		public CompExpressionContext(ArithmeticExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterCompExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterCompExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitCompExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitCompExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitCompExpression(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitCompExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1021,15 +1018,15 @@ public class LYnkParser extends Parser {
 		public NumberExpressionContext(ArithmeticExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterNumberExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterNumberExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitNumberExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitNumberExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitNumberExpression(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitNumberExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1041,15 +1038,15 @@ public class LYnkParser extends Parser {
 		public ParenthesisExpressionContext(ArithmeticExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterParenthesisExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterParenthesisExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitParenthesisExpression(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitParenthesisExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitParenthesisExpression(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitParenthesisExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1070,138 +1067,138 @@ public class LYnkParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(140);
-				_errHandler.sync(this);
-				switch (_input.LA(1)) {
-					case T__0:
-					{
-						_localctx = new ParenthesisExpressionContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
+			setState(140);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case T__0:
+				{
+				_localctx = new ParenthesisExpressionContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 
-						setState(132);
-						match(T__0);
-						setState(133);
-						arithmeticExpression(0);
-						setState(134);
-						match(T__1);
-					}
-					break;
-					case NUMBER:
-					{
-						_localctx = new NumberExpressionContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
-						setState(136);
-						match(NUMBER);
-					}
-					break;
-					case LONG:
-					{
-						_localctx = new LongExpressionContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
-						setState(137);
-						match(LONG);
-					}
-					break;
-					case DOUBLE:
-					{
-						_localctx = new DoubleExpressionContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
-						setState(138);
-						match(DOUBLE);
-					}
-					break;
-					case IDENTIFICATION:
-					{
-						_localctx = new IdentificationExpressionContext(_localctx);
-						_ctx = _localctx;
-						_prevctx = _localctx;
-						setState(139);
-						match(IDENTIFICATION);
-					}
-					break;
-					default:
-						throw new NoViableAltException(this);
+				setState(132);
+				match(T__0);
+				setState(133);
+				arithmeticExpression(0);
+				setState(134);
+				match(T__1);
 				}
-				_ctx.stop = _input.LT(-1);
-				setState(154);
+				break;
+			case NUMBER:
+				{
+				_localctx = new NumberExpressionContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(136);
+				match(NUMBER);
+				}
+				break;
+			case LONG:
+				{
+				_localctx = new LongExpressionContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(137);
+				match(LONG);
+				}
+				break;
+			case DOUBLE:
+				{
+				_localctx = new DoubleExpressionContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(138);
+				match(DOUBLE);
+				}
+				break;
+			case IDENTIFICATION:
+				{
+				_localctx = new IdentificationExpressionContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+				setState(139);
+				match(IDENTIFICATION);
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+			_ctx.stop = _input.LT(-1);
+			setState(154);
+			_errHandler.sync(this);
+			_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					if ( _parseListeners!=null ) triggerExitRuleEvent();
+					_prevctx = _localctx;
+					{
+					setState(152);
+					_errHandler.sync(this);
+					switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
+					case 1:
+						{
+						_localctx = new MulDivExpressionContext(new ArithmeticExpressionContext(_parentctx, _parentState));
+						((MulDivExpressionContext)_localctx).left = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_arithmeticExpression);
+						setState(142);
+						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
+						setState(143);
+						((MulDivExpressionContext)_localctx).op = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==MULTIPLICATION || _la==DIVISION) ) {
+							((MulDivExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(144);
+						((MulDivExpressionContext)_localctx).right = arithmeticExpression(8);
+						}
+						break;
+					case 2:
+						{
+						_localctx = new PlusMinusExpressionContext(new ArithmeticExpressionContext(_parentctx, _parentState));
+						((PlusMinusExpressionContext)_localctx).left = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_arithmeticExpression);
+						setState(145);
+						if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
+						setState(146);
+						((PlusMinusExpressionContext)_localctx).op = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==PLUS || _la==MINUS) ) {
+							((PlusMinusExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(147);
+						((PlusMinusExpressionContext)_localctx).right = arithmeticExpression(7);
+						}
+						break;
+					case 3:
+						{
+						_localctx = new CompExpressionContext(new ArithmeticExpressionContext(_parentctx, _parentState));
+						((CompExpressionContext)_localctx).left = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_arithmeticExpression);
+						setState(148);
+						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
+						setState(149);
+						numOperator();
+						setState(150);
+						((CompExpressionContext)_localctx).right = arithmeticExpression(6);
+						}
+						break;
+					}
+					} 
+				}
+				setState(156);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
-				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
-					if ( _alt==1 ) {
-						if ( _parseListeners!=null ) triggerExitRuleEvent();
-						_prevctx = _localctx;
-						{
-							setState(152);
-							_errHandler.sync(this);
-							switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
-								case 1:
-								{
-									_localctx = new MulDivExpressionContext(new ArithmeticExpressionContext(_parentctx, _parentState));
-									((MulDivExpressionContext)_localctx).left = _prevctx;
-									pushNewRecursionContext(_localctx, _startState, RULE_arithmeticExpression);
-									setState(142);
-									if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
-									setState(143);
-									((MulDivExpressionContext)_localctx).op = _input.LT(1);
-									_la = _input.LA(1);
-									if ( !(_la==MULTIPLICATION || _la==DIVISION) ) {
-										((MulDivExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-									}
-									else {
-										if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-										_errHandler.reportMatch(this);
-										consume();
-									}
-									setState(144);
-									((MulDivExpressionContext)_localctx).right = arithmeticExpression(8);
-								}
-								break;
-								case 2:
-								{
-									_localctx = new PlusMinusExpressionContext(new ArithmeticExpressionContext(_parentctx, _parentState));
-									((PlusMinusExpressionContext)_localctx).left = _prevctx;
-									pushNewRecursionContext(_localctx, _startState, RULE_arithmeticExpression);
-									setState(145);
-									if (!(precpred(_ctx, 6))) throw new FailedPredicateException(this, "precpred(_ctx, 6)");
-									setState(146);
-									((PlusMinusExpressionContext)_localctx).op = _input.LT(1);
-									_la = _input.LA(1);
-									if ( !(_la==PLUS || _la==MINUS) ) {
-										((PlusMinusExpressionContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-									}
-									else {
-										if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-										_errHandler.reportMatch(this);
-										consume();
-									}
-									setState(147);
-									((PlusMinusExpressionContext)_localctx).right = arithmeticExpression(7);
-								}
-								break;
-								case 3:
-								{
-									_localctx = new CompExpressionContext(new ArithmeticExpressionContext(_parentctx, _parentState));
-									((CompExpressionContext)_localctx).left = _prevctx;
-									pushNewRecursionContext(_localctx, _startState, RULE_arithmeticExpression);
-									setState(148);
-									if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
-									setState(149);
-									numOperator();
-									setState(150);
-									((CompExpressionContext)_localctx).right = arithmeticExpression(6);
-								}
-								break;
-							}
-						}
-					}
-					setState(156);
-					_errHandler.sync(this);
-					_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
-				}
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -1230,15 +1227,15 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_arithmeticOperator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterArithmeticOperator(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterArithmeticOperator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitArithmeticOperator(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitArithmeticOperator(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitArithmeticOperator(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitArithmeticOperator(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1250,17 +1247,17 @@ public class LYnkParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(157);
-				((ArithmeticOperatorContext)_localctx).op = _input.LT(1);
-				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 17732923532771328L) != 0)) ) {
-					((ArithmeticOperatorContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
+			setState(157);
+			((ArithmeticOperatorContext)_localctx).op = _input.LT(1);
+			_la = _input.LA(1);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 17732923532771328L) != 0)) ) {
+				((ArithmeticOperatorContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -1285,15 +1282,15 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_boolOperator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterBoolOperator(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterBoolOperator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitBoolOperator(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitBoolOperator(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitBoolOperator(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitBoolOperator(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1305,17 +1302,17 @@ public class LYnkParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(159);
-				((BoolOperatorContext)_localctx).op = _input.LT(1);
-				_la = _input.LA(1);
-				if ( !(_la==EQUAL || _la==NOT_EQUAL) ) {
-					((BoolOperatorContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
+			setState(159);
+			((BoolOperatorContext)_localctx).op = _input.LT(1);
+			_la = _input.LA(1);
+			if ( !(_la==EQUAL || _la==NOT_EQUAL) ) {
+				((BoolOperatorContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -1342,15 +1339,15 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_numOperator; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterNumOperator(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterNumOperator(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitNumOperator(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitNumOperator(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitNumOperator(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitNumOperator(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1362,17 +1359,17 @@ public class LYnkParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(161);
-				((NumOperatorContext)_localctx).op = _input.LT(1);
-				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 131941395333120L) != 0)) ) {
-					((NumOperatorContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
+			setState(161);
+			((NumOperatorContext)_localctx).op = _input.LT(1);
+			_la = _input.LA(1);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 131941395333120L) != 0)) ) {
+				((NumOperatorContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -1400,15 +1397,15 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_ifStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterIfStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterIfStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitIfStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitIfStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitIfStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitIfStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1419,12 +1416,129 @@ public class LYnkParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(163);
-				match(T__7);
-				setState(164);
-				booleanExpression(0);
-				setState(165);
-				blockStatement();
+			setState(163);
+			match(T__7);
+			setState(164);
+			booleanExpression(0);
+			setState(165);
+			blockStatement();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class ForStatementContext extends ParserRuleContext {
+		public Token from;
+		public Token to;
+		public Token step;
+		public TerminalNode IDENTIFICATION() { return getToken(LYnkParser.IDENTIFICATION, 0); }
+		public BlockStatementContext blockStatement() {
+			return getRuleContext(BlockStatementContext.class,0);
+		}
+		public List<TerminalNode> NUMBER() { return getTokens(LYnkParser.NUMBER); }
+		public TerminalNode NUMBER(int i) {
+			return getToken(LYnkParser.NUMBER, i);
+		}
+		public List<TerminalNode> LONG() { return getTokens(LYnkParser.LONG); }
+		public TerminalNode LONG(int i) {
+			return getToken(LYnkParser.LONG, i);
+		}
+		public ForStatementContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_forStatement; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterForStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitForStatement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitForStatement(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final ForStatementContext forStatement() throws RecognitionException {
+		ForStatementContext _localctx = new ForStatementContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_forStatement);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(167);
+			match(T__8);
+			setState(168);
+			match(IDENTIFICATION);
+			setState(171);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==T__9) {
+				{
+				setState(169);
+				match(T__9);
+				setState(170);
+				((ForStatementContext)_localctx).from = _input.LT(1);
+				_la = _input.LA(1);
+				if ( !(_la==LONG || _la==NUMBER) ) {
+					((ForStatementContext)_localctx).from = (Token)_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
+				}
+			}
+
+			setState(173);
+			match(T__10);
+			setState(174);
+			((ForStatementContext)_localctx).to = _input.LT(1);
+			_la = _input.LA(1);
+			if ( !(_la==LONG || _la==NUMBER) ) {
+				((ForStatementContext)_localctx).to = (Token)_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
+			setState(177);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==T__11) {
+				{
+				setState(175);
+				match(T__11);
+				setState(176);
+				((ForStatementContext)_localctx).step = _input.LT(1);
+				_la = _input.LA(1);
+				if ( !(_la==LONG || _la==NUMBER) ) {
+					((ForStatementContext)_localctx).step = (Token)_errHandler.recoverInline(this);
+				}
+				else {
+					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+					_errHandler.reportMatch(this);
+					consume();
+				}
+				}
+			}
+
+			setState(179);
+			blockStatement();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1452,31 +1566,31 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_whileStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterWhileStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterWhileStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitWhileStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitWhileStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitWhileStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitWhileStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final WhileStatementContext whileStatement() throws RecognitionException {
 		WhileStatementContext _localctx = new WhileStatementContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_whileStatement);
+		enterRule(_localctx, 18, RULE_whileStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(167);
-				match(T__8);
-				setState(168);
-				booleanExpression(0);
-				setState(169);
-				blockStatement();
+			setState(181);
+			match(T__12);
+			setState(182);
+			booleanExpression(0);
+			setState(183);
+			blockStatement();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1502,36 +1616,36 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_numParameter; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterNumParameter(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterNumParameter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitNumParameter(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitNumParameter(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitNumParameter(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitNumParameter(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final NumParameterContext numParameter() throws RecognitionException {
 		NumParameterContext _localctx = new NumParameterContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_numParameter);
+		enterRule(_localctx, 20, RULE_numParameter);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(171);
-				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 3161095929856L) != 0)) ) {
-					_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
+			setState(185);
+			_la = _input.LA(1);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 3161095929856L) != 0)) ) {
+			_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -1555,36 +1669,36 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_colorParameter; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterColorParameter(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterColorParameter(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitColorParameter(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitColorParameter(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitColorParameter(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitColorParameter(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final ColorParameterContext colorParameter() throws RecognitionException {
 		ColorParameterContext _localctx = new ColorParameterContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_colorParameter);
+		enterRule(_localctx, 22, RULE_colorParameter);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(173);
-				_la = _input.LA(1);
-				if ( !(_la==LONG || _la==DOUBLE) ) {
-					_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
+			setState(187);
+			_la = _input.LA(1);
+			if ( !(_la==LONG || _la==DOUBLE) ) {
+			_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -1610,31 +1724,31 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_mimicStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterMimicStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterMimicStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitMimicStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitMimicStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitMimicStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitMimicStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final MimicStatementContext mimicStatement() throws RecognitionException {
 		MimicStatementContext _localctx = new MimicStatementContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_mimicStatement);
+		enterRule(_localctx, 24, RULE_mimicStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(175);
-				match(T__9);
-				setState(176);
-				match(LONG);
-				setState(177);
-				blockStatement();
+			setState(189);
+			match(T__13);
+			setState(190);
+			match(LONG);
+			setState(191);
+			blockStatement();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1665,53 +1779,53 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_mirrorStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterMirrorStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterMirrorStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitMirrorStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitMirrorStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitMirrorStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitMirrorStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final MirrorStatementContext mirrorStatement() throws RecognitionException {
 		MirrorStatementContext _localctx = new MirrorStatementContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_mirrorStatement);
+		enterRule(_localctx, 26, RULE_mirrorStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(179);
-				match(T__10);
-				setState(188);
-				_errHandler.sync(this);
-				switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
-					case 1:
-					{
-						setState(180);
-						numParameter();
-						setState(181);
-						numParameter();
-					}
-					break;
-					case 2:
-					{
-						setState(183);
-						numParameter();
-						setState(184);
-						numParameter();
-						setState(185);
-						numParameter();
-						setState(186);
-						numParameter();
-					}
-					break;
+			setState(193);
+			match(T__14);
+			setState(202);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
+			case 1:
+				{
+				setState(194);
+				numParameter();
+				setState(195);
+				numParameter();
 				}
-				setState(190);
-				blockStatement();
+				break;
+			case 2:
+				{
+				setState(197);
+				numParameter();
+				setState(198);
+				numParameter();
+				setState(199);
+				numParameter();
+				setState(200);
+				numParameter();
+				}
+				break;
+			}
+			setState(204);
+			blockStatement();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1736,29 +1850,29 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_forwardStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterForwardStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterForwardStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitForwardStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitForwardStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitForwardStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitForwardStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final ForwardStatementContext forwardStatement() throws RecognitionException {
 		ForwardStatementContext _localctx = new ForwardStatementContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_forwardStatement);
+		enterRule(_localctx, 28, RULE_forwardStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(192);
-				match(T__11);
-				setState(193);
-				numParameter();
+			setState(206);
+			match(T__15);
+			setState(207);
+			numParameter();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1783,29 +1897,29 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_backwardStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterBackwardStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterBackwardStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitBackwardStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitBackwardStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitBackwardStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitBackwardStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final BackwardStatementContext backwardStatement() throws RecognitionException {
 		BackwardStatementContext _localctx = new BackwardStatementContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_backwardStatement);
+		enterRule(_localctx, 30, RULE_backwardStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(195);
-				match(T__12);
-				setState(196);
-				numParameter();
+			setState(209);
+			match(T__16);
+			setState(210);
+			numParameter();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1833,31 +1947,31 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_moveStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterMoveStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterMoveStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitMoveStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitMoveStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitMoveStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitMoveStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final MoveStatementContext moveStatement() throws RecognitionException {
 		MoveStatementContext _localctx = new MoveStatementContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_moveStatement);
+		enterRule(_localctx, 32, RULE_moveStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(198);
-				match(T__13);
-				setState(199);
-				numParameter();
-				setState(200);
-				numParameter();
+			setState(212);
+			match(T__17);
+			setState(213);
+			numParameter();
+			setState(214);
+			numParameter();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1885,93 +1999,31 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_positionStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterPositionStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterPositionStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitPositionStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitPositionStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitPositionStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitPositionStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final PositionStatementContext positionStatement() throws RecognitionException {
 		PositionStatementContext _localctx = new PositionStatementContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_positionStatement);
+		enterRule(_localctx, 34, RULE_positionStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(202);
-				match(T__14);
-				setState(203);
-				numParameter();
-				setState(204);
-				numParameter();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class BoolDeclarationContext extends ParserRuleContext {
-		public TerminalNode IDENTIFICATION() { return getToken(LYnkParser.IDENTIFICATION, 0); }
-		public TerminalNode ASSIGN() { return getToken(LYnkParser.ASSIGN, 0); }
-		public BooleanExpressionContext booleanExpression() {
-			return getRuleContext(BooleanExpressionContext.class,0);
-		}
-		public BoolDeclarationContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_boolDeclaration; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterBoolDeclaration(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitBoolDeclaration(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitBoolDeclaration(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final BoolDeclarationContext boolDeclaration() throws RecognitionException {
-		BoolDeclarationContext _localctx = new BoolDeclarationContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_boolDeclaration);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-				setState(206);
-				match(T__15);
-				setState(207);
-				match(IDENTIFICATION);
-				setState(210);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				if (_la==ASSIGN) {
-					{
-						setState(208);
-						match(ASSIGN);
-						setState(209);
-						booleanExpression(0);
-					}
-				}
-
+			setState(216);
+			match(T__18);
+			setState(217);
+			numParameter();
+			setState(218);
+			numParameter();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1999,15 +2051,15 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_blockStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterBlockStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterBlockStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitBlockStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitBlockStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitBlockStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitBlockStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2019,135 +2071,24 @@ public class LYnkParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(212);
-				match(T__16);
-				setState(216);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 34352135936L) != 0)) {
-					{
-						{
-							setState(213);
-							statement();
-						}
-					}
-					setState(218);
-					_errHandler.sync(this);
-					_la = _input.LA(1);
-				}
-				setState(219);
-				match(T__17);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	@SuppressWarnings("CheckReturnValue")
-	public static class ForStatementContext extends ParserRuleContext {
-		public TerminalNode IDENTIFICATION() { return getToken(LYnkParser.IDENTIFICATION, 0); }
-		public BlockStatementContext blockStatement() {
-			return getRuleContext(BlockStatementContext.class,0);
-		}
-		public List<TerminalNode> NUMBER() { return getTokens(LYnkParser.NUMBER); }
-		public TerminalNode NUMBER(int i) {
-			return getToken(LYnkParser.NUMBER, i);
-		}
-		public List<TerminalNode> LONG() { return getTokens(LYnkParser.LONG); }
-		public TerminalNode LONG(int i) {
-			return getToken(LYnkParser.LONG, i);
-		}
-		public ForStatementContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_forStatement; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterForStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitForStatement(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitForStatement(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-
-	public final ForStatementContext forStatement() throws RecognitionException {
-		ForStatementContext _localctx = new ForStatementContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_forStatement);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
+			setState(220);
+			match(T__19);
+			setState(224);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 34357633792L) != 0)) {
+				{
+				{
 				setState(221);
-				match(T__18);
-				setState(222);
-				match(IDENTIFICATION);
-				setState(225);
+				statement();
+				}
+				}
+				setState(226);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if (_la==T__19) {
-					{
-						setState(223);
-						match(T__19);
-						setState(224);
-						_la = _input.LA(1);
-						if ( !(_la==LONG || _la==NUMBER) ) {
-							_errHandler.recoverInline(this);
-						}
-						else {
-							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-							_errHandler.reportMatch(this);
-							consume();
-						}
-					}
-				}
-
-				setState(227);
-				match(T__20);
-				setState(228);
-				_la = _input.LA(1);
-				if ( !(_la==LONG || _la==NUMBER) ) {
-					_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
-				setState(231);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				if (_la==T__21) {
-					{
-						setState(229);
-						match(T__21);
-						setState(230);
-						_la = _input.LA(1);
-						if ( !(_la==LONG || _la==NUMBER) ) {
-							_errHandler.recoverInline(this);
-						}
-						else {
-							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-							_errHandler.reportMatch(this);
-							consume();
-						}
-					}
-				}
-
-				setState(233);
-				blockStatement();
+			}
+			setState(227);
+			match(T__20);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2176,52 +2117,52 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_colorStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterColorStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterColorStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitColorStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitColorStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitColorStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitColorStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final ColorStatementContext colorStatement() throws RecognitionException {
 		ColorStatementContext _localctx = new ColorStatementContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_colorStatement);
+		enterRule(_localctx, 38, RULE_colorStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(235);
-				match(T__22);
-				setState(241);
-				_errHandler.sync(this);
-				switch (_input.LA(1)) {
-					case HEXCODE:
-					{
-						setState(236);
-						match(HEXCODE);
-					}
-					break;
-					case LONG:
-					case DOUBLE:
-					{
-						{
-							setState(237);
-							colorParameter();
-							setState(238);
-							colorParameter();
-							setState(239);
-							colorParameter();
-						}
-					}
-					break;
-					default:
-						throw new NoViableAltException(this);
+			setState(229);
+			match(T__21);
+			setState(235);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case HEXCODE:
+				{
+				setState(230);
+				match(HEXCODE);
 				}
+				break;
+			case LONG:
+			case DOUBLE:
+				{
+				{
+				setState(231);
+				colorParameter();
+				setState(232);
+				colorParameter();
+				setState(233);
+				colorParameter();
+				}
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -2244,29 +2185,29 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_cursorStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterCursorStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterCursorStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitCursorStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitCursorStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitCursorStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitCursorStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final CursorStatementContext cursorStatement() throws RecognitionException {
 		CursorStatementContext _localctx = new CursorStatementContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_cursorStatement);
+		enterRule(_localctx, 40, RULE_cursorStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(243);
-				match(T__23);
-				setState(244);
-				match(LONG);
+			setState(237);
+			match(T__22);
+			setState(238);
+			match(LONG);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2289,29 +2230,29 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_selectStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterSelectStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterSelectStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitSelectStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitSelectStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitSelectStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitSelectStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final SelectStatementContext selectStatement() throws RecognitionException {
 		SelectStatementContext _localctx = new SelectStatementContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_selectStatement);
+		enterRule(_localctx, 42, RULE_selectStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(246);
-				match(T__24);
-				setState(247);
-				match(LONG);
+			setState(240);
+			match(T__23);
+			setState(241);
+			match(LONG);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2334,29 +2275,29 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_removeStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterRemoveStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterRemoveStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitRemoveStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitRemoveStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitRemoveStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitRemoveStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final RemoveStatementContext removeStatement() throws RecognitionException {
 		RemoveStatementContext _localctx = new RemoveStatementContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_removeStatement);
+		enterRule(_localctx, 44, RULE_removeStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(249);
-				match(T__25);
-				setState(250);
-				match(LONG);
+			setState(243);
+			match(T__24);
+			setState(244);
+			match(LONG);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2380,38 +2321,38 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_pressStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterPressStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterPressStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitPressStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitPressStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitPressStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitPressStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final PressStatementContext pressStatement() throws RecognitionException {
 		PressStatementContext _localctx = new PressStatementContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_pressStatement);
+		enterRule(_localctx, 46, RULE_pressStatement);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(252);
-				match(T__26);
-				setState(253);
-				_la = _input.LA(1);
-				if ( !(_la==DOUBLE || _la==PERCENTAGE) ) {
-					_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
+			setState(246);
+			match(T__25);
+			setState(247);
+			_la = _input.LA(1);
+			if ( !(_la==DOUBLE || _la==PERCENTAGE) ) {
+			_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -2434,29 +2375,29 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_thickStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterThickStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterThickStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitThickStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitThickStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitThickStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitThickStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final ThickStatementContext thickStatement() throws RecognitionException {
 		ThickStatementContext _localctx = new ThickStatementContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_thickStatement);
+		enterRule(_localctx, 48, RULE_thickStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(255);
-				match(T__27);
-				setState(256);
-				match(LONG);
+			setState(249);
+			match(T__26);
+			setState(250);
+			match(LONG);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2479,29 +2420,29 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_lookAtStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterLookAtStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterLookAtStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitLookAtStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitLookAtStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitLookAtStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitLookAtStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final LookAtStatementContext lookAtStatement() throws RecognitionException {
 		LookAtStatementContext _localctx = new LookAtStatementContext(_ctx, getState());
-		enterRule(_localctx, 52, RULE_lookAtStatement);
+		enterRule(_localctx, 50, RULE_lookAtStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(258);
-				match(T__28);
-				setState(259);
-				match(LONG);
+			setState(252);
+			match(T__27);
+			setState(253);
+			match(LONG);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2523,27 +2464,27 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_hideStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterHideStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterHideStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitHideStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitHideStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitHideStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitHideStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final HideStatementContext hideStatement() throws RecognitionException {
 		HideStatementContext _localctx = new HideStatementContext(_ctx, getState());
-		enterRule(_localctx, 54, RULE_hideStatement);
+		enterRule(_localctx, 52, RULE_hideStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(261);
-				match(T__29);
+			setState(255);
+			match(T__28);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2565,27 +2506,27 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_showStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterShowStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterShowStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitShowStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitShowStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitShowStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitShowStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final ShowStatementContext showStatement() throws RecognitionException {
 		ShowStatementContext _localctx = new ShowStatementContext(_ctx, getState());
-		enterRule(_localctx, 56, RULE_showStatement);
+		enterRule(_localctx, 54, RULE_showStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(263);
-				match(T__30);
+			setState(257);
+			match(T__29);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2610,29 +2551,29 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_rotationStatement; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterRotationStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterRotationStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitRotationStatement(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitRotationStatement(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitRotationStatement(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitRotationStatement(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final RotationStatementContext rotationStatement() throws RecognitionException {
 		RotationStatementContext _localctx = new RotationStatementContext(_ctx, getState());
-		enterRule(_localctx, 58, RULE_rotationStatement);
+		enterRule(_localctx, 56, RULE_rotationStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(265);
-				match(T__31);
-				setState(266);
-				arithmeticExpression(0);
+			setState(259);
+			match(T__30);
+			setState(260);
+			arithmeticExpression(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2657,41 +2598,103 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_stringDeclaration; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterStringDeclaration(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterStringDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitStringDeclaration(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitStringDeclaration(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitStringDeclaration(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitStringDeclaration(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
 	public final StringDeclarationContext stringDeclaration() throws RecognitionException {
 		StringDeclarationContext _localctx = new StringDeclarationContext(_ctx, getState());
-		enterRule(_localctx, 60, RULE_stringDeclaration);
+		enterRule(_localctx, 58, RULE_stringDeclaration);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(268);
-				match(T__32);
-				setState(269);
-				match(IDENTIFICATION);
-				setState(272);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				if (_la==ASSIGN) {
-					{
-						setState(270);
-						match(ASSIGN);
-						setState(271);
-						match(LITERAL);
-					}
+			setState(262);
+			match(T__31);
+			setState(263);
+			match(IDENTIFICATION);
+			setState(266);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==ASSIGN) {
+				{
+				setState(264);
+				match(ASSIGN);
+				setState(265);
+				match(LITERAL);
 				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	@SuppressWarnings("CheckReturnValue")
+	public static class BoolDeclarationContext extends ParserRuleContext {
+		public TerminalNode IDENTIFICATION() { return getToken(LYnkParser.IDENTIFICATION, 0); }
+		public TerminalNode ASSIGN() { return getToken(LYnkParser.ASSIGN, 0); }
+		public BooleanExpressionContext booleanExpression() {
+			return getRuleContext(BooleanExpressionContext.class,0);
+		}
+		public BoolDeclarationContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_boolDeclaration; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterBoolDeclaration(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitBoolDeclaration(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitBoolDeclaration(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final BoolDeclarationContext boolDeclaration() throws RecognitionException {
+		BoolDeclarationContext _localctx = new BoolDeclarationContext(_ctx, getState());
+		enterRule(_localctx, 60, RULE_boolDeclaration);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(268);
+			match(T__32);
+			setState(269);
+			match(IDENTIFICATION);
+			setState(272);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==ASSIGN) {
+				{
+				setState(270);
+				match(ASSIGN);
+				setState(271);
+				booleanExpression(0);
+				}
+			}
 
 			}
 		}
@@ -2719,15 +2722,15 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_numberDeclaration; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterNumberDeclaration(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterNumberDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitNumberDeclaration(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).exitNumberDeclaration(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitNumberDeclaration(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((chromatynk.chromatynk_g6.LYnk.LYnkVisitor<? extends T>)visitor).visitNumberDeclaration(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2739,21 +2742,21 @@ public class LYnkParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(274);
-				match(T__33);
-				setState(275);
-				match(IDENTIFICATION);
-				setState(278);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-				if (_la==ASSIGN) {
-					{
-						setState(276);
-						match(ASSIGN);
-						setState(277);
-						arithmeticExpression(0);
-					}
+			setState(274);
+			match(T__33);
+			setState(275);
+			match(IDENTIFICATION);
+			setState(278);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==ASSIGN) {
+				{
+				setState(276);
+				match(ASSIGN);
+				setState(277);
+				arithmeticExpression(0);
 				}
+			}
 
 			}
 		}
@@ -2777,15 +2780,15 @@ public class LYnkParser extends Parser {
 		@Override public int getRuleIndex() { return RULE_deleteDeclaration; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).enterDeleteDeclaration(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((chromatynk.chromatynk_g6.LYnk.LYnkListener)listener).enterDeleteDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LYnkListener ) ((LYnkListener)listener).exitDeleteDeclaration(this);
+			if ( listener instanceof chromatynk.chromatynk_g6.LYnk.LYnkListener) ((LYnkListener)listener).exitDeleteDeclaration(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LYnkVisitor ) return ((LYnkVisitor<? extends T>)visitor).visitDeleteDeclaration(this);
+			if ( visitor instanceof chromatynk.chromatynk_g6.LYnk.LYnkVisitor) return ((LYnkVisitor<? extends T>)visitor).visitDeleteDeclaration(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -2796,10 +2799,10 @@ public class LYnkParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-				setState(280);
-				match(T__34);
-				setState(281);
-				match(IDENTIFICATION);
+			setState(280);
+			match(T__34);
+			setState(281);
+			match(IDENTIFICATION);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2815,216 +2818,215 @@ public class LYnkParser extends Parser {
 
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-			case 2:
-				return booleanExpression_sempred((BooleanExpressionContext)_localctx, predIndex);
-			case 3:
-				return arithmeticExpression_sempred((ArithmeticExpressionContext)_localctx, predIndex);
+		case 2:
+			return booleanExpression_sempred((BooleanExpressionContext)_localctx, predIndex);
+		case 3:
+			return arithmeticExpression_sempred((ArithmeticExpressionContext)_localctx, predIndex);
 		}
 		return true;
 	}
 	private boolean booleanExpression_sempred(BooleanExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-			case 0:
-				return precpred(_ctx, 8);
-			case 1:
-				return precpred(_ctx, 5);
+		case 0:
+			return precpred(_ctx, 8);
+		case 1:
+			return precpred(_ctx, 5);
 		}
 		return true;
 	}
 	private boolean arithmeticExpression_sempred(ArithmeticExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
-			case 2:
-				return precpred(_ctx, 7);
-			case 3:
-				return precpred(_ctx, 6);
-			case 4:
-				return precpred(_ctx, 5);
+		case 2:
+			return precpred(_ctx, 7);
+		case 3:
+			return precpred(_ctx, 6);
+		case 4:
+			return precpred(_ctx, 5);
 		}
 		return true;
 	}
 
 	public static final String _serializedATN =
-			"\u0004\u00016\u011c\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
-					"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
-					"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
-					"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
-					"\f\u0007\f\u0002\r\u0007\r\u0002\u000e\u0007\u000e\u0002\u000f\u0007\u000f"+
-					"\u0002\u0010\u0007\u0010\u0002\u0011\u0007\u0011\u0002\u0012\u0007\u0012"+
-					"\u0002\u0013\u0007\u0013\u0002\u0014\u0007\u0014\u0002\u0015\u0007\u0015"+
-					"\u0002\u0016\u0007\u0016\u0002\u0017\u0007\u0017\u0002\u0018\u0007\u0018"+
-					"\u0002\u0019\u0007\u0019\u0002\u001a\u0007\u001a\u0002\u001b\u0007\u001b"+
-					"\u0002\u001c\u0007\u001c\u0002\u001d\u0007\u001d\u0002\u001e\u0007\u001e"+
-					"\u0002\u001f\u0007\u001f\u0002 \u0007 \u0001\u0000\u0005\u0000D\b\u0000"+
-					"\n\u0000\f\u0000G\t\u0000\u0001\u0000\u0001\u0000\u0001\u0001\u0001\u0001"+
-					"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
-					"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
-					"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
-					"\u0001\u0001\u0001\u0001\u0001\u0001\u0003\u0001b\b\u0001\u0001\u0002"+
-					"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002"+
-					"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002"+
-					"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0003\u0002"+
-					"v\b\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002"+
-					"\u0001\u0002\u0001\u0002\u0005\u0002\u007f\b\u0002\n\u0002\f\u0002\u0082"+
-					"\t\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001"+
-					"\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u0003\u008d\b\u0003\u0001"+
-					"\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001"+
-					"\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0005\u0003\u0099\b\u0003\n"+
-					"\u0003\f\u0003\u009c\t\u0003\u0001\u0004\u0001\u0004\u0001\u0005\u0001"+
-					"\u0005\u0001\u0006\u0001\u0006\u0001\u0007\u0001\u0007\u0001\u0007\u0001"+
-					"\u0007\u0001\b\u0001\b\u0001\b\u0001\b\u0001\t\u0001\t\u0001\n\u0001\n"+
-					"\u0001\u000b\u0001\u000b\u0001\u000b\u0001\u000b\u0001\f\u0001\f\u0001"+
-					"\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0001\f\u0003\f\u00bd\b\f\u0001"+
-					"\f\u0001\f\u0001\r\u0001\r\u0001\r\u0001\u000e\u0001\u000e\u0001\u000e"+
-					"\u0001\u000f\u0001\u000f\u0001\u000f\u0001\u000f\u0001\u0010\u0001\u0010"+
-					"\u0001\u0010\u0001\u0010\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011"+
-					"\u0003\u0011\u00d3\b\u0011\u0001\u0012\u0001\u0012\u0005\u0012\u00d7\b"+
-					"\u0012\n\u0012\f\u0012\u00da\t\u0012\u0001\u0012\u0001\u0012\u0001\u0013"+
-					"\u0001\u0013\u0001\u0013\u0001\u0013\u0003\u0013\u00e2\b\u0013\u0001\u0013"+
-					"\u0001\u0013\u0001\u0013\u0001\u0013\u0003\u0013\u00e8\b\u0013\u0001\u0013"+
-					"\u0001\u0013\u0001\u0014\u0001\u0014\u0001\u0014\u0001\u0014\u0001\u0014"+
-					"\u0001\u0014\u0003\u0014\u00f2\b\u0014\u0001\u0015\u0001\u0015\u0001\u0015"+
-					"\u0001\u0016\u0001\u0016\u0001\u0016\u0001\u0017\u0001\u0017\u0001\u0017"+
-					"\u0001\u0018\u0001\u0018\u0001\u0018\u0001\u0019\u0001\u0019\u0001\u0019"+
-					"\u0001\u001a\u0001\u001a\u0001\u001a\u0001\u001b\u0001\u001b\u0001\u001c"+
-					"\u0001\u001c\u0001\u001d\u0001\u001d\u0001\u001d\u0001\u001e\u0001\u001e"+
-					"\u0001\u001e\u0001\u001e\u0003\u001e\u0111\b\u001e\u0001\u001f\u0001\u001f"+
-					"\u0001\u001f\u0001\u001f\u0003\u001f\u0117\b\u001f\u0001 \u0001 \u0001"+
-					" \u0001 \u0000\u0002\u0004\u0006!\u0000\u0002\u0004\u0006\b\n\f\u000e"+
-					"\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u001e \"$&(*,.02468:<>@\u0000"+
-					"\u000b\u0002\u0000$$((\u0001\u0000\u0003\u0004\u0001\u0000+,\u0001\u0000"+
-					"-.\u0001\u000005\u0001\u000001\u0001\u0000+.\u0002\u0000%\'))\u0002\u0000"+
-					"%%\'\'\u0001\u0000%&\u0002\u0000\'\'))\u0128\u0000E\u0001\u0000\u0000"+
-					"\u0000\u0002a\u0001\u0000\u0000\u0000\u0004u\u0001\u0000\u0000\u0000\u0006"+
-					"\u008c\u0001\u0000\u0000\u0000\b\u009d\u0001\u0000\u0000\u0000\n\u009f"+
-					"\u0001\u0000\u0000\u0000\f\u00a1\u0001\u0000\u0000\u0000\u000e\u00a3\u0001"+
-					"\u0000\u0000\u0000\u0010\u00a7\u0001\u0000\u0000\u0000\u0012\u00ab\u0001"+
-					"\u0000\u0000\u0000\u0014\u00ad\u0001\u0000\u0000\u0000\u0016\u00af\u0001"+
-					"\u0000\u0000\u0000\u0018\u00b3\u0001\u0000\u0000\u0000\u001a\u00c0\u0001"+
-					"\u0000\u0000\u0000\u001c\u00c3\u0001\u0000\u0000\u0000\u001e\u00c6\u0001"+
-					"\u0000\u0000\u0000 \u00ca\u0001\u0000\u0000\u0000\"\u00ce\u0001\u0000"+
-					"\u0000\u0000$\u00d4\u0001\u0000\u0000\u0000&\u00dd\u0001\u0000\u0000\u0000"+
-					"(\u00eb\u0001\u0000\u0000\u0000*\u00f3\u0001\u0000\u0000\u0000,\u00f6"+
-					"\u0001\u0000\u0000\u0000.\u00f9\u0001\u0000\u0000\u00000\u00fc\u0001\u0000"+
-					"\u0000\u00002\u00ff\u0001\u0000\u0000\u00004\u0102\u0001\u0000\u0000\u0000"+
-					"6\u0105\u0001\u0000\u0000\u00008\u0107\u0001\u0000\u0000\u0000:\u0109"+
-					"\u0001\u0000\u0000\u0000<\u010c\u0001\u0000\u0000\u0000>\u0112\u0001\u0000"+
-					"\u0000\u0000@\u0118\u0001\u0000\u0000\u0000BD\u0003\u0002\u0001\u0000"+
-					"CB\u0001\u0000\u0000\u0000DG\u0001\u0000\u0000\u0000EC\u0001\u0000\u0000"+
-					"\u0000EF\u0001\u0000\u0000\u0000FH\u0001\u0000\u0000\u0000GE\u0001\u0000"+
-					"\u0000\u0000HI\u0005\u0000\u0000\u0001I\u0001\u0001\u0000\u0000\u0000"+
-					"Jb\u0003\u000e\u0007\u0000Kb\u0003\u0010\b\u0000Lb\u0003&\u0013\u0000"+
-					"Mb\u0003\u0016\u000b\u0000Nb\u0003\u0018\f\u0000Ob\u0003*\u0015\u0000"+
-					"Pb\u0003,\u0016\u0000Qb\u0003.\u0017\u0000Rb\u00036\u001b\u0000Sb\u0003"+
-					"8\u001c\u0000Tb\u00030\u0018\u0000Ub\u00032\u0019\u0000Vb\u0003(\u0014"+
-					"\u0000Wb\u00034\u001a\u0000Xb\u0003\u001a\r\u0000Yb\u0003\u001c\u000e"+
-					"\u0000Zb\u0003:\u001d\u0000[b\u0003\u001e\u000f\u0000\\b\u0003 \u0010"+
-					"\u0000]b\u0003\"\u0011\u0000^b\u0003>\u001f\u0000_b\u0003<\u001e\u0000"+
-					"`b\u0003$\u0012\u0000aJ\u0001\u0000\u0000\u0000aK\u0001\u0000\u0000\u0000"+
-					"aL\u0001\u0000\u0000\u0000aM\u0001\u0000\u0000\u0000aN\u0001\u0000\u0000"+
-					"\u0000aO\u0001\u0000\u0000\u0000aP\u0001\u0000\u0000\u0000aQ\u0001\u0000"+
-					"\u0000\u0000aR\u0001\u0000\u0000\u0000aS\u0001\u0000\u0000\u0000aT\u0001"+
-					"\u0000\u0000\u0000aU\u0001\u0000\u0000\u0000aV\u0001\u0000\u0000\u0000"+
-					"aW\u0001\u0000\u0000\u0000aX\u0001\u0000\u0000\u0000aY\u0001\u0000\u0000"+
-					"\u0000aZ\u0001\u0000\u0000\u0000a[\u0001\u0000\u0000\u0000a\\\u0001\u0000"+
-					"\u0000\u0000a]\u0001\u0000\u0000\u0000a^\u0001\u0000\u0000\u0000a_\u0001"+
-					"\u0000\u0000\u0000a`\u0001\u0000\u0000\u0000b\u0003\u0001\u0000\u0000"+
-					"\u0000cd\u0006\u0002\uffff\uffff\u0000de\u0005\u0001\u0000\u0000ef\u0003"+
-					"\u0004\u0002\u0000fg\u0005\u0002\u0000\u0000gv\u0001\u0000\u0000\u0000"+
-					"hi\u0005\u0005\u0000\u0000iv\u0003\u0004\u0002\u0007jk\u0003\u0006\u0003"+
-					"\u0000kl\u0003\b\u0004\u0000lm\u0003\u0006\u0003\u0000mv\u0001\u0000\u0000"+
-					"\u0000no\u0007\u0000\u0000\u0000op\u0003\b\u0004\u0000pq\u0007\u0000\u0000"+
-					"\u0000qv\u0001\u0000\u0000\u0000rv\u0005$\u0000\u0000sv\u0005\u0006\u0000"+
-					"\u0000tv\u0005\u0007\u0000\u0000uc\u0001\u0000\u0000\u0000uh\u0001\u0000"+
-					"\u0000\u0000uj\u0001\u0000\u0000\u0000un\u0001\u0000\u0000\u0000ur\u0001"+
-					"\u0000\u0000\u0000us\u0001\u0000\u0000\u0000ut\u0001\u0000\u0000\u0000"+
-					"v\u0080\u0001\u0000\u0000\u0000wx\n\b\u0000\u0000xy\u0007\u0001\u0000"+
-					"\u0000y\u007f\u0003\u0004\u0002\tz{\n\u0005\u0000\u0000{|\u0003\n\u0005"+
-					"\u0000|}\u0003\u0004\u0002\u0006}\u007f\u0001\u0000\u0000\u0000~w\u0001"+
-					"\u0000\u0000\u0000~z\u0001\u0000\u0000\u0000\u007f\u0082\u0001\u0000\u0000"+
-					"\u0000\u0080~\u0001\u0000\u0000\u0000\u0080\u0081\u0001\u0000\u0000\u0000"+
-					"\u0081\u0005\u0001\u0000\u0000\u0000\u0082\u0080\u0001\u0000\u0000\u0000"+
-					"\u0083\u0084\u0006\u0003\uffff\uffff\u0000\u0084\u0085\u0005\u0001\u0000"+
-					"\u0000\u0085\u0086\u0003\u0006\u0003\u0000\u0086\u0087\u0005\u0002\u0000"+
-					"\u0000\u0087\u008d\u0001\u0000\u0000\u0000\u0088\u008d\u0005&\u0000\u0000"+
-					"\u0089\u008d\u0005%\u0000\u0000\u008a\u008d\u0005\'\u0000\u0000\u008b"+
-					"\u008d\u0005$\u0000\u0000\u008c\u0083\u0001\u0000\u0000\u0000\u008c\u0088"+
-					"\u0001\u0000\u0000\u0000\u008c\u0089\u0001\u0000\u0000\u0000\u008c\u008a"+
-					"\u0001\u0000\u0000\u0000\u008c\u008b\u0001\u0000\u0000\u0000\u008d\u009a"+
-					"\u0001\u0000\u0000\u0000\u008e\u008f\n\u0007\u0000\u0000\u008f\u0090\u0007"+
-					"\u0002\u0000\u0000\u0090\u0099\u0003\u0006\u0003\b\u0091\u0092\n\u0006"+
-					"\u0000\u0000\u0092\u0093\u0007\u0003\u0000\u0000\u0093\u0099\u0003\u0006"+
-					"\u0003\u0007\u0094\u0095\n\u0005\u0000\u0000\u0095\u0096\u0003\f\u0006"+
-					"\u0000\u0096\u0097\u0003\u0006\u0003\u0006\u0097\u0099\u0001\u0000\u0000"+
-					"\u0000\u0098\u008e\u0001\u0000\u0000\u0000\u0098\u0091\u0001\u0000\u0000"+
-					"\u0000\u0098\u0094\u0001\u0000\u0000\u0000\u0099\u009c\u0001\u0000\u0000"+
-					"\u0000\u009a\u0098\u0001\u0000\u0000\u0000\u009a\u009b\u0001\u0000\u0000"+
-					"\u0000\u009b\u0007\u0001\u0000\u0000\u0000\u009c\u009a\u0001\u0000\u0000"+
-					"\u0000\u009d\u009e\u0007\u0004\u0000\u0000\u009e\t\u0001\u0000\u0000\u0000"+
-					"\u009f\u00a0\u0007\u0005\u0000\u0000\u00a0\u000b\u0001\u0000\u0000\u0000"+
-					"\u00a1\u00a2\u0007\u0006\u0000\u0000\u00a2\r\u0001\u0000\u0000\u0000\u00a3"+
-					"\u00a4\u0005\b\u0000\u0000\u00a4\u00a5\u0003\u0004\u0002\u0000\u00a5\u00a6"+
-					"\u0003$\u0012\u0000\u00a6\u000f\u0001\u0000\u0000\u0000\u00a7\u00a8\u0005"+
-					"\t\u0000\u0000\u00a8\u00a9\u0003\u0004\u0002\u0000\u00a9\u00aa\u0003$"+
-					"\u0012\u0000\u00aa\u0011\u0001\u0000\u0000\u0000\u00ab\u00ac\u0007\u0007"+
-					"\u0000\u0000\u00ac\u0013\u0001\u0000\u0000\u0000\u00ad\u00ae\u0007\b\u0000"+
-					"\u0000\u00ae\u0015\u0001\u0000\u0000\u0000\u00af\u00b0\u0005\n\u0000\u0000"+
-					"\u00b0\u00b1\u0005%\u0000\u0000\u00b1\u00b2\u0003$\u0012\u0000\u00b2\u0017"+
-					"\u0001\u0000\u0000\u0000\u00b3\u00bc\u0005\u000b\u0000\u0000\u00b4\u00b5"+
-					"\u0003\u0012\t\u0000\u00b5\u00b6\u0003\u0012\t\u0000\u00b6\u00bd\u0001"+
-					"\u0000\u0000\u0000\u00b7\u00b8\u0003\u0012\t\u0000\u00b8\u00b9\u0003\u0012"+
-					"\t\u0000\u00b9\u00ba\u0003\u0012\t\u0000\u00ba\u00bb\u0003\u0012\t\u0000"+
-					"\u00bb\u00bd\u0001\u0000\u0000\u0000\u00bc\u00b4\u0001\u0000\u0000\u0000"+
-					"\u00bc\u00b7\u0001\u0000\u0000\u0000\u00bd\u00be\u0001\u0000\u0000\u0000"+
-					"\u00be\u00bf\u0003$\u0012\u0000\u00bf\u0019\u0001\u0000\u0000\u0000\u00c0"+
-					"\u00c1\u0005\f\u0000\u0000\u00c1\u00c2\u0003\u0012\t\u0000\u00c2\u001b"+
-					"\u0001\u0000\u0000\u0000\u00c3\u00c4\u0005\r\u0000\u0000\u00c4\u00c5\u0003"+
-					"\u0012\t\u0000\u00c5\u001d\u0001\u0000\u0000\u0000\u00c6\u00c7\u0005\u000e"+
-					"\u0000\u0000\u00c7\u00c8\u0003\u0012\t\u0000\u00c8\u00c9\u0003\u0012\t"+
-					"\u0000\u00c9\u001f\u0001\u0000\u0000\u0000\u00ca\u00cb\u0005\u000f\u0000"+
-					"\u0000\u00cb\u00cc\u0003\u0012\t\u0000\u00cc\u00cd\u0003\u0012\t\u0000"+
-					"\u00cd!\u0001\u0000\u0000\u0000\u00ce\u00cf\u0005\u0010\u0000\u0000\u00cf"+
-					"\u00d2\u0005$\u0000\u0000\u00d0\u00d1\u0005/\u0000\u0000\u00d1\u00d3\u0003"+
-					"\u0004\u0002\u0000\u00d2\u00d0\u0001\u0000\u0000\u0000\u00d2\u00d3\u0001"+
-					"\u0000\u0000\u0000\u00d3#\u0001\u0000\u0000\u0000\u00d4\u00d8\u0005\u0011"+
-					"\u0000\u0000\u00d5\u00d7\u0003\u0002\u0001\u0000\u00d6\u00d5\u0001\u0000"+
-					"\u0000\u0000\u00d7\u00da\u0001\u0000\u0000\u0000\u00d8\u00d6\u0001\u0000"+
-					"\u0000\u0000\u00d8\u00d9\u0001\u0000\u0000\u0000\u00d9\u00db\u0001\u0000"+
-					"\u0000\u0000\u00da\u00d8\u0001\u0000\u0000\u0000\u00db\u00dc\u0005\u0012"+
-					"\u0000\u0000\u00dc%\u0001\u0000\u0000\u0000\u00dd\u00de\u0005\u0013\u0000"+
-					"\u0000\u00de\u00e1\u0005$\u0000\u0000\u00df\u00e0\u0005\u0014\u0000\u0000"+
-					"\u00e0\u00e2\u0007\t\u0000\u0000\u00e1\u00df\u0001\u0000\u0000\u0000\u00e1"+
-					"\u00e2\u0001\u0000\u0000\u0000\u00e2\u00e3\u0001\u0000\u0000\u0000\u00e3"+
-					"\u00e4\u0005\u0015\u0000\u0000\u00e4\u00e7\u0007\t\u0000\u0000\u00e5\u00e6"+
-					"\u0005\u0016\u0000\u0000\u00e6\u00e8\u0007\t\u0000\u0000\u00e7\u00e5\u0001"+
-					"\u0000\u0000\u0000\u00e7\u00e8\u0001\u0000\u0000\u0000\u00e8\u00e9\u0001"+
-					"\u0000\u0000\u0000\u00e9\u00ea\u0003$\u0012\u0000\u00ea\'\u0001\u0000"+
-					"\u0000\u0000\u00eb\u00f1\u0005\u0017\u0000\u0000\u00ec\u00f2\u0005*\u0000"+
-					"\u0000\u00ed\u00ee\u0003\u0014\n\u0000\u00ee\u00ef\u0003\u0014\n\u0000"+
-					"\u00ef\u00f0\u0003\u0014\n\u0000\u00f0\u00f2\u0001\u0000\u0000\u0000\u00f1"+
-					"\u00ec\u0001\u0000\u0000\u0000\u00f1\u00ed\u0001\u0000\u0000\u0000\u00f2"+
-					")\u0001\u0000\u0000\u0000\u00f3\u00f4\u0005\u0018\u0000\u0000\u00f4\u00f5"+
-					"\u0005%\u0000\u0000\u00f5+\u0001\u0000\u0000\u0000\u00f6\u00f7\u0005\u0019"+
-					"\u0000\u0000\u00f7\u00f8\u0005%\u0000\u0000\u00f8-\u0001\u0000\u0000\u0000"+
-					"\u00f9\u00fa\u0005\u001a\u0000\u0000\u00fa\u00fb\u0005%\u0000\u0000\u00fb"+
-					"/\u0001\u0000\u0000\u0000\u00fc\u00fd\u0005\u001b\u0000\u0000\u00fd\u00fe"+
-					"\u0007\n\u0000\u0000\u00fe1\u0001\u0000\u0000\u0000\u00ff\u0100\u0005"+
-					"\u001c\u0000\u0000\u0100\u0101\u0005%\u0000\u0000\u01013\u0001\u0000\u0000"+
-					"\u0000\u0102\u0103\u0005\u001d\u0000\u0000\u0103\u0104\u0005%\u0000\u0000"+
-					"\u01045\u0001\u0000\u0000\u0000\u0105\u0106\u0005\u001e\u0000\u0000\u0106"+
-					"7\u0001\u0000\u0000\u0000\u0107\u0108\u0005\u001f\u0000\u0000\u01089\u0001"+
-					"\u0000\u0000\u0000\u0109\u010a\u0005 \u0000\u0000\u010a\u010b\u0003\u0006"+
-					"\u0003\u0000\u010b;\u0001\u0000\u0000\u0000\u010c\u010d\u0005!\u0000\u0000"+
-					"\u010d\u0110\u0005$\u0000\u0000\u010e\u010f\u0005/\u0000\u0000\u010f\u0111"+
-					"\u0005(\u0000\u0000\u0110\u010e\u0001\u0000\u0000\u0000\u0110\u0111\u0001"+
-					"\u0000\u0000\u0000\u0111=\u0001\u0000\u0000\u0000\u0112\u0113\u0005\""+
-					"\u0000\u0000\u0113\u0116\u0005$\u0000\u0000\u0114\u0115\u0005/\u0000\u0000"+
-					"\u0115\u0117\u0003\u0006\u0003\u0000\u0116\u0114\u0001\u0000\u0000\u0000"+
-					"\u0116\u0117\u0001\u0000\u0000\u0000\u0117?\u0001\u0000\u0000\u0000\u0118"+
-					"\u0119\u0005#\u0000\u0000\u0119\u011a\u0005$\u0000\u0000\u011aA\u0001"+
-					"\u0000\u0000\u0000\u0010Eau~\u0080\u008c\u0098\u009a\u00bc\u00d2\u00d8"+
-					"\u00e1\u00e7\u00f1\u0110\u0116";
+		"\u0004\u00016\u011c\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0002"+
+		"\u0005\u0007\u0005\u0002\u0006\u0007\u0006\u0002\u0007\u0007\u0007\u0002"+
+		"\b\u0007\b\u0002\t\u0007\t\u0002\n\u0007\n\u0002\u000b\u0007\u000b\u0002"+
+		"\f\u0007\f\u0002\r\u0007\r\u0002\u000e\u0007\u000e\u0002\u000f\u0007\u000f"+
+		"\u0002\u0010\u0007\u0010\u0002\u0011\u0007\u0011\u0002\u0012\u0007\u0012"+
+		"\u0002\u0013\u0007\u0013\u0002\u0014\u0007\u0014\u0002\u0015\u0007\u0015"+
+		"\u0002\u0016\u0007\u0016\u0002\u0017\u0007\u0017\u0002\u0018\u0007\u0018"+
+		"\u0002\u0019\u0007\u0019\u0002\u001a\u0007\u001a\u0002\u001b\u0007\u001b"+
+		"\u0002\u001c\u0007\u001c\u0002\u001d\u0007\u001d\u0002\u001e\u0007\u001e"+
+		"\u0002\u001f\u0007\u001f\u0002 \u0007 \u0001\u0000\u0005\u0000D\b\u0000"+
+		"\n\u0000\f\u0000G\t\u0000\u0001\u0000\u0001\u0000\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0001\u0001\u0001\u0001\u0003\u0001b\b\u0001\u0001\u0002"+
+		"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002"+
+		"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002"+
+		"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0003\u0002"+
+		"v\b\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002"+
+		"\u0001\u0002\u0001\u0002\u0005\u0002\u007f\b\u0002\n\u0002\f\u0002\u0082"+
+		"\t\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001"+
+		"\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u0003\u008d\b\u0003\u0001"+
+		"\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001"+
+		"\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0005\u0003\u0099\b\u0003\n"+
+		"\u0003\f\u0003\u009c\t\u0003\u0001\u0004\u0001\u0004\u0001\u0005\u0001"+
+		"\u0005\u0001\u0006\u0001\u0006\u0001\u0007\u0001\u0007\u0001\u0007\u0001"+
+		"\u0007\u0001\b\u0001\b\u0001\b\u0001\b\u0003\b\u00ac\b\b\u0001\b\u0001"+
+		"\b\u0001\b\u0001\b\u0003\b\u00b2\b\b\u0001\b\u0001\b\u0001\t\u0001\t\u0001"+
+		"\t\u0001\t\u0001\n\u0001\n\u0001\u000b\u0001\u000b\u0001\f\u0001\f\u0001"+
+		"\f\u0001\f\u0001\r\u0001\r\u0001\r\u0001\r\u0001\r\u0001\r\u0001\r\u0001"+
+		"\r\u0001\r\u0003\r\u00cb\b\r\u0001\r\u0001\r\u0001\u000e\u0001\u000e\u0001"+
+		"\u000e\u0001\u000f\u0001\u000f\u0001\u000f\u0001\u0010\u0001\u0010\u0001"+
+		"\u0010\u0001\u0010\u0001\u0011\u0001\u0011\u0001\u0011\u0001\u0011\u0001"+
+		"\u0012\u0001\u0012\u0005\u0012\u00df\b\u0012\n\u0012\f\u0012\u00e2\t\u0012"+
+		"\u0001\u0012\u0001\u0012\u0001\u0013\u0001\u0013\u0001\u0013\u0001\u0013"+
+		"\u0001\u0013\u0001\u0013\u0003\u0013\u00ec\b\u0013\u0001\u0014\u0001\u0014"+
+		"\u0001\u0014\u0001\u0015\u0001\u0015\u0001\u0015\u0001\u0016\u0001\u0016"+
+		"\u0001\u0016\u0001\u0017\u0001\u0017\u0001\u0017\u0001\u0018\u0001\u0018"+
+		"\u0001\u0018\u0001\u0019\u0001\u0019\u0001\u0019\u0001\u001a\u0001\u001a"+
+		"\u0001\u001b\u0001\u001b\u0001\u001c\u0001\u001c\u0001\u001c\u0001\u001d"+
+		"\u0001\u001d\u0001\u001d\u0001\u001d\u0003\u001d\u010b\b\u001d\u0001\u001e"+
+		"\u0001\u001e\u0001\u001e\u0001\u001e\u0003\u001e\u0111\b\u001e\u0001\u001f"+
+		"\u0001\u001f\u0001\u001f\u0001\u001f\u0003\u001f\u0117\b\u001f\u0001 "+
+		"\u0001 \u0001 \u0001 \u0000\u0002\u0004\u0006!\u0000\u0002\u0004\u0006"+
+		"\b\n\f\u000e\u0010\u0012\u0014\u0016\u0018\u001a\u001c\u001e \"$&(*,."+
+		"02468:<>@\u0000\u000b\u0002\u0000$$((\u0001\u0000\u0003\u0004\u0001\u0000"+
+		"+,\u0001\u0000-.\u0001\u000005\u0001\u000001\u0001\u0000+.\u0001\u0000"+
+		"%&\u0002\u0000%\'))\u0002\u0000%%\'\'\u0002\u0000\'\'))\u0128\u0000E\u0001"+
+		"\u0000\u0000\u0000\u0002a\u0001\u0000\u0000\u0000\u0004u\u0001\u0000\u0000"+
+		"\u0000\u0006\u008c\u0001\u0000\u0000\u0000\b\u009d\u0001\u0000\u0000\u0000"+
+		"\n\u009f\u0001\u0000\u0000\u0000\f\u00a1\u0001\u0000\u0000\u0000\u000e"+
+		"\u00a3\u0001\u0000\u0000\u0000\u0010\u00a7\u0001\u0000\u0000\u0000\u0012"+
+		"\u00b5\u0001\u0000\u0000\u0000\u0014\u00b9\u0001\u0000\u0000\u0000\u0016"+
+		"\u00bb\u0001\u0000\u0000\u0000\u0018\u00bd\u0001\u0000\u0000\u0000\u001a"+
+		"\u00c1\u0001\u0000\u0000\u0000\u001c\u00ce\u0001\u0000\u0000\u0000\u001e"+
+		"\u00d1\u0001\u0000\u0000\u0000 \u00d4\u0001\u0000\u0000\u0000\"\u00d8"+
+		"\u0001\u0000\u0000\u0000$\u00dc\u0001\u0000\u0000\u0000&\u00e5\u0001\u0000"+
+		"\u0000\u0000(\u00ed\u0001\u0000\u0000\u0000*\u00f0\u0001\u0000\u0000\u0000"+
+		",\u00f3\u0001\u0000\u0000\u0000.\u00f6\u0001\u0000\u0000\u00000\u00f9"+
+		"\u0001\u0000\u0000\u00002\u00fc\u0001\u0000\u0000\u00004\u00ff\u0001\u0000"+
+		"\u0000\u00006\u0101\u0001\u0000\u0000\u00008\u0103\u0001\u0000\u0000\u0000"+
+		":\u0106\u0001\u0000\u0000\u0000<\u010c\u0001\u0000\u0000\u0000>\u0112"+
+		"\u0001\u0000\u0000\u0000@\u0118\u0001\u0000\u0000\u0000BD\u0003\u0002"+
+		"\u0001\u0000CB\u0001\u0000\u0000\u0000DG\u0001\u0000\u0000\u0000EC\u0001"+
+		"\u0000\u0000\u0000EF\u0001\u0000\u0000\u0000FH\u0001\u0000\u0000\u0000"+
+		"GE\u0001\u0000\u0000\u0000HI\u0005\u0000\u0000\u0001I\u0001\u0001\u0000"+
+		"\u0000\u0000Jb\u0003\u000e\u0007\u0000Kb\u0003\u0012\t\u0000Lb\u0003\u0010"+
+		"\b\u0000Mb\u0003\u0018\f\u0000Nb\u0003\u001a\r\u0000Ob\u0003(\u0014\u0000"+
+		"Pb\u0003*\u0015\u0000Qb\u0003,\u0016\u0000Rb\u00034\u001a\u0000Sb\u0003"+
+		"6\u001b\u0000Tb\u0003.\u0017\u0000Ub\u00030\u0018\u0000Vb\u0003&\u0013"+
+		"\u0000Wb\u00032\u0019\u0000Xb\u0003\u001c\u000e\u0000Yb\u0003\u001e\u000f"+
+		"\u0000Zb\u00038\u001c\u0000[b\u0003 \u0010\u0000\\b\u0003\"\u0011\u0000"+
+		"]b\u0003<\u001e\u0000^b\u0003>\u001f\u0000_b\u0003:\u001d\u0000`b\u0003"+
+		"$\u0012\u0000aJ\u0001\u0000\u0000\u0000aK\u0001\u0000\u0000\u0000aL\u0001"+
+		"\u0000\u0000\u0000aM\u0001\u0000\u0000\u0000aN\u0001\u0000\u0000\u0000"+
+		"aO\u0001\u0000\u0000\u0000aP\u0001\u0000\u0000\u0000aQ\u0001\u0000\u0000"+
+		"\u0000aR\u0001\u0000\u0000\u0000aS\u0001\u0000\u0000\u0000aT\u0001\u0000"+
+		"\u0000\u0000aU\u0001\u0000\u0000\u0000aV\u0001\u0000\u0000\u0000aW\u0001"+
+		"\u0000\u0000\u0000aX\u0001\u0000\u0000\u0000aY\u0001\u0000\u0000\u0000"+
+		"aZ\u0001\u0000\u0000\u0000a[\u0001\u0000\u0000\u0000a\\\u0001\u0000\u0000"+
+		"\u0000a]\u0001\u0000\u0000\u0000a^\u0001\u0000\u0000\u0000a_\u0001\u0000"+
+		"\u0000\u0000a`\u0001\u0000\u0000\u0000b\u0003\u0001\u0000\u0000\u0000"+
+		"cd\u0006\u0002\uffff\uffff\u0000de\u0005\u0001\u0000\u0000ef\u0003\u0004"+
+		"\u0002\u0000fg\u0005\u0002\u0000\u0000gv\u0001\u0000\u0000\u0000hi\u0005"+
+		"\u0005\u0000\u0000iv\u0003\u0004\u0002\u0007jk\u0003\u0006\u0003\u0000"+
+		"kl\u0003\b\u0004\u0000lm\u0003\u0006\u0003\u0000mv\u0001\u0000\u0000\u0000"+
+		"no\u0007\u0000\u0000\u0000op\u0003\b\u0004\u0000pq\u0007\u0000\u0000\u0000"+
+		"qv\u0001\u0000\u0000\u0000rv\u0005$\u0000\u0000sv\u0005\u0006\u0000\u0000"+
+		"tv\u0005\u0007\u0000\u0000uc\u0001\u0000\u0000\u0000uh\u0001\u0000\u0000"+
+		"\u0000uj\u0001\u0000\u0000\u0000un\u0001\u0000\u0000\u0000ur\u0001\u0000"+
+		"\u0000\u0000us\u0001\u0000\u0000\u0000ut\u0001\u0000\u0000\u0000v\u0080"+
+		"\u0001\u0000\u0000\u0000wx\n\b\u0000\u0000xy\u0007\u0001\u0000\u0000y"+
+		"\u007f\u0003\u0004\u0002\tz{\n\u0005\u0000\u0000{|\u0003\n\u0005\u0000"+
+		"|}\u0003\u0004\u0002\u0006}\u007f\u0001\u0000\u0000\u0000~w\u0001\u0000"+
+		"\u0000\u0000~z\u0001\u0000\u0000\u0000\u007f\u0082\u0001\u0000\u0000\u0000"+
+		"\u0080~\u0001\u0000\u0000\u0000\u0080\u0081\u0001\u0000\u0000\u0000\u0081"+
+		"\u0005\u0001\u0000\u0000\u0000\u0082\u0080\u0001\u0000\u0000\u0000\u0083"+
+		"\u0084\u0006\u0003\uffff\uffff\u0000\u0084\u0085\u0005\u0001\u0000\u0000"+
+		"\u0085\u0086\u0003\u0006\u0003\u0000\u0086\u0087\u0005\u0002\u0000\u0000"+
+		"\u0087\u008d\u0001\u0000\u0000\u0000\u0088\u008d\u0005&\u0000\u0000\u0089"+
+		"\u008d\u0005%\u0000\u0000\u008a\u008d\u0005\'\u0000\u0000\u008b\u008d"+
+		"\u0005$\u0000\u0000\u008c\u0083\u0001\u0000\u0000\u0000\u008c\u0088\u0001"+
+		"\u0000\u0000\u0000\u008c\u0089\u0001\u0000\u0000\u0000\u008c\u008a\u0001"+
+		"\u0000\u0000\u0000\u008c\u008b\u0001\u0000\u0000\u0000\u008d\u009a\u0001"+
+		"\u0000\u0000\u0000\u008e\u008f\n\u0007\u0000\u0000\u008f\u0090\u0007\u0002"+
+		"\u0000\u0000\u0090\u0099\u0003\u0006\u0003\b\u0091\u0092\n\u0006\u0000"+
+		"\u0000\u0092\u0093\u0007\u0003\u0000\u0000\u0093\u0099\u0003\u0006\u0003"+
+		"\u0007\u0094\u0095\n\u0005\u0000\u0000\u0095\u0096\u0003\f\u0006\u0000"+
+		"\u0096\u0097\u0003\u0006\u0003\u0006\u0097\u0099\u0001\u0000\u0000\u0000"+
+		"\u0098\u008e\u0001\u0000\u0000\u0000\u0098\u0091\u0001\u0000\u0000\u0000"+
+		"\u0098\u0094\u0001\u0000\u0000\u0000\u0099\u009c\u0001\u0000\u0000\u0000"+
+		"\u009a\u0098\u0001\u0000\u0000\u0000\u009a\u009b\u0001\u0000\u0000\u0000"+
+		"\u009b\u0007\u0001\u0000\u0000\u0000\u009c\u009a\u0001\u0000\u0000\u0000"+
+		"\u009d\u009e\u0007\u0004\u0000\u0000\u009e\t\u0001\u0000\u0000\u0000\u009f"+
+		"\u00a0\u0007\u0005\u0000\u0000\u00a0\u000b\u0001\u0000\u0000\u0000\u00a1"+
+		"\u00a2\u0007\u0006\u0000\u0000\u00a2\r\u0001\u0000\u0000\u0000\u00a3\u00a4"+
+		"\u0005\b\u0000\u0000\u00a4\u00a5\u0003\u0004\u0002\u0000\u00a5\u00a6\u0003"+
+		"$\u0012\u0000\u00a6\u000f\u0001\u0000\u0000\u0000\u00a7\u00a8\u0005\t"+
+		"\u0000\u0000\u00a8\u00ab\u0005$\u0000\u0000\u00a9\u00aa\u0005\n\u0000"+
+		"\u0000\u00aa\u00ac\u0007\u0007\u0000\u0000\u00ab\u00a9\u0001\u0000\u0000"+
+		"\u0000\u00ab\u00ac\u0001\u0000\u0000\u0000\u00ac\u00ad\u0001\u0000\u0000"+
+		"\u0000\u00ad\u00ae\u0005\u000b\u0000\u0000\u00ae\u00b1\u0007\u0007\u0000"+
+		"\u0000\u00af\u00b0\u0005\f\u0000\u0000\u00b0\u00b2\u0007\u0007\u0000\u0000"+
+		"\u00b1\u00af\u0001\u0000\u0000\u0000\u00b1\u00b2\u0001\u0000\u0000\u0000"+
+		"\u00b2\u00b3\u0001\u0000\u0000\u0000\u00b3\u00b4\u0003$\u0012\u0000\u00b4"+
+		"\u0011\u0001\u0000\u0000\u0000\u00b5\u00b6\u0005\r\u0000\u0000\u00b6\u00b7"+
+		"\u0003\u0004\u0002\u0000\u00b7\u00b8\u0003$\u0012\u0000\u00b8\u0013\u0001"+
+		"\u0000\u0000\u0000\u00b9\u00ba\u0007\b\u0000\u0000\u00ba\u0015\u0001\u0000"+
+		"\u0000\u0000\u00bb\u00bc\u0007\t\u0000\u0000\u00bc\u0017\u0001\u0000\u0000"+
+		"\u0000\u00bd\u00be\u0005\u000e\u0000\u0000\u00be\u00bf\u0005%\u0000\u0000"+
+		"\u00bf\u00c0\u0003$\u0012\u0000\u00c0\u0019\u0001\u0000\u0000\u0000\u00c1"+
+		"\u00ca\u0005\u000f\u0000\u0000\u00c2\u00c3\u0003\u0014\n\u0000\u00c3\u00c4"+
+		"\u0003\u0014\n\u0000\u00c4\u00cb\u0001\u0000\u0000\u0000\u00c5\u00c6\u0003"+
+		"\u0014\n\u0000\u00c6\u00c7\u0003\u0014\n\u0000\u00c7\u00c8\u0003\u0014"+
+		"\n\u0000\u00c8\u00c9\u0003\u0014\n\u0000\u00c9\u00cb\u0001\u0000\u0000"+
+		"\u0000\u00ca\u00c2\u0001\u0000\u0000\u0000\u00ca\u00c5\u0001\u0000\u0000"+
+		"\u0000\u00cb\u00cc\u0001\u0000\u0000\u0000\u00cc\u00cd\u0003$\u0012\u0000"+
+		"\u00cd\u001b\u0001\u0000\u0000\u0000\u00ce\u00cf\u0005\u0010\u0000\u0000"+
+		"\u00cf\u00d0\u0003\u0014\n\u0000\u00d0\u001d\u0001\u0000\u0000\u0000\u00d1"+
+		"\u00d2\u0005\u0011\u0000\u0000\u00d2\u00d3\u0003\u0014\n\u0000\u00d3\u001f"+
+		"\u0001\u0000\u0000\u0000\u00d4\u00d5\u0005\u0012\u0000\u0000\u00d5\u00d6"+
+		"\u0003\u0014\n\u0000\u00d6\u00d7\u0003\u0014\n\u0000\u00d7!\u0001\u0000"+
+		"\u0000\u0000\u00d8\u00d9\u0005\u0013\u0000\u0000\u00d9\u00da\u0003\u0014"+
+		"\n\u0000\u00da\u00db\u0003\u0014\n\u0000\u00db#\u0001\u0000\u0000\u0000"+
+		"\u00dc\u00e0\u0005\u0014\u0000\u0000\u00dd\u00df\u0003\u0002\u0001\u0000"+
+		"\u00de\u00dd\u0001\u0000\u0000\u0000\u00df\u00e2\u0001\u0000\u0000\u0000"+
+		"\u00e0\u00de\u0001\u0000\u0000\u0000\u00e0\u00e1\u0001\u0000\u0000\u0000"+
+		"\u00e1\u00e3\u0001\u0000\u0000\u0000\u00e2\u00e0\u0001\u0000\u0000\u0000"+
+		"\u00e3\u00e4\u0005\u0015\u0000\u0000\u00e4%\u0001\u0000\u0000\u0000\u00e5"+
+		"\u00eb\u0005\u0016\u0000\u0000\u00e6\u00ec\u0005*\u0000\u0000\u00e7\u00e8"+
+		"\u0003\u0016\u000b\u0000\u00e8\u00e9\u0003\u0016\u000b\u0000\u00e9\u00ea"+
+		"\u0003\u0016\u000b\u0000\u00ea\u00ec\u0001\u0000\u0000\u0000\u00eb\u00e6"+
+		"\u0001\u0000\u0000\u0000\u00eb\u00e7\u0001\u0000\u0000\u0000\u00ec\'\u0001"+
+		"\u0000\u0000\u0000\u00ed\u00ee\u0005\u0017\u0000\u0000\u00ee\u00ef\u0005"+
+		"%\u0000\u0000\u00ef)\u0001\u0000\u0000\u0000\u00f0\u00f1\u0005\u0018\u0000"+
+		"\u0000\u00f1\u00f2\u0005%\u0000\u0000\u00f2+\u0001\u0000\u0000\u0000\u00f3"+
+		"\u00f4\u0005\u0019\u0000\u0000\u00f4\u00f5\u0005%\u0000\u0000\u00f5-\u0001"+
+		"\u0000\u0000\u0000\u00f6\u00f7\u0005\u001a\u0000\u0000\u00f7\u00f8\u0007"+
+		"\n\u0000\u0000\u00f8/\u0001\u0000\u0000\u0000\u00f9\u00fa\u0005\u001b"+
+		"\u0000\u0000\u00fa\u00fb\u0005%\u0000\u0000\u00fb1\u0001\u0000\u0000\u0000"+
+		"\u00fc\u00fd\u0005\u001c\u0000\u0000\u00fd\u00fe\u0005%\u0000\u0000\u00fe"+
+		"3\u0001\u0000\u0000\u0000\u00ff\u0100\u0005\u001d\u0000\u0000\u01005\u0001"+
+		"\u0000\u0000\u0000\u0101\u0102\u0005\u001e\u0000\u0000\u01027\u0001\u0000"+
+		"\u0000\u0000\u0103\u0104\u0005\u001f\u0000\u0000\u0104\u0105\u0003\u0006"+
+		"\u0003\u0000\u01059\u0001\u0000\u0000\u0000\u0106\u0107\u0005 \u0000\u0000"+
+		"\u0107\u010a\u0005$\u0000\u0000\u0108\u0109\u0005/\u0000\u0000\u0109\u010b"+
+		"\u0005(\u0000\u0000\u010a\u0108\u0001\u0000\u0000\u0000\u010a\u010b\u0001"+
+		"\u0000\u0000\u0000\u010b;\u0001\u0000\u0000\u0000\u010c\u010d\u0005!\u0000"+
+		"\u0000\u010d\u0110\u0005$\u0000\u0000\u010e\u010f\u0005/\u0000\u0000\u010f"+
+		"\u0111\u0003\u0004\u0002\u0000\u0110\u010e\u0001\u0000\u0000\u0000\u0110"+
+		"\u0111\u0001\u0000\u0000\u0000\u0111=\u0001\u0000\u0000\u0000\u0112\u0113"+
+		"\u0005\"\u0000\u0000\u0113\u0116\u0005$\u0000\u0000\u0114\u0115\u0005"+
+		"/\u0000\u0000\u0115\u0117\u0003\u0006\u0003\u0000\u0116\u0114\u0001\u0000"+
+		"\u0000\u0000\u0116\u0117\u0001\u0000\u0000\u0000\u0117?\u0001\u0000\u0000"+
+		"\u0000\u0118\u0119\u0005#\u0000\u0000\u0119\u011a\u0005$\u0000\u0000\u011a"+
+		"A\u0001\u0000\u0000\u0000\u0010Eau~\u0080\u008c\u0098\u009a\u00ab\u00b1"+
+		"\u00ca\u00e0\u00eb\u010a\u0110\u0116";
 	public static final ATN _ATN =
-			new ATNDeserializer().deserialize(_serializedATN.toCharArray());
+		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
 		_decisionToDFA = new DFA[_ATN.getNumberOfDecisions()];
 		for (int i = 0; i < _ATN.getNumberOfDecisions(); i++) {
