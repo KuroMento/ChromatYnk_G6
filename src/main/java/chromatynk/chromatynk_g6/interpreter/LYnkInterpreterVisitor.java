@@ -26,10 +26,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         //this.behaviour = Behaviour.DIRECT;
         //this.instructions = new ArrayDeque<>();
     }
-    @Override
-    public Object visitProgram(final LYnkParser.ProgramContext ctx){
-        return visitChildren(ctx);
-    }
 
     @Override
     public Object visitParenthesisVar(final LYnkParser.ParenthesisVarContext ctx){
@@ -86,7 +82,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         final int rightType = ctx.right.getType();
         final Object leftCondition;
         final Object rightCondition;
-        if(leftType == 40 && rightType == 40){
+        if(leftType == LYnkParser.LITERAL && rightType == LYnkParser.LITERAL){
             leftCondition = ctx.left.getText();
             rightCondition = ctx.right.getText();
             return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
@@ -101,7 +97,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
             rightCondition = ctx.right.getText();
             return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
         }
-        if(leftType == 36 && rightType == 36){
+        if(leftType == LYnkParser.IDENTIFICATION && rightType == LYnkParser.IDENTIFICATION){
             leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
             rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(1));
             return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
@@ -194,7 +190,23 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
     @Override
     public Object visitForStatement(final LYnkParser.ForStatementContext ctx){
-        if(ctx.)
+        final Object fromCondition = ctx.from;
+        final Object toCondition = ctx.to;
+        final Object stepCondition = ctx.step;
+        if(variableList.hasVar(ctx.IDENTIFICATION())){
+            console.addLine("the variable used for the for statement already exists");
+            return VOID;
+        }
+        int from = Integer.parseInt(ctx.from.getText());
+        int to = Integer.parseInt(ctx.to.getText());
+        int step = Integer.parseInt(ctx.step.getText());
+        if(){
+
+        }
+        for(from, from<to, step){
+            visit(ctx.blockStatement());
+            visitForStatement(ctx);
+        }
         return VOID;
     }
 
@@ -214,7 +226,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitNumParameter(LYnkParser.NumParameterContext ctx){
         if(ctx.getChild(0).getText().contains("%")){
-            return Double.parseDouble(ctx.getChild(0).getText());
+            return Double.parseDouble(ctx.getChild(0).getText().replace("%",""))/100;
         }
         else{
             return (Number) ctx.getChild(0);

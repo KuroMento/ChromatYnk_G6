@@ -21,59 +21,36 @@ public class NumberUtil {
         final double leftVal = left.doubleValue();
         final double rightVal = right.doubleValue();
 
-        switch (operator.getType()) {
-            case LYnkParser.LESS:
-                value = leftVal < rightVal;
-                break;
-            case LYnkParser.LESS_OR_EQUAL:
-                value = leftVal <= rightVal;
-                break;
-            case LYnkParser.GREATER:
-                value = leftVal > rightVal;
-                break;
-            case LYnkParser.GREATER_OR_EQUAL:
-                value = leftVal >= rightVal;
-                break;
-            case LYnkParser.EQUAL:
-                value = Objects.equals(left, right);
-                break;
-            case LYnkParser.NOT_EQUAL:
-                value = !Objects.equals(left, right);
-                break;
-            default:
-                throw new IllegalStateException(UNSUPPORTED_OPERATOR +operator.getText());
-        }
+        value = switch (operator.getType()) {
+            case LYnkParser.LESS -> leftVal < rightVal;
+            case LYnkParser.LESS_OR_EQUAL -> leftVal <= rightVal;
+            case LYnkParser.GREATER -> leftVal > rightVal;
+            case LYnkParser.GREATER_OR_EQUAL -> leftVal >= rightVal;
+            case LYnkParser.EQUAL -> Objects.equals(left, right);
+            case LYnkParser.NOT_EQUAL -> !Objects.equals(left, right);
+            default -> throw new IllegalStateException(UNSUPPORTED_OPERATOR + operator.getText());
+        };
 
         return value;
     }
 
     private static Long evalLongOperator(final Long left, final Long right, final Token op) {
-        switch (op.getType()) {
-            case LYnkParser.PLUS :
-                return left + right;
-            case LYnkParser.MINUS :
-                return left - right;
-            case LYnkParser.DIVISION:
-                return left / right;
-            case LYnkParser.MULTIPLICATION:
-                return left * right;
-            default :
-                throw new IllegalStateException(UNSUPPORTED_OPERATOR + op);
-        }
+        return switch (op.getType()) {
+            case LYnkParser.PLUS -> left + right;
+            case LYnkParser.MINUS -> left - right;
+            case LYnkParser.DIVISION -> left / right;
+            case LYnkParser.MULTIPLICATION -> left * right;
+            default -> throw new IllegalStateException(UNSUPPORTED_OPERATOR + op);
+        };
     }
 
     private static Double evalDoubleOperator(final Double left, final Double right, final Token op) {
-        switch (op.getType()) {
-            case LYnkParser.PLUS:
-                return left + right;
-            case LYnkParser.MINUS:
-                return left - right;
-            case LYnkParser.DIVISION:
-                return left / right;
-            case LYnkParser.MULTIPLICATION:
-                return left * right;
-            default:
-                throw new IllegalStateException(UNSUPPORTED_OPERATOR + op);
-        }
+        return switch (op.getType()) {
+            case LYnkParser.PLUS -> left + right;
+            case LYnkParser.MINUS -> left - right;
+            case LYnkParser.DIVISION -> left / right;
+            case LYnkParser.MULTIPLICATION -> left * right;
+            default -> throw new IllegalStateException(UNSUPPORTED_OPERATOR + op);
+        };
     }
 }
