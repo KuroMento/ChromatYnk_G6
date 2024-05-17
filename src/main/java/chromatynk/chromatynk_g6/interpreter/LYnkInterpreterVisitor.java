@@ -8,8 +8,11 @@ import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExi
 import chromatynk.chromatynk_g6.utils.BooleanUtil;
 import chromatynk.chromatynk_g6.utils.NumberUtil;
 import chromatynk.chromatynk_g6.utils.StringUtil;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
+
+import java.util.ArrayList;
 
 import static chromatynk.chromatynk_g6.interpreter.LYnkInterpreter.VOID;
 
@@ -78,7 +81,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
     @Override
     public Object visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) throws VariableDoesNotExistException{
-        final int leftType = ctx.left.getType(); //the value of getType is 40 if we have a LITERAL or 36 if it is a IDENTIFICATION
+        final int leftType = ctx.left.getType();
         final int rightType = ctx.right.getType();
         final Object leftCondition;
         final Object rightCondition;
@@ -87,12 +90,12 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
             rightCondition = ctx.right.getText();
             return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
         }
-        if(leftType == 40 && rightType == 36){
+        if(leftType == LYnkParser.LITERAL && rightType == LYnkParser.IDENTIFICATION){
             leftCondition = ctx.left.getText();
             rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
             return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
         }
-        if(leftType == 36 && rightType == 40){
+        if(leftType == LYnkParser.IDENTIFICATION && rightType == LYnkParser.LITERAL){
             leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
             rightCondition = ctx.right.getText();
             return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);

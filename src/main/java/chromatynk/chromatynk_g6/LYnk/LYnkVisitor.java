@@ -36,7 +36,7 @@ public interface LYnkVisitor<T> extends ParseTreeVisitor<T> {
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) throws VariableDoesNotExistException;
+	T visitLiteralComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.LiteralComparisonContext ctx) throws VariableDoesNotExistException;
 	/**
 	 * Visit a parse tree produced by the {@code falseVar}
 	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.

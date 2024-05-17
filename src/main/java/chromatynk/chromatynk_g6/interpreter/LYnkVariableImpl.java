@@ -32,7 +32,7 @@ public class LYnkVariableImpl implements LYnkVariable{
     /**
      * Return if name is an illegal variable name
      * @param name String name to verify
-     * @return boolean true if name is illegal
+     * @return boolean true if name is legal
      */
     private boolean isLegal(String name){
         for(String illegal : banList){
