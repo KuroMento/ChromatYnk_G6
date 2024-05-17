@@ -367,7 +367,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
             variableList.setNumVarValue(ctx.IDENTIFICATION(),0 );
         }
         else {
-            variableList.setNumVarValue(ctx.IDENTIFICATION(), ctx.arithmeticExpression());
+            variableList.setNumVarValue(ctx.IDENTIFICATION().getText(), ctx.arithmeticExpression());
         }
         return VOID;
     }
