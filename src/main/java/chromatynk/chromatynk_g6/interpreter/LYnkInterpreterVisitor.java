@@ -17,6 +17,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static chromatynk.chromatynk_g6.interpreter.LYnkInterpreter.VOID;
 
@@ -288,6 +289,8 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     public Object visitForwardStatement(LYnkParser.ForwardStatementContext ctx) throws NegativeNumberException {
         if(!ctx.numParameter().PERCENTAGE().getText().isEmpty()) {
             //the % is transformed into an int.
+            String[] StringWithoutPercent = percentUsed(ctx.getText());
+            cursorManager.getSelectedCursor().forward(Integer.parseInt(StringWithoutPercent[1]));
         }
         else{
             cursorManager.getSelectedCursor().forward(Integer.parseInt(ctx.numParameter().getText()));
@@ -299,7 +302,8 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     public Object visitBackwardStatement(LYnkParser.BackwardStatementContext ctx) throws NegativeNumberException{
         if(!ctx.numParameter().PERCENTAGE().getText().isEmpty()){
             //the % is transformed into an int
-            visitBackwardStatement(ctx); //we reuse the entry with the % transformed into an int.
+            String[] StringWithoutPercent = percentUsed(ctx.getText());
+            cursorManager.getSelectedCursor().forward(Integer.parseInt(StringWithoutPercent[1]));
         }
         else{
             cursorManager.getSelectedCursor().backward(Integer.parseInt(ctx.numParameter().getText()));
@@ -322,7 +326,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitSelectStatement(LYnkParser.SelectStatementContext ctx){
         if(cursorManager.cursorExist(Long.parseLong(ctx.LONG().getText()))){
-            cursorManager.selectCursor(Long.parseLong(ctx.LONG().getText())));
+            cursorManager.selectCursor(Long.parseLong(ctx.LONG().getText()));
         }
         return VOID;
     }
@@ -410,6 +414,32 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         }
         console.addLine("Expected a boolean but found : " + getTypeName(o));
         throw new IllegalStateException("Expected a boolean but found : " + getTypeName(o));
+    }
+
+    public static String[] percentUsed(String sentence){ //si y'a des espaces avec les % (56 %)
+        String[] StringWithoutPercent = sentence.trim().split("\\s+");
+        ArrayList<Integer> resolution = new ArrayList<Integer>(); // store the height and width of the image
+        resolution.add(1920); //temporary resolution, will be replaced by the exact resolution of the canvas
+        resolution.add(1080);
+        int resolutionAxis = 0; // 0: x-axis of the image; 1: y-axis of the image
+        double val;
+        for(int i = 1; i< StringWithoutPercent.length; i++){
+            //If a % is detected the previous value in percent is replaced by its pixel value
+            if(StringWithoutPercent[i].equals("%")){
+                val = (int)((Double.valueOf(StringWithoutPercent[i-1])/100) * resolution.get(resolutionAxis));
+                StringWithoutPercent[i-1] = String.valueOf(val);
+                StringWithoutPercent[i] = "";
+                resolutionAxis = (resolutionAxis + 1) % 2;
+            }
+        }
+        List<String> list = new ArrayList<String>();
+        for(int i = 0; i< StringWithoutPercent.length; i++) {
+            if(!StringWithoutPercent[i].equals("")) {
+                list.add(StringWithoutPercent[i]);
+            }
+        }
+        String[] stringArray = list.toArray(new String[0]);
+        return stringArray;
     }
 
     private static String getTypeName(final Object o){
