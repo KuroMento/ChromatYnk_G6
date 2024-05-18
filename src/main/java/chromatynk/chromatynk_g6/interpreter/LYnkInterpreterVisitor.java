@@ -6,6 +6,7 @@ import chromatynk.chromatynk_g6.CursorManager;
 import chromatynk.chromatynk_g6.LYnk.LYnkBaseVisitor;
 import chromatynk.chromatynk_g6.LYnk.LYnkParser;
 import chromatynk.chromatynk_g6.Variable;
+import chromatynk.chromatynk_g6.diagnostic.LYnkConsole;
 import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
 import chromatynk.chromatynk_g6.utils.BooleanUtil;
@@ -350,6 +351,23 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     }
 
     @Override
+    public Object visitHideStatement(LYnkParser.HideStatementContext ctx){
+        cursorManager.hide();
+        return VOID;
+    }
+
+    @Override
+    public Object visitShowStatement(LYnkParser.ShowStatementContext ctx){
+        cursorManager.show();
+        return VOID;
+    }
+
+    @Override
+    public Object visitRotationStatement(LYnkParser.RotationStatementContext ctx){
+        Object value = visit(ctx.arithmeticExpression());
+    }
+
+    @Override
     public Object visitBoolDeclaration(LYnkParser.BoolDeclarationContext ctx){
         if(ctx.booleanExpression().isEmpty()){
             variableList.setBoolVarValue(ctx.IDENTIFICATION().getText(),false);
@@ -360,6 +378,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
 
     }
+
     @Override
     public Object visitStringDeclaration(LYnkParser.StringDeclarationContext ctx) {
         if(ctx.LITERAL().getText().isEmpty()) {

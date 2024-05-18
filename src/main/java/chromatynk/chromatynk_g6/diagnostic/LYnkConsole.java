@@ -365,10 +365,10 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             
             // left variable right variable
             if( left.isIdentification() && right.isIdentification() ){
-                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && !this.varContext.getVarType(left.asString()) instanceof Boolean)) {
+                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && !(this.varContext.getVarType(left.asString()) instanceof Boolean))) {
                     return SKIP_ERROR;
                 }
-                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && !this.varContext.getVarType(right.asString()) instanceof Boolean)) {
+                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && !(this.varContext.getVarType(right.asString()) instanceof Boolean))) {
                     return SKIP_ERROR;
                 }
                 final Boolean leftValue = this.varContext.getBoolVarValue(left.asString());

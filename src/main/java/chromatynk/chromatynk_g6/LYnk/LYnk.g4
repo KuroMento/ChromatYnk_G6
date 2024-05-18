@@ -58,20 +58,21 @@ ifStatement : 'IF' booleanExpression blockStatement;
 forStatement : 'FOR' IDENTIFICATION ('FROM' from=(NUMBER|LONG))? 'TO' to=(NUMBER|LONG) ('STEP' step=(NUMBER|LONG))?  blockStatement;
 whileStatement : 'WHILE' booleanExpression blockStatement;
 
-numParameter : LONG | NUMBER | DOUBLE | PERCENTAGE;
-colorParameter : LONG | DOUBLE ;
+numParameter : LONG | NUMBER | DOUBLE | PERCENTAGE | IDENTIFICATION; //Identification added to use variable in parameters
 mimicStatement : 'MIMIC' LONG blockStatement;
-mirrorStatement : 'MIRROR' (numParameter numParameter | numParameter numParameter numParameter numParameter) blockStatement;
+mirrorStatement : 'MIRROR' (( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE )
+                           | ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ))
+                           blockStatement; //MIRROR takes 2 or 4 values or %
 
-forwardStatement : 'FWD' numParameter;
-backwardStatement : 'BWD' numParameter;
+forwardStatement : 'FWD' ( arithmeticExpression | PERCENTAGE ); // FWD need an expression with a value or %
+backwardStatement : 'BWD' ( arithmeticExpression | PERCENTAGE ); // BWD need an expression with a value or %
 
-moveStatement : 'MOV' numParameter numParameter;
-positionStatement : 'POS' numParameter numParameter;
+moveStatement : 'MOV' ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ); // MOV need an expression with 2 values or %
+positionStatement : 'POS' ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ); // POS need an expression with 2 values or %
 
 
 blockStatement : '{' (statement)* '}' ;
-colorStatement : 'COLOR' (HEXCODE | (colorParameter colorParameter colorParameter) );
+colorStatement : 'COLOR' (HEXCODE | arithmeticExpression arithmeticExpression arithmeticExpression ); // COLOR need a value in hexa or 3 expression
 cursorStatement : 'CURSOR' LONG;
 selectStatement : 'SELECT' LONG;
 removeStatement : 'REMOVE' LONG;
