@@ -75,12 +75,12 @@ colorStatement : 'COLOR' (HEXCODE | (colorParameter colorParameter colorParamete
 cursorStatement : 'CURSOR' LONG;
 selectStatement : 'SELECT' LONG;
 removeStatement : 'REMOVE' LONG;
-pressStatement : 'PRESS' (PERCENTAGE | DOUBLE);
-thickStatement : 'THICK' LONG;
-lookAtStatement : 'LOOKAT' LONG;
+pressStatement : 'PRESS' ( arithmeticExpression | PERCENTAGE ); // PRESS need an expression with a value or %
+thickStatement : 'THICK' arithmeticExpression;
+lookAtStatement : 'LOOKAT' ((id=LONG) | ( arithmeticExpression | PERCENTAGE )  ( arithmeticExpression | PERCENTAGE )); // LOOKAT needs a cursor id or 2 values or %
 hideStatement : 'HIDE';
 showStatement : 'SHOW';
-rotationStatement : 'TURN' arithmeticExpression;
+rotationStatement : 'TURN' arithmeticExpression; // TURN need an expression with a value but not %
 stringDeclaration : 'STR' IDENTIFICATION ('=' LITERAL)?;
 boolDeclaration : 'BOOL' IDENTIFICATION ('=' booleanExpression)?;
 numberDeclaration : 'NUM' IDENTIFICATION ('=' arithmeticExpression)?;
