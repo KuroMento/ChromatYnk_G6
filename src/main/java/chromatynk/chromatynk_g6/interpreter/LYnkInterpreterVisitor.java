@@ -261,25 +261,14 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitColorParameter(LYnkParser.ColorParameterContext ctx){
-        if(!ctx.DOUBLE().getText().isEmpty()){
-            return Double.valueOf(ctx.DOUBLE().getText());
-        }
-        if(!ctx.LONG().getText().isEmpty()){
-            return Long.valueOf(ctx.LONG().getText());
-        }
-        return VOID;
-    }
-
-    @Override
     public Object visitColorStatement(LYnkParser.ColorStatementContext ctx){
         if(!(ctx.HEXCODE().getText().isEmpty())){
             cursorManager.getSelectedCursor().setColor(Color.web(ctx.HEXCODE().getText()));
         }
         else{
-            final Object red = visit(ctx.colorParameter(0));
-            final Object green = visit(ctx.colorParameter(1));
-            final Object blue = visit(ctx.colorParameter(2));
+            final int red = (int) visit(ctx.arithmeticExpression(0));
+            final int green = (int) visit(ctx.arithmeticExpression(1));
+            final int blue = (int) visit(ctx.arithmeticExpression(2));
 
             cursorManager.getSelectedCursor().setColor(Color.rgb(red, green, blue));
         }
@@ -288,26 +277,26 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
     @Override
     public Object visitForwardStatement(LYnkParser.ForwardStatementContext ctx) throws NegativeNumberException {
-        if(!ctx.numParameter().PERCENTAGE().getText().isEmpty()) {
+        if(!ctx.PERCENTAGE().getText().isEmpty()) {
             //the % is transformed into an int.
             String[] StringWithoutPercent = percentUsed(ctx.getText());
             cursorManager.getSelectedCursor().forward(Integer.parseInt(StringWithoutPercent[1]));
         }
         else{
-            cursorManager.getSelectedCursor().forward(Integer.parseInt(ctx.numParameter().getText()));
+            cursorManager.getSelectedCursor().forward((int)visit(ctx.arithmeticExpression()));
         }
         return VOID;
     }
 
     @Override
     public Object visitBackwardStatement(LYnkParser.BackwardStatementContext ctx) throws NegativeNumberException{
-        if(!ctx.numParameter().PERCENTAGE().getText().isEmpty()){
+        if(!ctx.PERCENTAGE().getText().isEmpty()){
             //the % is transformed into an int
             String[] StringWithoutPercent = percentUsed(ctx.getText());
             cursorManager.getSelectedCursor().forward(Integer.parseInt(StringWithoutPercent[1]));
         }
         else{
-            cursorManager.getSelectedCursor().backward(Integer.parseInt(ctx.numParameter().getText()));
+            cursorManager.getSelectedCursor().backward((int)visit(ctx.arithmeticExpression()));
         }
         return VOID;
     }
@@ -334,18 +323,46 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
     @Override
     public Object visitThickStatement(LYnkParser.ThickStatementContext ctx){
-        cursorManager.getSelectedCursor().setThickness(Long.parseLong(ctx.LONG().getText()));
+        cursorManager.getSelectedCursor().setThickness((float)visit(ctx.arithmeticExpression()));
         return VOID;
     }
 
     @Override
     public Object visitLookAtStatement(LYnkParser.LookAtStatementContext ctx){
+        int x = 0;
+        int y = 0;
         //if the cursor to lookat exist
-        if(cursorManager.cursorExist(Long.parseLong(ctx.LONG().getText()))){
+        if(!ctx.LONG().getText().isEmpty() && cursorManager.cursorExist(Long.parseLong(ctx.LONG().getText()))){
             //the cursor to look at
             Cursor cursorToLookAt = cursorManager.getCursor(Long.parseLong(ctx.LONG().getText()));
             //the selected cursor look at the position x and y
             cursorManager.getSelectedCursor().lookAt(cursorToLookAt.getPosX(),cursorToLookAt.getPosY());
+        }
+        //if a position was given
+        else{
+            //checking the first argument x
+            //if it is a %
+            if(!ctx.PERCENTAGE(1).getText().isEmpty()){
+                //the % is transformed into an int
+                String[] StringWithoutPercent = percentUsed(ctx.getText());
+                x = Integer.parseInt(StringWithoutPercent);
+            }
+            //if it is a value alone
+            else{
+                x = (int)visit(ctx.arithmeticExpression(0));
+            }
+            //checking the second argument y
+            //if it is a %
+            if(!ctx.PERCENTAGE(1).getText().isEmpty()){
+                //the % is transformed into an int
+                String[] StringWithoutPercent = percentUsed(ctx.getText());
+                y = Integer.parseInt(StringWithoutPercent);
+            }
+            //if it is a value alone
+            else{
+                y = (int)visit(ctx.arithmeticExpression(1));
+            }
+            cursorManager.getSelectedCursor().lookAt(x,y);
         }
         return VOID;
     }
@@ -435,7 +452,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         throw new IllegalStateException("Expected a boolean but found : " + getTypeName(o));
     }
 
-    public static String[] percentUsed(String sentence){ //si y'a des espaces avec les % (56 %)
+    public static String[] percentUsed(String sentence){
         String[] StringWithoutPercent = sentence.trim().split("\\s+");
         ArrayList<Integer> resolution = new ArrayList<Integer>(); // store the height and width of the image
         resolution.add(1920); //temporary resolution, will be replaced by the exact resolution of the canvas
@@ -444,13 +461,36 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         final int resY = 1080;
         int resolutionAxis = 0; // 0: x-axis of the image; 1: y-axis of the image
         double val;
-        for(int i = 1; i< StringWithoutPercent.length; i++){
+        int j = 0;
+        for(int i = 0; i< sentence.length(); i++){
+            if(sentence.charAt(i) == ' ') {
+                j += 1;
+            }
             //If a % is detected the previous value in percent is replaced by its pixel value
-            if(StringWithoutPercent[i].equals("%")){
-                val = (int)((Double.valueOf(StringWithoutPercent[i-1])/100) * resolution.get(resolutionAxis));
-                StringWithoutPercent[i-1] = String.valueOf(val);
-                StringWithoutPercent[i] = "";
-                resolutionAxis = (resolutionAxis + 1) % 2;
+            if(sentence.charAt(i) == '%'){
+                if(sentence.charAt(i-1) == ' ') {
+                    val = (int) ((Double.valueOf(StringWithoutPercent[j - 1]) / 100) * resolution.get(resolutionAxis));
+                    StringWithoutPercent[j - 1] = String.valueOf(val);
+                    StringWithoutPercent[j] = "";
+                    resolutionAxis = (resolutionAxis + 1) % 2;
+                }
+                else {
+                    int k = i-1;
+                    while (sentence.charAt(k) != ' '){
+                        k -= 1;
+                    }
+                    k += 1;
+                    String tmp;
+                    StringBuilder sb = new StringBuilder();
+                    while (sentence.charAt(k) != '%'){
+                        sb.append(sentence.charAt(k));
+                        k +=1;
+                    }
+                    tmp = sb.toString();
+                    val = (int) ((Double.valueOf(tmp)/100) * resolution.get(resolutionAxis));
+                    StringWithoutPercent[j] = String.valueOf(val);
+                    resolutionAxis = (resolutionAxis + 1) % 2;
+                }
             }
         }
         List<String> list = new ArrayList<String>();

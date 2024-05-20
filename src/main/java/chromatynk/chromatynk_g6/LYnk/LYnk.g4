@@ -77,7 +77,7 @@ cursorStatement : 'CURSOR' LONG;
 selectStatement : 'SELECT' LONG;
 removeStatement : 'REMOVE' LONG;
 pressStatement : 'PRESS' ( arithmeticExpression | PERCENTAGE ); // PRESS need an expression with a value or %
-thickStatement : 'THICK' arithmeticExpression;
+thickStatement : 'THICK' arithmeticExpression; // THICK need an expression with a value but not %
 lookAtStatement : 'LOOKAT' ((id=LONG) | ( arithmeticExpression | PERCENTAGE )  ( arithmeticExpression | PERCENTAGE )); // LOOKAT needs a cursor id or 2 values or %
 hideStatement : 'HIDE';
 showStatement : 'SHOW';
