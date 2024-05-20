@@ -29,8 +29,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     private CursorManager cursorManager;
     public LYnkInterpreterVisitor(){
         super();
-        //this.cursorManager = new CursorManager();
-        //this.varList = new VariableManager();
         this.console = new Console();
         this.cursorManager = new CursorManager();
         //this.behaviour = Behaviour.DIRECT;
@@ -285,18 +283,19 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         try {
             cursorManager.forward((int) visit(ctx.numStatementParameterX()));
         }
+        catch(NegativeNumberException e){
+            return VOID;
+        }
         return VOID;
     }
 
     @Override
-    public Object visitBackwardStatement(LYnkParser.BackwardStatementContext ctx) throws NegativeNumberException{
-        if(!ctx.PERCENTAGE().getText().isEmpty()){
-            //the % is transformed into an int
-            String[] StringWithoutPercent = percentUsed(ctx.getText());
-            cursorManager.getSelectedCursor().forward(Integer.parseInt(StringWithoutPercent[1]));
+    public Object visitBackwardStatement(LYnkParser.BackwardStatementContext ctx){
+        try {
+            cursorManager.forward((int) visit(ctx.numStatementParameterX()));
         }
-        else{
-            cursorManager.getSelectedCursor().backward((int)visit(ctx.arithmeticExpression()));
+        catch (NegativeNumberException e){
+            return VOID;
         }
         return VOID;
     }
@@ -343,12 +342,22 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a thick statement.
+     * @param ctx the parse tree
+     * @return Change the thickness of a cursor.
+     */
     @Override
     public Object visitThickStatement(LYnkParser.ThickStatementContext ctx){
         cursorManager.getSelectedCursor().setThickness((float)visit(ctx.arithmeticExpression()));
         return VOID;
     }
 
+    /**
+     * Visit a look at statement.
+     * @param ctx the parse tree
+     * @return The selected cursor looks at a position or other cursor given.
+     */
     @Override
     public Object visitLookAtStatement(LYnkParser.LookAtStatementContext ctx){
         int x = 0;
@@ -389,23 +398,43 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a hide statement.
+     * @param ctx the parse tree
+     * @return Hides a cursor.
+     */
     @Override
     public Object visitHideStatement(LYnkParser.HideStatementContext ctx){
         cursorManager.hide();
         return VOID;
     }
 
+    /**
+     * Visit a show statement.
+     * @param ctx the parse tree
+     * @return Shows a cursor.
+     */
     @Override
     public Object visitShowStatement(LYnkParser.ShowStatementContext ctx){
         cursorManager.show();
         return VOID;
     }
 
+    /**
+     * Visit a rotation statement.
+     * @param ctx the parse tree
+     * @return Rotates a cursor.
+     */
     @Override
     public Object visitRotationStatement(LYnkParser.RotationStatementContext ctx){
         Object value = visit(ctx.arithmeticExpression());
     }
 
+    /**
+     * Visit a boolean declaration.
+     * @param ctx the parse tree
+     * @return Creates the boolean variable.
+     */
     @Override
     public Object visitBoolDeclaration(LYnkParser.BoolDeclarationContext ctx){
         if(ctx.booleanExpression().isEmpty()){
@@ -418,6 +447,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
     }
 
+    /**
+     * Visit a string declaration.
+     * @param ctx the parse tree
+     * @return Creates the string variable.
+     */
     @Override
     public Object visitStringDeclaration(LYnkParser.StringDeclarationContext ctx) {
         if(ctx.LITERAL().getText().isEmpty()) {
@@ -429,6 +463,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a number declaration.
+     * @param ctx the parse tree
+     * @return Creates the numeral variable.
+     */
     @Override
     public Object visitNumberDeclaration(LYnkParser.NumberDeclarationContext ctx) {
         if(ctx.arithmeticExpression().isEmpty()) {
@@ -440,6 +479,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a delete declaration.
+     * @param ctx the parse tree
+     * @return Remove the variable.
+     */
     @Override
     public Object visitDeleteDeclaration(LYnkParser.DeleteDeclarationContext ctx){
         try {
@@ -450,6 +494,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Verify if the object passed in argument is a number.
+     * @param o The object.
+     * @return The object if it is a number or an error.
+     */
     private Object shouldBeNumber(final Object o){
         if (o instanceof Number ){
             return  o;
@@ -458,6 +507,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         throw new IllegalStateException("Expected a number but found :" + getTypeName(o));
     }
 
+    /**
+     * Verify if the object passed in argument is a string.
+     * @param o The object.
+     * @return The object if it is a string or an error.
+     */
     private Object shouldBeString(final Object o){
         if (o instanceof String ){
             return  o;
@@ -466,6 +520,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         throw new IllegalStateException("Expected a string but found :" + getTypeName(o));
     }
 
+    /**
+     * Verify if the object passed in argument is a boolean.
+     * @param o The object.
+     * @return The object if it is a boolean or an error.
+     */
     private Object shouldBeBoolean(final Object o){
         if(o instanceof Boolean){
             return o;
@@ -474,57 +533,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         throw new IllegalStateException("Expected a boolean but found : " + getTypeName(o));
     }
 
-    public static String[] percentUsed(String sentence){
-        String[] StringWithoutPercent = sentence.trim().split("\\s+");
-        ArrayList<Integer> resolution = new ArrayList<Integer>(); // store the height and width of the image
-        resolution.add(1920); //temporary resolution, will be replaced by the exact resolution of the canvas
-        resolution.add(1080); 
-        final int resX = 1920;
-        final int resY = 1080;
-        int resolutionAxis = 0; // 0: x-axis of the image; 1: y-axis of the image
-        double val;
-        int j = 0;
-        for(int i = 0; i< sentence.length(); i++){
-            if(sentence.charAt(i) == ' ') {
-                j += 1;
-            }
-            //If a % is detected the previous value in percent is replaced by its pixel value
-            if(sentence.charAt(i) == '%'){
-                if(sentence.charAt(i-1) == ' ') {
-                    val = (int) ((Double.valueOf(StringWithoutPercent[j - 1]) / 100) * resolution.get(resolutionAxis));
-                    StringWithoutPercent[j - 1] = String.valueOf(val);
-                    StringWithoutPercent[j] = "";
-                    resolutionAxis = (resolutionAxis + 1) % 2;
-                }
-                else {
-                    int k = i-1;
-                    while (sentence.charAt(k) != ' '){
-                        k -= 1;
-                    }
-                    k += 1;
-                    String tmp;
-                    StringBuilder sb = new StringBuilder();
-                    while (sentence.charAt(k) != '%'){
-                        sb.append(sentence.charAt(k));
-                        k +=1;
-                    }
-                    tmp = sb.toString();
-                    val = (int) ((Double.valueOf(tmp)/100) * resolution.get(resolutionAxis));
-                    StringWithoutPercent[j] = String.valueOf(val);
-                    resolutionAxis = (resolutionAxis + 1) % 2;
-                }
-            }
-        }
-        List<String> list = new ArrayList<String>();
-        for(int i = 0; i< StringWithoutPercent.length; i++) {
-            if(!StringWithoutPercent[i].equals("")) {
-                list.add(StringWithoutPercent[i]);
-            }
-        }
-        String[] stringArray = list.toArray(new String[0]);
-        return stringArray;
-    }
-
+    /**
+     * Return the type of an object.
+     * @param o The object.
+     * @return The type of the object passed in argument.
+     */
     private static String getTypeName(final Object o){
         return o != null ? o.getClass().getSimpleName() : "null";
     }

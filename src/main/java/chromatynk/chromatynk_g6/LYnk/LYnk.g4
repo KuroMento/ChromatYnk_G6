@@ -70,8 +70,8 @@ mirrorStatement : 'MIRROR' (( arithmeticExpression | PERCENTAGE ) ( arithmeticEx
 forwardStatement : 'FWD' ( arithmeticExpression | PERCENTAGE ); // FWD need an expression with a value or %
 backwardStatement : 'BWD' ( arithmeticExpression | PERCENTAGE ); // BWD need an expression with a value or %
 
-moveStatement : 'MOV' ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ); // MOV need an expression with 2 values or %
-positionStatement : 'POS' ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ); // POS need an expression with 2 values or %
+moveStatement : 'MOV' x=numStatementParameterX y=numStatementParameterY; // MOV need an expression with 2 values or %
+positionStatement : 'POS' x=numStatementParameterX y=numStatementParameterY; // POS need an expression with 2 values or %
 
 
 blockStatement : '{' (statement)* '}' ;
@@ -79,7 +79,7 @@ colorStatement : 'COLOR' (HEXCODE | arithmeticExpression arithmeticExpression ar
 cursorStatement : 'CURSOR' LONG;
 selectStatement : 'SELECT' LONG;
 removeStatement : 'REMOVE' LONG;
-pressStatement : 'PRESS' ( arithmeticExpression | PERCENTAGE ); // PRESS need an expression with a value or %
+pressStatement : 'PRESS' (arithmeticExpression | PERCENTAGE); // PRESS need an expression with a value or %
 thickStatement : 'THICK' arithmeticExpression; // THICK need an expression with a value but not %
 lookAtStatement : 'LOOKAT' ((id=LONG) | ( arithmeticExpression | PERCENTAGE )  ( arithmeticExpression | PERCENTAGE )); // LOOKAT needs a cursor id or 2 values or %
 hideStatement : 'HIDE';
