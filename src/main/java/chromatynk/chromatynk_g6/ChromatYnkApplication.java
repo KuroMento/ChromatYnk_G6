@@ -24,7 +24,8 @@ public class ChromatYnkApplication extends Application {
         this.primaryStage.setTitle("ChromatYnk_G6 - v.0.1.0");
 
         initRootLayout();
-        showCanvasHistory();
+        showCanvas();
+        showInstructionField();
         showInterpreterField();
     }
 
@@ -34,12 +35,15 @@ public class ChromatYnkApplication extends Application {
     public void initRootLayout() {
         try {
             // Load root layout from fxml file.
-            FXMLLoader fxmlLoader = new FXMLLoader(ChromatYnkApplication.class.getResource("RootLayout.fxml"));
-            this.rootLayout = (BorderPane) fxmlLoader.load();
+            FXMLLoader fxmlLoader = new FXMLLoader(ChromatYnkApplication.class.getResource("view/RootLayout.fxml"));
+            this.rootLayout = fxmlLoader.load();
 
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout,1000,800);
             this.primaryStage.setScene(scene);
+            this.primaryStage.setMinHeight(800);
+            this.primaryStage.setMinWidth(1000);
+
             this.primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -49,11 +53,11 @@ public class ChromatYnkApplication extends Application {
     /**
      * Shows the Canvas and the History Console at the center of the root layout.
      */
-    public void showCanvasHistory() {
+    public void showCanvas() {
         try {
             // Load root layout from fxml file.
-            FXMLLoader fxmlLoader = new FXMLLoader(ChromatYnkApplication.class.getResource("CanvasHistory.fxml"));
-            SplitPane canvasHistory = (SplitPane) fxmlLoader.load();
+            FXMLLoader fxmlLoader = new FXMLLoader(ChromatYnkApplication.class.getResource("view/CanvasOverview.fxml"));
+            BorderPane canvasHistory = fxmlLoader.load();
 
             // Set person overview into the center of root layout.
             this.rootLayout.setCenter(canvasHistory);
@@ -70,19 +74,31 @@ public class ChromatYnkApplication extends Application {
     /**
      * Shows the Interpreter at the bottom of the root layout.
      */
-    public void showInterpreterField() {
+    public void showInstructionField() {
         try {
             // Load root layout from fxml file.
-            FXMLLoader fxmlLoader = new FXMLLoader(ChromatYnkApplication.class.getResource("InterpreterField.fxml"));
-            AnchorPane interpreterField = (AnchorPane) fxmlLoader.load();
+            FXMLLoader fxmlLoader = new FXMLLoader(ChromatYnkApplication.class.getResource("view/InstructionOverview.fxml"));
+            BorderPane instructionField = fxmlLoader.load();
 
             // Set person overview into the center of root layout.
-            this.rootLayout.setBottom(interpreterField);
+            this.rootLayout.setBottom(instructionField);
 
             // Give the controller access to the main app.
             // InterpreterFieldController controller = fxmlLoader.getController();
             // controller.setMainApp(this);
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showInterpreterField(){
+        try {
+            //Load fxml file
+            FXMLLoader fxmlLoader = new FXMLLoader(ChromatYnkApplication.class.getResource("view/InterpreterOverview.fxml"));
+            BorderPane interpreterField = fxmlLoader.load();
+
+            this.rootLayout.setBottom(interpreterField);
         } catch (IOException e) {
             e.printStackTrace();
         }
