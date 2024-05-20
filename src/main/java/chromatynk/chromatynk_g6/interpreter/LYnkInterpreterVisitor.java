@@ -8,6 +8,8 @@ import chromatynk.chromatynk_g6.LYnk.LYnkParser;
 import chromatynk.chromatynk_g6.Variable;
 import chromatynk.chromatynk_g6.diagnostic.LYnkConsole;
 import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;
+import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorAlreadyExistingException;
+import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorException;
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
 import chromatynk.chromatynk_g6.utils.BooleanUtil;
 import chromatynk.chromatynk_g6.utils.NumberUtil;
@@ -35,11 +37,21 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         //this.instructions = new ArrayDeque<>();
     }
 
+    /**
+     * Visit a boolean expression in parentheses
+     * @param ctx the parse tree
+     * @return the expression in it
+     */
     @Override
     public Object visitParenthesisVar(final LYnkParser.ParenthesisVarContext ctx){
         return visit(ctx.booleanExpression());
     }
 
+    /**
+     * Visit an expression with "AND" or "OR"
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
     public Object visitAndOrExpression(LYnkParser.AndOrExpressionContext ctx){
         final Object leftCondition = shouldBeBoolean(visit(ctx.left));
@@ -52,6 +64,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         //throw new IllegalStateException(String.format("Operator '%s' not supported for String", ctx.op.getText())); might be needed instead of the return VOID
     }
 
+    /**
+     * Visit an expression with "NOT"
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
     public Object visitNotExpression(LYnkParser.NotExpressionContext ctx) {
         final Object condition = visit(ctx.booleanExpression());
@@ -62,6 +79,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         throw new IllegalStateException("NOT needs a boolean comparison to function");
     }
 
+    /**
+     * Visit an arithmetic comparison
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
     public Object visitArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx){
         final Object leftCondition = shouldBeNumber(visit(ctx.left));
@@ -73,6 +95,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a comparison expression between boolean
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
     public Object visitBooleanComparison(LYnkParser.BooleanComparisonContext ctx){
         final Object leftCondition = shouldBeBoolean(visit(ctx.left));
@@ -87,39 +114,47 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     /**
      * Compare to string together and returns the result of the comparison
      * @param ctx the parse tree
-     * @return The result of the comparison
-     * @throws VariableDoesNotExistException the variable does not exist
+     * @return the value of the comparison
      */
     @Override
-    public Object visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) throws VariableDoesNotExistException{
+    public Object visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx){
         final int leftType = ctx.left.getType();
         final int rightType = ctx.right.getType();
         final Object leftCondition;
         final Object rightCondition;
-        if(leftType == LYnkParser.LITERAL && rightType == LYnkParser.LITERAL){
-            leftCondition = ctx.left.getText();
-            rightCondition = ctx.right.getText();
-            return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+        try {
+            if (leftType == LYnkParser.LITERAL && rightType == LYnkParser.LITERAL) {
+                leftCondition = ctx.left.getText();
+                rightCondition = ctx.right.getText();
+                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+            }
+            if (leftType == LYnkParser.LITERAL && rightType == LYnkParser.IDENTIFICATION) {
+                leftCondition = ctx.left.getText();
+                rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
+                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+            }
+            if (leftType == LYnkParser.IDENTIFICATION && rightType == LYnkParser.LITERAL) {
+                leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
+                rightCondition = ctx.right.getText();
+                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+            }
+            if (leftType == LYnkParser.IDENTIFICATION && rightType == LYnkParser.IDENTIFICATION) {
+                leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
+                rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(1));
+                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+            }
         }
-        if(leftType == LYnkParser.LITERAL && rightType == LYnkParser.IDENTIFICATION){
-            leftCondition = ctx.left.getText();
-            rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
-            return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+        finally {
+            console.addLine("Operator " + "'" + ctx.op.getText() + "' " + "not supported for String");
+            return VOID;
         }
-        if(leftType == LYnkParser.IDENTIFICATION && rightType == LYnkParser.LITERAL){
-            leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
-            rightCondition = ctx.right.getText();
-            return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
-        }
-        if(leftType == LYnkParser.IDENTIFICATION && rightType == LYnkParser.IDENTIFICATION){
-            leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
-            rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(1));
-            return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
-        }
-        console.addLine("Operator " + "'" + ctx.op.getText() + "' " + "not supported for String");
-        return VOID;
     }
 
+    /**
+     * Visit an identification expression
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
     public Object visitIdentificationVar(LYnkParser.IdentificationVarContext ctx){
         try {
@@ -130,20 +165,41 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         }
     }
 
+    /**
+     * Visit the boolean "TRUE"
+     * @param ctx the parse tree
+     * @return TRUE
+     */
     @Override
     public Object visitTrueVar(LYnkParser.TrueVarContext ctx) {
         return Boolean.TRUE;
     }
+
+    /**
+     * Visit the boolean "FALSE"
+     * @param ctx the parse tree
+     * @return FALSE
+     */
     @Override
     public Object visitFalseVar(LYnkParser.FalseVarContext ctx){
         return Boolean.FALSE;
     }
 
+    /**
+     * Visit an expression in parentheses
+     * @param ctx the parse tree
+     * @return the value of the arithmetic expression
+     */
     @Override
     public Object visitParenthesisExpression(final LYnkParser.ParenthesisExpressionContext ctx){
         return visit(ctx.arithmeticExpression());
     }
 
+    /**
+     * Visit an arithmetic expression with * or /
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
     public Object visitMulDivExpression(LYnkParser.MulDivExpressionContext ctx){
         final Object left = shouldBeNumber(visit(ctx.left));
@@ -154,6 +210,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit an arithmetic expression with + or -
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
     public Object visitPlusMinusExpression(LYnkParser.PlusMinusExpressionContext ctx){
         final Object left = shouldBeNumber(visit(ctx.left));
@@ -165,6 +226,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit an arithmetic expression with comparison >, >=; <, <=, ==, !=
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
     public Object visitCompExpression(LYnkParser.CompExpressionContext ctx){
         final Object left = shouldBeNumber(visit(ctx.left));
@@ -175,26 +241,56 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a number expression
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
     public Object visitNumberExpression(final LYnkParser.NumberExpressionContext ctx){
         return Long.valueOf(ctx.NUMBER().getText());
     }
 
+    /**
+     * Visit a long expression
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
     public Object visitLongExpression(final LYnkParser.LongExpressionContext ctx){
         return Long.valueOf(ctx.LONG().getText());
     }
 
+    /**
+     * Visit a double expression
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
     public Object visitDoubleExpression(final LYnkParser.DoubleExpressionContext ctx){
         return Double.valueOf(ctx.DOUBLE().getText());
     }
 
+    /**
+     * Visit an identification (variable) in an expression
+     * @param ctx the parse tree
+     * @return the value of the expression
+     */
     @Override
-    public Object visitIdentificationExpression(final LYnkParser.IdentificationExpressionContext ctx) throws VariableDoesNotExistException{
-        return variableList.getVarValue(ctx.IDENTIFICATION());
+    public Object visitIdentificationExpression(final LYnkParser.IdentificationExpressionContext ctx){
+        try {
+            return variableList.getVarValue(ctx.IDENTIFICATION());
+        }
+        finally{
+            return VOID;
+        }
     }
 
+    /**
+     * Visit a condition if
+     * @param ctx the parse tree
+     * @return VOID as the if execute instructions
+     */
     @Override
     public Object visitIfStatement(final LYnkParser.IfStatementContext ctx) {
         final Object condition = visit(ctx.booleanExpression());
@@ -207,39 +303,54 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a for statement
+     * @param ctx the parse tree
+     * @return VOID as the for execute instructions
+     */
     @Override
-    public Object visitForStatement(final LYnkParser.ForStatementContext ctx) throws VariableDoesNotExistException{
+    public Object visitForStatement(final LYnkParser.ForStatementContext ctx){
         final Object fromCondition = ctx.from;
         final String toCondition = ctx.to.getText();
         final Object stepCondition = ctx.step;
         int from = 0;
         int step = 1;
-        if(variableList.hasVar(ctx.IDENTIFICATION().getText())){
-            console.addLine("the variable used for the for statement already exists");
+        try {
+            if (variableList.hasVar(ctx.IDENTIFICATION().getText())) {
+                console.addLine("the variable used for the for statement already exists");
+                return VOID;
+            }
+            if (toCondition.isEmpty()) {
+                console.addLine("the TO in the for statement cannot be empty");
+                return VOID;
+            }
+            int to = Integer.parseInt(ctx.to.getText());
+            if (!(fromCondition == null)) {
+                from = Integer.parseInt(ctx.from.getText());
+            }
+            if (!(stepCondition == null)) {
+                step = Integer.parseInt(ctx.step.getText());
+            }
+            String variableName = ctx.IDENTIFICATION().getText();
+            int variableValue;
+            for (variableValue = from; variableValue < to; variableValue += step) {
+                if (variableList.setNumVarValue(variableName, variableValue)) {
+                    visit(ctx.blockStatement());
+                }
+                ;
+            }
+            variableList.delete(variableName);
+        }
+        finally {
             return VOID;
         }
-        if(toCondition.isEmpty()){
-            console.addLine("the TO in the for statement cannot be empty");
-            return VOID;
-        }
-        int to = Integer.parseInt(ctx.to.getText());
-        if(!(fromCondition == null)){
-            from = Integer.parseInt(ctx.from.getText());
-        }
-        if(!(stepCondition == null)){
-            step = Integer.parseInt(ctx.step.getText());
-        }
-        String variableName = ctx.IDENTIFICATION().getText();
-        int variableValue;
-        for(variableValue=from;variableValue<to ; variableValue += step){
-            if(variableList.setNumVarValue(variableName, variableValue)){
-                visit(ctx.blockStatement());
-            };
-        }
-        variableList.delete(variableName);
-        return VOID;
     }
 
+    /**
+     * Visit a while statement
+     * @param ctx the parse tree
+     * @return VOID as the while execute instructions
+     */
     @Override
     public Object visitWhileStatement(final LYnkParser.WhileStatementContext ctx){
         final Object condition = visit(ctx.booleanExpression());
@@ -253,6 +364,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a parameter = a value, variable or %
+     * @param ctx the parse tree
+     * @return the value of the expression with % between 0 and 1
+     */
     @Override
     public Object visitNumParameter(LYnkParser.NumParameterContext ctx){
         if(ctx.getChild(0).getText().contains("%")){
@@ -263,6 +379,52 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         }
     }
 
+    /**
+     * Visit a parameter = a value, variable or %
+     * @param ctx the parse tree
+     * @return the value of the expression with % the value on the x-axis
+     */
+    @Override
+    public Object visitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx){
+        if(!ctx.PERCENTAGE().getText().isEmpty()){
+            String tmp = ctx.PERCENTAGE().getText();
+            tmp = tmp.substring(0, tmp.length()-1); //the entry without the % (only the number is kept)
+            Double value = Double.parseDouble(tmp);
+            value = (value/100)*1920; //TODO: Convertir 1920 en attribut de la classe
+            int result = (int) value.doubleValue();
+            return result;
+
+        }
+        else{
+            return visit(ctx.arithmeticExpression());
+        }
+    }
+
+    /**
+     * Visit a parameter = a value, variable or %
+     * @param ctx the parse tree
+     * @return the value of the expression with % the value on the y-axis
+     */
+    @Override
+    public Object visitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx){
+        if(!ctx.PERCENTAGE().getText().isEmpty()){
+            String tmp = ctx.PERCENTAGE().getText();
+            tmp = tmp.substring(0, tmp.length()-1); //the entry without the % (only the number is kept)
+            Double value = Double.parseDouble(tmp);
+            value = (value/100)*1080; //TODO: Convertir 1080 en attribut de la classe
+            int result = (int) value.doubleValue();
+            return result;
+        }
+        else{
+            return visit(ctx.arithmeticExpression());
+        }
+    }
+
+    /**
+     * Visit a color statement
+     * @param ctx the parse tree
+     * @return VOID as the color is applied to the selected cursor
+     */
     @Override
     public Object visitColorStatement(LYnkParser.ColorStatementContext ctx){
         if(!(ctx.HEXCODE().getText().isEmpty())){
@@ -278,6 +440,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a forward ("FWD") statement
+     * @param ctx the parse tree
+     * @return VOID as forward is applied to the selected cursor
+     */
     @Override
     public Object visitForwardStatement(LYnkParser.ForwardStatementContext ctx){
         try {
@@ -289,6 +456,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a backward ("BWD") statement
+     * @param ctx the parse tree
+     * @return VOID as backward is applied to the selected cursor
+     */
     @Override
     public Object visitBackwardStatement(LYnkParser.BackwardStatementContext ctx){
         try {
@@ -300,10 +472,57 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a move ("MOV") statement
+     * @param ctx the parse tree
+     * @return VOID as the move is applied to the selected cursor
+     */
+    @Override
+    public Object visitMoveStatement(LYnkParser.MoveStatementContext ctx){
+        try {
+            int x;
+            int y;
+            x = (int) visit(ctx.numStatementParameterX());
+            y = (int) visit(ctx.numStatementParameterY());
+            cursorManager.move(x, y);
+        }
+        finally{
+            return VOID;
+        }
+    }
+
+    /**
+     * Visit a position ("POS") statement
+     * @param ctx the parse tree
+     * @return VOID as the position is applied to the selected cursor
+     */
+    @Override
+    public Object visitPositionStatement(LYnkParser.PositionStatementContext ctx){
+        try {
+            int x;
+            int y;
+            x = (int) visit(ctx.numStatementParameterX());
+            y = (int) visit(ctx.numStatementParameterY());
+            cursorManager.position(x, y);
+        }
+        finally{
+            return VOID;
+        }
+    }
+
+    /**
+     * Visit a cursor statement adding a cursor
+     * @param ctx the parse tree
+     * @return VOID as adding cursor is applied to cursorManager
+     */
     @Override
     public Object visitCursorStatement(LYnkParser.CursorStatementContext ctx){
-        cursorManager.addCursor(Long.parseLong(ctx.LONG().getText()));
-        return VOID;
+        try {
+            cursorManager.addCursor(Long.parseLong(ctx.LONG().getText()));
+        }
+        finally {
+            return VOID;
+        }
     }
 
     /**
@@ -330,16 +549,34 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
      */
     @Override
     public Object visitRemoveStatement(LYnkParser.RemoveStatementContext ctx){
-        cursorManager.removeCursor(Long.parseLong(ctx.LONG().getText()));
-        return VOID;
+        try {
+            cursorManager.removeCursor(Long.parseLong(ctx.LONG().getText()));
+        }
+        finally {
+            return VOID;
+        }
     }
 
+    /**
+     * Visit a press statement
+     * @param ctx the parse tree
+     * @return VOID as press is applied to the selected cursor
+     */
     @Override
-    public Object visitSelectStatement(LYnkParser.SelectStatementContext ctx){
-        if(cursorManager.cursorExist(Long.parseLong(ctx.LONG().getText()))){
-            cursorManager.selectCursor(Long.parseLong(ctx.LONG().getText()));
+    public Object visitPressStatement(LYnkParser.PressStatementContext ctx){
+        try {
+            if (!ctx.arithmeticExpression().isEmpty()) {
+                cursorManager.press((float) visit(ctx.arithmeticExpression()));
+            } else {
+                String tmp = ctx.PERCENTAGE().getText();
+                tmp = tmp.substring(0, tmp.length() - 1); //the entry without the % (only the number is kept)
+                Float value = Float.parseFloat(tmp);
+                cursorManager.press((float) value);
+            }
         }
-        return VOID;
+        finally {
+            return VOID;
+        }
     }
 
     /**
@@ -349,8 +586,12 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
      */
     @Override
     public Object visitThickStatement(LYnkParser.ThickStatementContext ctx){
-        cursorManager.getSelectedCursor().setThickness((float)visit(ctx.arithmeticExpression()));
-        return VOID;
+        try {
+            cursorManager.thick((float) visit(ctx.arithmeticExpression()));
+        }
+        finally {
+            return VOID;
+        }
     }
 
     /**
@@ -362,7 +603,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     public Object visitLookAtStatement(LYnkParser.LookAtStatementContext ctx){
         int x = 0;
         int y = 0;
-        //if the cursor to lookat exist
+        //if a cursor to look at exist
         if(!ctx.LONG().getText().isEmpty() && cursorManager.cursorExist(Long.parseLong(ctx.LONG().getText()))){
             //the cursor to look at
             Cursor cursorToLookAt = cursorManager.getCursor(Long.parseLong(ctx.LONG().getText()));
@@ -371,28 +612,8 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         }
         //if a position was given
         else{
-            //checking the first argument x
-            //if it is a %
-            if(!ctx.PERCENTAGE(1).getText().isEmpty()){
-                //the % is transformed into an int
-                String[] StringWithoutPercent = percentUsed(ctx.getText());
-                x = Integer.parseInt(StringWithoutPercent);
-            }
-            //if it is a value alone
-            else{
-                x = (int)visit(ctx.arithmeticExpression(0));
-            }
-            //checking the second argument y
-            //if it is a %
-            if(!ctx.PERCENTAGE(1).getText().isEmpty()){
-                //the % is transformed into an int
-                String[] StringWithoutPercent = percentUsed(ctx.getText());
-                y = Integer.parseInt(StringWithoutPercent);
-            }
-            //if it is a value alone
-            else{
-                y = (int)visit(ctx.arithmeticExpression(1));
-            }
+            x = (int) visit(ctx.numStatementParameterX());
+            y = (int) visit(ctx.numStatementParameterY());
             cursorManager.getSelectedCursor().lookAt(x,y);
         }
         return VOID;
@@ -428,6 +649,8 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitRotationStatement(LYnkParser.RotationStatementContext ctx){
         Object value = visit(ctx.arithmeticExpression());
+        cursorManager.turn((float) value);
+        return VOID;
     }
 
     /**

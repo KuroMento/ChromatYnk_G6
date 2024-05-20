@@ -231,7 +231,7 @@ public class CursorManager {
     }
 
     /**
-     * Add to every cursor's position the amount passed in the parameters. (i.e. Moves the cursor based on its relative position)
+     * Move every cursor's position by the amount passed in the parameters. (i.e. Moves the cursor based on its relative position)
      * @param x value to add on the horizontal axis
      * @param y value to add on the vertical axis
      * @throws <code>NegativeNumberException</code>
@@ -241,6 +241,16 @@ public class CursorManager {
         for(long key : this.temporaryCursors.keySet()){
             this.temporaryCursors.get(key).moveCursor(x,y);
         }
+    }
+
+    /**
+     * Add to every cursor's position the amount passed in the parameters. (i.e. Change the cursor position based on its relative position)
+     * @param x value to add on the horizontal axis
+     * @param y value to add on the vertical axis
+     * @throws NegativeNumberException
+     */
+    public void position(int x, int y) throws NegativeNumberException {
+        getSelectedCursor().moveCursor(x,y);
     }
 
     /**

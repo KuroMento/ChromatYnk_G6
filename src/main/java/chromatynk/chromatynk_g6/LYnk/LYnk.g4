@@ -63,12 +63,12 @@ numStatementParameterX : (arithmeticExpression | PERCENTAGE);
 numStatementParameterY : (arithmeticExpression | PERCENTAGE);
 
 mimicStatement : 'MIMIC' LONG blockStatement;
-mirrorStatement : 'MIRROR' (( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE )
-                           | ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ))
+mirrorStatement : 'MIRROR' (x1=numStatementParameterX y1=numStatementParameterY
+                           | x1=numStatementParameterX y1=numStatementParameterY x2=numStatementParameterX y2=numStatementParameterY)
                            blockStatement; //MIRROR takes 2 or 4 values or %
 
-forwardStatement : 'FWD' ( arithmeticExpression | PERCENTAGE ); // FWD need an expression with a value or %
-backwardStatement : 'BWD' ( arithmeticExpression | PERCENTAGE ); // BWD need an expression with a value or %
+forwardStatement : 'FWD' numStatementParameterX; // FWD need an expression with a value or %
+backwardStatement : 'BWD' numStatementParameterX; // BWD need an expression with a value or %
 
 moveStatement : 'MOV' x=numStatementParameterX y=numStatementParameterY; // MOV need an expression with 2 values or %
 positionStatement : 'POS' x=numStatementParameterX y=numStatementParameterY; // POS need an expression with 2 values or %
@@ -81,7 +81,7 @@ selectStatement : 'SELECT' LONG;
 removeStatement : 'REMOVE' LONG;
 pressStatement : 'PRESS' (arithmeticExpression | PERCENTAGE); // PRESS need an expression with a value or %
 thickStatement : 'THICK' arithmeticExpression; // THICK need an expression with a value but not %
-lookAtStatement : 'LOOKAT' ((id=LONG) | ( arithmeticExpression | PERCENTAGE )  ( arithmeticExpression | PERCENTAGE )); // LOOKAT needs a cursor id or 2 values or %
+lookAtStatement : 'LOOKAT' (LONG | x=numStatementParameterX y=numStatementParameterY); // LOOKAT needs a cursor id or 2 values or %
 hideStatement : 'HIDE';
 showStatement : 'SHOW';
 rotationStatement : 'TURN' arithmeticExpression; // TURN need an expression with a value but not %
