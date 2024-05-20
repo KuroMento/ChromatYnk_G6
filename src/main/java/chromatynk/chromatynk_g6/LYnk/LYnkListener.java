@@ -4,520 +4,510 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
  * This interface defines a complete listener for a parse tree produced by
- * {@link chromatynk.chromatynk_g6.LYnk.LYnkParser}.
+ * {@link LYnkParser}.
  */
 public interface LYnkListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#program}.
+	 * Enter a parse tree produced by {@link LYnkParser#program}.
 	 * @param ctx the parse tree
 	 */
-	void enterProgram(chromatynk.chromatynk_g6.LYnk.LYnkParser.ProgramContext ctx);
+	void enterProgram(LYnkParser.ProgramContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#program}.
+	 * Exit a parse tree produced by {@link LYnkParser#program}.
 	 * @param ctx the parse tree
 	 */
-	void exitProgram(chromatynk.chromatynk_g6.LYnk.LYnkParser.ProgramContext ctx);
+	void exitProgram(LYnkParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#statement}.
+	 * Enter a parse tree produced by {@link LYnkParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.StatementContext ctx);
+	void enterStatement(LYnkParser.StatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#statement}.
+	 * Exit a parse tree produced by {@link LYnkParser#statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.StatementContext ctx);
+	void exitStatement(LYnkParser.StatementContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code trueVar}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterTrueVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.TrueVarContext ctx);
+	void enterTrueVar(LYnkParser.TrueVarContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code trueVar}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitTrueVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.TrueVarContext ctx);
+	void exitTrueVar(LYnkParser.TrueVarContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code literalComparison}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterLiteralComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.LiteralComparisonContext ctx);
+	void enterLiteralComparison(LYnkParser.LiteralComparisonContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code literalComparison}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitLiteralComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.LiteralComparisonContext ctx);
+	void exitLiteralComparison(LYnkParser.LiteralComparisonContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code falseVar}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterFalseVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.FalseVarContext ctx);
+	void enterFalseVar(LYnkParser.FalseVarContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code falseVar}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitFalseVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.FalseVarContext ctx);
+	void exitFalseVar(LYnkParser.FalseVarContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code andOrExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterAndOrExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.AndOrExpressionContext ctx);
+	void enterAndOrExpression(LYnkParser.AndOrExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code andOrExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitAndOrExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.AndOrExpressionContext ctx);
+	void exitAndOrExpression(LYnkParser.AndOrExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code notExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterNotExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.NotExpressionContext ctx);
+	void enterNotExpression(LYnkParser.NotExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code notExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitNotExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.NotExpressionContext ctx);
+	void exitNotExpression(LYnkParser.NotExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code arithmeticComparison}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterArithmeticComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.ArithmeticComparisonContext ctx);
+	void enterArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code arithmeticComparison}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitArithmeticComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.ArithmeticComparisonContext ctx);
+	void exitArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code booleanComparison}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterBooleanComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.BooleanComparisonContext ctx);
+	void enterBooleanComparison(LYnkParser.BooleanComparisonContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code booleanComparison}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitBooleanComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.BooleanComparisonContext ctx);
+	void exitBooleanComparison(LYnkParser.BooleanComparisonContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code parenthesisVar}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterParenthesisVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.ParenthesisVarContext ctx);
+	void enterParenthesisVar(LYnkParser.ParenthesisVarContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code parenthesisVar}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitParenthesisVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.ParenthesisVarContext ctx);
+	void exitParenthesisVar(LYnkParser.ParenthesisVarContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code identificationVar}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterIdentificationVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.IdentificationVarContext ctx);
+	void enterIdentificationVar(LYnkParser.IdentificationVarContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code identificationVar}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#booleanExpression}.
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitIdentificationVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.IdentificationVarContext ctx);
+	void exitIdentificationVar(LYnkParser.IdentificationVarContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code identificationExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterIdentificationExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.IdentificationExpressionContext ctx);
+	void enterIdentificationExpression(LYnkParser.IdentificationExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code identificationExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitIdentificationExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.IdentificationExpressionContext ctx);
+	void exitIdentificationExpression(LYnkParser.IdentificationExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code longExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterLongExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.LongExpressionContext ctx);
+	void enterLongExpression(LYnkParser.LongExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code longExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitLongExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.LongExpressionContext ctx);
+	void exitLongExpression(LYnkParser.LongExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code mulDivExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterMulDivExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.MulDivExpressionContext ctx);
+	void enterMulDivExpression(LYnkParser.MulDivExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code mulDivExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitMulDivExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.MulDivExpressionContext ctx);
+	void exitMulDivExpression(LYnkParser.MulDivExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code plusMinusExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterPlusMinusExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.PlusMinusExpressionContext ctx);
+	void enterPlusMinusExpression(LYnkParser.PlusMinusExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code plusMinusExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitPlusMinusExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.PlusMinusExpressionContext ctx);
+	void exitPlusMinusExpression(LYnkParser.PlusMinusExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code doubleExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterDoubleExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.DoubleExpressionContext ctx);
+	void enterDoubleExpression(LYnkParser.DoubleExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code doubleExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitDoubleExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.DoubleExpressionContext ctx);
+	void exitDoubleExpression(LYnkParser.DoubleExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code compExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterCompExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.CompExpressionContext ctx);
+	void enterCompExpression(LYnkParser.CompExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code compExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitCompExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.CompExpressionContext ctx);
+	void exitCompExpression(LYnkParser.CompExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code numberExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterNumberExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumberExpressionContext ctx);
+	void enterNumberExpression(LYnkParser.NumberExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code numberExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitNumberExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumberExpressionContext ctx);
+	void exitNumberExpression(LYnkParser.NumberExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code parenthesisExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void enterParenthesisExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.ParenthesisExpressionContext ctx);
+	void enterParenthesisExpression(LYnkParser.ParenthesisExpressionContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code parenthesisExpression}
-	 * labeled alternative in {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticExpression}.
+	 * labeled alternative in {@link LYnkParser#arithmeticExpression}.
 	 * @param ctx the parse tree
 	 */
-	void exitParenthesisExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.ParenthesisExpressionContext ctx);
+	void exitParenthesisExpression(LYnkParser.ParenthesisExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticOperator}.
+	 * Enter a parse tree produced by {@link LYnkParser#arithmeticOperator}.
 	 * @param ctx the parse tree
 	 */
-	void enterArithmeticOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.ArithmeticOperatorContext ctx);
+	void enterArithmeticOperator(LYnkParser.ArithmeticOperatorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#arithmeticOperator}.
+	 * Exit a parse tree produced by {@link LYnkParser#arithmeticOperator}.
 	 * @param ctx the parse tree
 	 */
-	void exitArithmeticOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.ArithmeticOperatorContext ctx);
+	void exitArithmeticOperator(LYnkParser.ArithmeticOperatorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#boolOperator}.
+	 * Enter a parse tree produced by {@link LYnkParser#boolOperator}.
 	 * @param ctx the parse tree
 	 */
-	void enterBoolOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.BoolOperatorContext ctx);
+	void enterBoolOperator(LYnkParser.BoolOperatorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#boolOperator}.
+	 * Exit a parse tree produced by {@link LYnkParser#boolOperator}.
 	 * @param ctx the parse tree
 	 */
-	void exitBoolOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.BoolOperatorContext ctx);
+	void exitBoolOperator(LYnkParser.BoolOperatorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#numOperator}.
+	 * Enter a parse tree produced by {@link LYnkParser#numOperator}.
 	 * @param ctx the parse tree
 	 */
-	void enterNumOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumOperatorContext ctx);
+	void enterNumOperator(LYnkParser.NumOperatorContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#numOperator}.
+	 * Exit a parse tree produced by {@link LYnkParser#numOperator}.
 	 * @param ctx the parse tree
 	 */
-	void exitNumOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumOperatorContext ctx);
+	void exitNumOperator(LYnkParser.NumOperatorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#ifStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#ifStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterIfStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.IfStatementContext ctx);
+	void enterIfStatement(LYnkParser.IfStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#ifStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#ifStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitIfStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.IfStatementContext ctx);
+	void exitIfStatement(LYnkParser.IfStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#forStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#forStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterForStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ForStatementContext ctx);
+	void enterForStatement(LYnkParser.ForStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#forStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#forStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitForStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ForStatementContext ctx);
+	void exitForStatement(LYnkParser.ForStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#whileStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#whileStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterWhileStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.WhileStatementContext ctx);
+	void enterWhileStatement(LYnkParser.WhileStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#whileStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#whileStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitWhileStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.WhileStatementContext ctx);
+	void exitWhileStatement(LYnkParser.WhileStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#numParameter}.
+	 * Enter a parse tree produced by {@link LYnkParser#numParameter}.
 	 * @param ctx the parse tree
 	 */
-	void enterNumParameter(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumParameterContext ctx);
+	void enterNumParameter(LYnkParser.NumParameterContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#numParameter}.
+	 * Exit a parse tree produced by {@link LYnkParser#numParameter}.
 	 * @param ctx the parse tree
 	 */
-	void exitNumParameter(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumParameterContext ctx);
+	void exitNumParameter(LYnkParser.NumParameterContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#colorParameter}.
+	 * Enter a parse tree produced by {@link LYnkParser#mimicStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterColorParameter(chromatynk.chromatynk_g6.LYnk.LYnkParser.ColorParameterContext ctx);
+	void enterMimicStatement(LYnkParser.MimicStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#colorParameter}.
+	 * Exit a parse tree produced by {@link LYnkParser#mimicStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitColorParameter(chromatynk.chromatynk_g6.LYnk.LYnkParser.ColorParameterContext ctx);
+	void exitMimicStatement(LYnkParser.MimicStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#mimicStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#mirrorStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterMimicStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MimicStatementContext ctx);
+	void enterMirrorStatement(LYnkParser.MirrorStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#mimicStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#mirrorStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitMimicStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MimicStatementContext ctx);
+	void exitMirrorStatement(LYnkParser.MirrorStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#mirrorStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#forwardStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterMirrorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MirrorStatementContext ctx);
+	void enterForwardStatement(LYnkParser.ForwardStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#mirrorStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#forwardStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitMirrorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MirrorStatementContext ctx);
+	void exitForwardStatement(LYnkParser.ForwardStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#forwardStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#backwardStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterForwardStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ForwardStatementContext ctx);
+	void enterBackwardStatement(LYnkParser.BackwardStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#forwardStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#backwardStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitForwardStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ForwardStatementContext ctx);
+	void exitBackwardStatement(LYnkParser.BackwardStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#backwardStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#moveStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterBackwardStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.BackwardStatementContext ctx);
+	void enterMoveStatement(LYnkParser.MoveStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#backwardStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#moveStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitBackwardStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.BackwardStatementContext ctx);
+	void exitMoveStatement(LYnkParser.MoveStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#moveStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#positionStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterMoveStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MoveStatementContext ctx);
+	void enterPositionStatement(LYnkParser.PositionStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#moveStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#positionStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitMoveStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MoveStatementContext ctx);
+	void exitPositionStatement(LYnkParser.PositionStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#positionStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#blockStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterPositionStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.PositionStatementContext ctx);
+	void enterBlockStatement(LYnkParser.BlockStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#positionStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#blockStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitPositionStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.PositionStatementContext ctx);
+	void exitBlockStatement(LYnkParser.BlockStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#blockStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#colorStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterBlockStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.BlockStatementContext ctx);
+	void enterColorStatement(LYnkParser.ColorStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#blockStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#colorStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitBlockStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.BlockStatementContext ctx);
+	void exitColorStatement(LYnkParser.ColorStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#colorStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#cursorStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterColorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ColorStatementContext ctx);
+	void enterCursorStatement(LYnkParser.CursorStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#colorStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#cursorStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitColorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ColorStatementContext ctx);
+	void exitCursorStatement(LYnkParser.CursorStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#cursorStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#selectStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterCursorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.CursorStatementContext ctx);
+	void enterSelectStatement(LYnkParser.SelectStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#cursorStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#selectStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitCursorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.CursorStatementContext ctx);
+	void exitSelectStatement(LYnkParser.SelectStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#selectStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#removeStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterSelectStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.SelectStatementContext ctx);
+	void enterRemoveStatement(LYnkParser.RemoveStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#selectStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#removeStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitSelectStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.SelectStatementContext ctx);
+	void exitRemoveStatement(LYnkParser.RemoveStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#removeStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#pressStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterRemoveStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.RemoveStatementContext ctx);
+	void enterPressStatement(LYnkParser.PressStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#removeStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#pressStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitRemoveStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.RemoveStatementContext ctx);
+	void exitPressStatement(LYnkParser.PressStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#pressStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#thickStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterPressStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.PressStatementContext ctx);
+	void enterThickStatement(LYnkParser.ThickStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#pressStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#thickStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitPressStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.PressStatementContext ctx);
+	void exitThickStatement(LYnkParser.ThickStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#thickStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#lookAtStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterThickStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ThickStatementContext ctx);
+	void enterLookAtStatement(LYnkParser.LookAtStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#thickStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#lookAtStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitThickStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ThickStatementContext ctx);
+	void exitLookAtStatement(LYnkParser.LookAtStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#lookAtStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#hideStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterLookAtStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.LookAtStatementContext ctx);
+	void enterHideStatement(LYnkParser.HideStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#lookAtStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#hideStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitLookAtStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.LookAtStatementContext ctx);
+	void exitHideStatement(LYnkParser.HideStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#hideStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#showStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterHideStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.HideStatementContext ctx);
+	void enterShowStatement(LYnkParser.ShowStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#hideStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#showStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitHideStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.HideStatementContext ctx);
+	void exitShowStatement(LYnkParser.ShowStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#showStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#rotationStatement}.
 	 * @param ctx the parse tree
 	 */
-	void enterShowStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ShowStatementContext ctx);
+	void enterRotationStatement(LYnkParser.RotationStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#showStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#rotationStatement}.
 	 * @param ctx the parse tree
 	 */
-	void exitShowStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ShowStatementContext ctx);
+	void exitRotationStatement(LYnkParser.RotationStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#rotationStatement}.
+	 * Enter a parse tree produced by {@link LYnkParser#stringDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterRotationStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.RotationStatementContext ctx);
+	void enterStringDeclaration(LYnkParser.StringDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#rotationStatement}.
+	 * Exit a parse tree produced by {@link LYnkParser#stringDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitRotationStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.RotationStatementContext ctx);
+	void exitStringDeclaration(LYnkParser.StringDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#stringDeclaration}.
+	 * Enter a parse tree produced by {@link LYnkParser#boolDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterStringDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.StringDeclarationContext ctx);
+	void enterBoolDeclaration(LYnkParser.BoolDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#stringDeclaration}.
+	 * Exit a parse tree produced by {@link LYnkParser#boolDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitStringDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.StringDeclarationContext ctx);
+	void exitBoolDeclaration(LYnkParser.BoolDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#boolDeclaration}.
+	 * Enter a parse tree produced by {@link LYnkParser#numberDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterBoolDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.BoolDeclarationContext ctx);
+	void enterNumberDeclaration(LYnkParser.NumberDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#boolDeclaration}.
+	 * Exit a parse tree produced by {@link LYnkParser#numberDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitBoolDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.BoolDeclarationContext ctx);
+	void exitNumberDeclaration(LYnkParser.NumberDeclarationContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#numberDeclaration}.
+	 * Enter a parse tree produced by {@link LYnkParser#deleteDeclaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterNumberDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumberDeclarationContext ctx);
+	void enterDeleteDeclaration(LYnkParser.DeleteDeclarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#numberDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumberDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumberDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#deleteDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeleteDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.DeleteDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link chromatynk.chromatynk_g6.LYnk.LYnkParser#deleteDeclaration}.
+	 * Exit a parse tree produced by {@link LYnkParser#deleteDeclaration}.
 	 * @param ctx the parse tree
 	 */
 	void exitDeleteDeclaration(LYnkParser.DeleteDeclarationContext ctx);

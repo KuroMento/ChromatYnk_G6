@@ -439,7 +439,9 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         String[] StringWithoutPercent = sentence.trim().split("\\s+");
         ArrayList<Integer> resolution = new ArrayList<Integer>(); // store the height and width of the image
         resolution.add(1920); //temporary resolution, will be replaced by the exact resolution of the canvas
-        resolution.add(1080);
+        resolution.add(1080); 
+        final int resX = 1920;
+        final int resY = 1080;
         int resolutionAxis = 0; // 0: x-axis of the image; 1: y-axis of the image
         double val;
         for(int i = 1; i< StringWithoutPercent.length; i++){

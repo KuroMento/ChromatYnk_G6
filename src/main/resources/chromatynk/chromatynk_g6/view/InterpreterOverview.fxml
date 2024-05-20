@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../style.css" xmlns="http://javafx.com/javafx/21">
+    <bottom>
+        <HBox prefHeight="150.0" prefWidth="1000.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+            <TextArea  prefHeight="130.0" prefWidth="750.0" promptText="Enter your instructions here" HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" text="Submit" HBox.hgrow="ALWAYS" />
+        </HBox>
+    </bottom>
+</BorderPane>

@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * This class provides an empty implementation of {@link chromatynk.chromatynk_g6.LYnk.LYnkListener},
+ * This class provides an empty implementation of {@link LYnkListener},
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
@@ -17,571 +17,559 @@ public class LYnkBaseListener implements LYnkListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProgram(chromatynk.chromatynk_g6.LYnk.LYnkParser.ProgramContext ctx) { }
+	@Override public void enterProgram(LYnkParser.ProgramContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProgram(chromatynk.chromatynk_g6.LYnk.LYnkParser.ProgramContext ctx) { }
+	@Override public void exitProgram(LYnkParser.ProgramContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.StatementContext ctx) { }
+	@Override public void enterStatement(LYnkParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.StatementContext ctx) { }
+	@Override public void exitStatement(LYnkParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTrueVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.TrueVarContext ctx) { }
+	@Override public void enterTrueVar(LYnkParser.TrueVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitTrueVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.TrueVarContext ctx) { }
+	@Override public void exitTrueVar(LYnkParser.TrueVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLiteralComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.LiteralComparisonContext ctx) { }
+	@Override public void enterLiteralComparison(LYnkParser.LiteralComparisonContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLiteralComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.LiteralComparisonContext ctx) { }
+	@Override public void exitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFalseVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.FalseVarContext ctx) { }
+	@Override public void enterFalseVar(LYnkParser.FalseVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFalseVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.FalseVarContext ctx) { }
+	@Override public void exitFalseVar(LYnkParser.FalseVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAndOrExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.AndOrExpressionContext ctx) { }
+	@Override public void enterAndOrExpression(LYnkParser.AndOrExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAndOrExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.AndOrExpressionContext ctx) { }
+	@Override public void exitAndOrExpression(LYnkParser.AndOrExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNotExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.NotExpressionContext ctx) { }
+	@Override public void enterNotExpression(LYnkParser.NotExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNotExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.NotExpressionContext ctx) { }
+	@Override public void exitNotExpression(LYnkParser.NotExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArithmeticComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.ArithmeticComparisonContext ctx) { }
+	@Override public void enterArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArithmeticComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.ArithmeticComparisonContext ctx) { }
+	@Override public void exitArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBooleanComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.BooleanComparisonContext ctx) { }
+	@Override public void enterBooleanComparison(LYnkParser.BooleanComparisonContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBooleanComparison(chromatynk.chromatynk_g6.LYnk.LYnkParser.BooleanComparisonContext ctx) { }
+	@Override public void exitBooleanComparison(LYnkParser.BooleanComparisonContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParenthesisVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.ParenthesisVarContext ctx) { }
+	@Override public void enterParenthesisVar(LYnkParser.ParenthesisVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParenthesisVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.ParenthesisVarContext ctx) { }
+	@Override public void exitParenthesisVar(LYnkParser.ParenthesisVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIdentificationVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.IdentificationVarContext ctx) { }
+	@Override public void enterIdentificationVar(LYnkParser.IdentificationVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIdentificationVar(chromatynk.chromatynk_g6.LYnk.LYnkParser.IdentificationVarContext ctx) { }
+	@Override public void exitIdentificationVar(LYnkParser.IdentificationVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIdentificationExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.IdentificationExpressionContext ctx) { }
+	@Override public void enterIdentificationExpression(LYnkParser.IdentificationExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIdentificationExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.IdentificationExpressionContext ctx) { }
+	@Override public void exitIdentificationExpression(LYnkParser.IdentificationExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLongExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.LongExpressionContext ctx) { }
+	@Override public void enterLongExpression(LYnkParser.LongExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLongExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.LongExpressionContext ctx) { }
+	@Override public void exitLongExpression(LYnkParser.LongExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMulDivExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.MulDivExpressionContext ctx) { }
+	@Override public void enterMulDivExpression(LYnkParser.MulDivExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMulDivExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.MulDivExpressionContext ctx) { }
+	@Override public void exitMulDivExpression(LYnkParser.MulDivExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPlusMinusExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.PlusMinusExpressionContext ctx) { }
+	@Override public void enterPlusMinusExpression(LYnkParser.PlusMinusExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPlusMinusExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.PlusMinusExpressionContext ctx) { }
+	@Override public void exitPlusMinusExpression(LYnkParser.PlusMinusExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDoubleExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.DoubleExpressionContext ctx) { }
+	@Override public void enterDoubleExpression(LYnkParser.DoubleExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDoubleExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.DoubleExpressionContext ctx) { }
+	@Override public void exitDoubleExpression(LYnkParser.DoubleExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCompExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.CompExpressionContext ctx) { }
+	@Override public void enterCompExpression(LYnkParser.CompExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCompExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.CompExpressionContext ctx) { }
+	@Override public void exitCompExpression(LYnkParser.CompExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumberExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumberExpressionContext ctx) { }
+	@Override public void enterNumberExpression(LYnkParser.NumberExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumberExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumberExpressionContext ctx) { }
+	@Override public void exitNumberExpression(LYnkParser.NumberExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParenthesisExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.ParenthesisExpressionContext ctx) { }
+	@Override public void enterParenthesisExpression(LYnkParser.ParenthesisExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParenthesisExpression(chromatynk.chromatynk_g6.LYnk.LYnkParser.ParenthesisExpressionContext ctx) { }
+	@Override public void exitParenthesisExpression(LYnkParser.ParenthesisExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArithmeticOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.ArithmeticOperatorContext ctx) { }
+	@Override public void enterArithmeticOperator(LYnkParser.ArithmeticOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArithmeticOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.ArithmeticOperatorContext ctx) { }
+	@Override public void exitArithmeticOperator(LYnkParser.ArithmeticOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoolOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.BoolOperatorContext ctx) { }
+	@Override public void enterBoolOperator(LYnkParser.BoolOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBoolOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.BoolOperatorContext ctx) { }
+	@Override public void exitBoolOperator(LYnkParser.BoolOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumOperatorContext ctx) { }
+	@Override public void enterNumOperator(LYnkParser.NumOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumOperator(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumOperatorContext ctx) { }
+	@Override public void exitNumOperator(LYnkParser.NumOperatorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIfStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.IfStatementContext ctx) { }
+	@Override public void enterIfStatement(LYnkParser.IfStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIfStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.IfStatementContext ctx) { }
+	@Override public void exitIfStatement(LYnkParser.IfStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterForStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ForStatementContext ctx) { }
+	@Override public void enterForStatement(LYnkParser.ForStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitForStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ForStatementContext ctx) { }
+	@Override public void exitForStatement(LYnkParser.ForStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWhileStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.WhileStatementContext ctx) { }
+	@Override public void enterWhileStatement(LYnkParser.WhileStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWhileStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.WhileStatementContext ctx) { }
+	@Override public void exitWhileStatement(LYnkParser.WhileStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumParameter(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumParameterContext ctx) { }
+	@Override public void enterNumParameter(LYnkParser.NumParameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitNumParameter(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumParameterContext ctx) { }
+	@Override public void exitNumParameter(LYnkParser.NumParameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterColorParameter(chromatynk.chromatynk_g6.LYnk.LYnkParser.ColorParameterContext ctx) { }
+	@Override public void enterMimicStatement(LYnkParser.MimicStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitColorParameter(chromatynk.chromatynk_g6.LYnk.LYnkParser.ColorParameterContext ctx) { }
+	@Override public void exitMimicStatement(LYnkParser.MimicStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMimicStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MimicStatementContext ctx) { }
+	@Override public void enterMirrorStatement(LYnkParser.MirrorStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMimicStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MimicStatementContext ctx) { }
+	@Override public void exitMirrorStatement(LYnkParser.MirrorStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMirrorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MirrorStatementContext ctx) { }
+	@Override public void enterForwardStatement(LYnkParser.ForwardStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMirrorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MirrorStatementContext ctx) { }
+	@Override public void exitForwardStatement(LYnkParser.ForwardStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterForwardStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ForwardStatementContext ctx) { }
+	@Override public void enterBackwardStatement(LYnkParser.BackwardStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitForwardStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ForwardStatementContext ctx) { }
+	@Override public void exitBackwardStatement(LYnkParser.BackwardStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBackwardStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.BackwardStatementContext ctx) { }
+	@Override public void enterMoveStatement(LYnkParser.MoveStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBackwardStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.BackwardStatementContext ctx) { }
+	@Override public void exitMoveStatement(LYnkParser.MoveStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMoveStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MoveStatementContext ctx) { }
+	@Override public void enterPositionStatement(LYnkParser.PositionStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMoveStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.MoveStatementContext ctx) { }
+	@Override public void exitPositionStatement(LYnkParser.PositionStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPositionStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.PositionStatementContext ctx) { }
+	@Override public void enterBlockStatement(LYnkParser.BlockStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPositionStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.PositionStatementContext ctx) { }
+	@Override public void exitBlockStatement(LYnkParser.BlockStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlockStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.BlockStatementContext ctx) { }
+	@Override public void enterColorStatement(LYnkParser.ColorStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBlockStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.BlockStatementContext ctx) { }
+	@Override public void exitColorStatement(LYnkParser.ColorStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterColorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ColorStatementContext ctx) { }
+	@Override public void enterCursorStatement(LYnkParser.CursorStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitColorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ColorStatementContext ctx) { }
+	@Override public void exitCursorStatement(LYnkParser.CursorStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCursorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.CursorStatementContext ctx) { }
+	@Override public void enterSelectStatement(LYnkParser.SelectStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCursorStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.CursorStatementContext ctx) { }
+	@Override public void exitSelectStatement(LYnkParser.SelectStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSelectStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.SelectStatementContext ctx) { }
+	@Override public void enterRemoveStatement(LYnkParser.RemoveStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSelectStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.SelectStatementContext ctx) { }
+	@Override public void exitRemoveStatement(LYnkParser.RemoveStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRemoveStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.RemoveStatementContext ctx) { }
+	@Override public void enterPressStatement(LYnkParser.PressStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRemoveStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.RemoveStatementContext ctx) { }
+	@Override public void exitPressStatement(LYnkParser.PressStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPressStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.PressStatementContext ctx) { }
+	@Override public void enterThickStatement(LYnkParser.ThickStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitPressStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.PressStatementContext ctx) { }
+	@Override public void exitThickStatement(LYnkParser.ThickStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterThickStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ThickStatementContext ctx) { }
+	@Override public void enterLookAtStatement(LYnkParser.LookAtStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitThickStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ThickStatementContext ctx) { }
+	@Override public void exitLookAtStatement(LYnkParser.LookAtStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLookAtStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.LookAtStatementContext ctx) { }
+	@Override public void enterHideStatement(LYnkParser.HideStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLookAtStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.LookAtStatementContext ctx) { }
+	@Override public void exitHideStatement(LYnkParser.HideStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHideStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.HideStatementContext ctx) { }
+	@Override public void enterShowStatement(LYnkParser.ShowStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHideStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.HideStatementContext ctx) { }
+	@Override public void exitShowStatement(LYnkParser.ShowStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterShowStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ShowStatementContext ctx) { }
+	@Override public void enterRotationStatement(LYnkParser.RotationStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitShowStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.ShowStatementContext ctx) { }
+	@Override public void exitRotationStatement(LYnkParser.RotationStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterRotationStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.RotationStatementContext ctx) { }
+	@Override public void enterStringDeclaration(LYnkParser.StringDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitRotationStatement(chromatynk.chromatynk_g6.LYnk.LYnkParser.RotationStatementContext ctx) { }
+	@Override public void exitStringDeclaration(LYnkParser.StringDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStringDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.StringDeclarationContext ctx) { }
+	@Override public void enterBoolDeclaration(LYnkParser.BoolDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStringDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.StringDeclarationContext ctx) { }
+	@Override public void exitBoolDeclaration(LYnkParser.BoolDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBoolDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.BoolDeclarationContext ctx) { }
+	@Override public void enterNumberDeclaration(LYnkParser.NumberDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBoolDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.BoolDeclarationContext ctx) { }
+	@Override public void exitNumberDeclaration(LYnkParser.NumberDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNumberDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumberDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNumberDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.NumberDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeleteDeclaration(chromatynk.chromatynk_g6.LYnk.LYnkParser.DeleteDeclarationContext ctx) { }
+	@Override public void enterDeleteDeclaration(LYnkParser.DeleteDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
