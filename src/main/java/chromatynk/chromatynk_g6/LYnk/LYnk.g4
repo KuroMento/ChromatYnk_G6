@@ -59,6 +59,9 @@ forStatement : 'FOR' IDENTIFICATION ('FROM' from=(NUMBER|LONG))? 'TO' to=(NUMBER
 whileStatement : 'WHILE' booleanExpression blockStatement;
 
 numParameter : LONG | NUMBER | DOUBLE | PERCENTAGE | IDENTIFICATION; //Identification added to use variable in parameters
+numStatementParameterX : (arithmeticExpression | PERCENTAGE);
+numStatementParameterY : (arithmeticExpression | PERCENTAGE);
+
 mimicStatement : 'MIMIC' LONG blockStatement;
 mirrorStatement : 'MIRROR' (( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE )
                            | ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ) ( arithmeticExpression | PERCENTAGE ))
@@ -87,6 +90,8 @@ boolDeclaration : 'BOOL' IDENTIFICATION ('=' booleanExpression)?;
 numberDeclaration : 'NUM' IDENTIFICATION ('=' arithmeticExpression)?;
 deleteDeclaration : 'DEL' IDENTIFICATION;
 
+
+// PERCENTAGE : '%' => FWD arithmeticExpression (PERCENTAGE)?
 
 //Tokens
 

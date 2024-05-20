@@ -123,8 +123,13 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitIdentificationVar(LYnkParser.IdentificationVarContext ctx) throws VariableDoesNotExistException {
-        return variableList.getVarValue(ctx.IDENTIFICATION());
+    public Object visitIdentificationVar(LYnkParser.IdentificationVarContext ctx){
+        try {
+            return variableList.getVarValue(ctx.IDENTIFICATION());
+        }
+        finally{
+            return VOID;
+        }
     }
 
     @Override
@@ -276,14 +281,9 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     }
 
     @Override
-    public Object visitForwardStatement(LYnkParser.ForwardStatementContext ctx) throws NegativeNumberException {
-        if(!ctx.PERCENTAGE().getText().isEmpty()) {
-            //the % is transformed into an int.
-            String[] StringWithoutPercent = percentUsed(ctx.getText());
-            cursorManager.getSelectedCursor().forward(Integer.parseInt(StringWithoutPercent[1]));
-        }
-        else{
-            cursorManager.getSelectedCursor().forward((int)visit(ctx.arithmeticExpression()));
+    public Object visitForwardStatement(LYnkParser.ForwardStatementContext ctx){
+        try {
+            cursorManager.forward((int) visit(ctx.numStatementParameterX()));
         }
         return VOID;
     }
@@ -307,6 +307,28 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
+    /**
+     * Visit a select cursor statement
+     * @param ctx the parse tree
+     * @return VOID as selecting a cursor is applied to cursorManager
+     */
+    @Override
+    public Object visitSelectStatement(LYnkParser.SelectStatementContext ctx){
+        try {
+            if (cursorManager.cursorExist(Long.parseLong(ctx.LONG().getText()))) {
+                cursorManager.selectCursor(Long.parseLong(ctx.LONG().getText()));
+            }
+        }
+        finally {
+            return VOID;
+        }
+    }
+
+    /**
+     * Visit a remove cursor statement
+     * @param ctx the parse tree
+     * @return VOID as selecting a cursor is applied to cursorManager
+     */
     @Override
     public Object visitRemoveStatement(LYnkParser.RemoveStatementContext ctx){
         cursorManager.removeCursor(Long.parseLong(ctx.LONG().getText()));

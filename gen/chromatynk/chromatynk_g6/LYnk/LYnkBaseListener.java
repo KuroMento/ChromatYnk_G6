@@ -329,6 +329,30 @@ public class LYnkBaseListener implements LYnkListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMimicStatement(LYnkParser.MimicStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}

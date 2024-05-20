@@ -184,6 +184,18 @@ public interface LYnkVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNumParameter(LYnkParser.NumParameterContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LYnkParser#numStatementParameterX}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LYnkParser#numStatementParameterY}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LYnkParser#mimicStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

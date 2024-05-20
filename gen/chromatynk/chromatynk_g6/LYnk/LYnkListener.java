@@ -302,6 +302,26 @@ public interface LYnkListener extends ParseTreeListener {
 	 */
 	void exitNumParameter(LYnkParser.NumParameterContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LYnkParser#numStatementParameterX}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LYnkParser#numStatementParameterX}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LYnkParser#numStatementParameterY}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LYnkParser#numStatementParameterY}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LYnkParser#mimicStatement}.
 	 * @param ctx the parse tree
 	 */

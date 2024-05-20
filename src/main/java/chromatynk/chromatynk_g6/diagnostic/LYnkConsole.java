@@ -70,6 +70,9 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     }
 
     // Arithmetic Expression Visit
+    /**
+     * Arithmetic Expressions
+     */
     @Override
     public LYnkValidation visitParenthesisExpression(LYnkParser.ParenthesisExpressionContext ctx){
         return visit(ctx.arithmeticExpression());
@@ -89,7 +92,6 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
         try {
             // Left and Right are either a long or a double
-            // TODO: add to try catch (IllegalStateException => wrong op)
             if (left.isNumeric() && right.isNumeric()) {
                 if (ctx.op.getType() == LYnkParser.DIVISION && (right.value().equals(0))) {
                     addIssue(IssueType.ERROR, ctx.op, "Division by 0!");
@@ -104,7 +106,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // Left is a numeral and right is a variable
             if (left.isNumeric() && right.isIdentification()) {
-                if (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                if (this.varContext.getVarType(right.asString()) instanceof Boolean || this.varContext.getVarType(right.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The right variable does not have a supported type for this operation: " + this.varContext.getVarType(right.asString()));
                     return SKIP_ERROR;
                 }
@@ -118,7 +120,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // Right is a numeral and left is a variable
             if (left.isIdentification() && right.isNumeric()) {
-                if (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                if (this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The left variable does not have a supported type for this operation: " + this.varContext.getVarType(left.asString()));
                     return SKIP_ERROR;
                 }
@@ -132,11 +134,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // Left and right are variables
             if (left.isIdentification() && right.isIdentification()) {
-                if (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                if (this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The left variable does not have a supported type for this operation: " + this.varContext.getVarType(left.asString()));
                     return SKIP_ERROR;
                 }
-                if (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                if (this.varContext.getVarType(right.asString()) instanceof Boolean || this.varContext.getVarType(right.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The right variable does not have a supported type for this operation: " + this.varContext.getVarType(right.asString()));
                     return SKIP_ERROR;
                 }
@@ -176,7 +178,6 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
         try {
             // Left and Right are either a long or a double
-            // TODO: add to try catch (IllegalStateException => wrong op)
             if (left.isNumeric() && right.isNumeric()) {
                 if (ctx.op.getType() == LYnkParser.DIVISION && (right.value().equals(0))) {
                     addIssue(IssueType.ERROR, ctx.op, "Division by 0!");
@@ -191,7 +192,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // Left is a numeral and right is a variable
             if (left.isNumeric() && right.isIdentification()) {
-                if (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                if (this.varContext.getVarType(right.asString()) instanceof Boolean || this.varContext.getVarType(right.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The right variable does not have a supported type for this operation: " + this.varContext.getVarType(right.asString()));
                     return SKIP_ERROR;
                 }
@@ -205,7 +206,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // Right is a numeral and left is a variable
             if (left.isIdentification() && right.isNumeric()) {
-                if (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                if ( this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The left variable does not have a supported type for this operation: " + this.varContext.getVarType(left.asString()));
                     return SKIP_ERROR;
                 }
@@ -219,11 +220,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // Left and right are variables
             if (left.isIdentification() && right.isIdentification()) {
-                if (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                if ( this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The left variable does not have a supported type for this operation: " + this.varContext.getVarType(left.asString()));
                     return SKIP_ERROR;
                 }
-                if (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                if (this.varContext.getVarType(right.asString()) instanceof Boolean || this.varContext.getVarType(right.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The right variable does not have a supported type for this operation: " + this.varContext.getVarType(right.asString()));
                     return SKIP_ERROR;
                 }
@@ -263,7 +264,6 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
         try {
             // Left and Right are either a long or a double
-            // TODO: add to try catch (IllegalStateException => wrong op)
             if (left.isNumeric() && right.isNumeric()) {
                 if (ctx.numOperator().op.getType() == LYnkParser.DIVISION && (right.value().equals(0))) {
                     addIssue(IssueType.ERROR, ctx.numOperator().op, "Division by 0!");
@@ -278,7 +278,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // Left is a numeral and right is a variable
             if (left.isNumeric() && right.isIdentification()) {
-                if (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                if ( this.varContext.getVarType(right.asString()) instanceof Boolean || this.varContext.getVarType(right.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.numOperator().op, "The right variable does not have a supported type for this operation: " + this.varContext.getVarType(right.asString()));
                     return SKIP_ERROR;
                 }
@@ -292,7 +292,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // Right is a numeral and left is a variable
             if (left.isIdentification() && right.isNumeric()) {
-                if (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                if (this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.numOperator().op, "The left variable does not have a supported type for this operation: " + this.varContext.getVarType(left.asString()));
                     return SKIP_ERROR;
                 }
@@ -306,11 +306,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // Left and right are variables
             if (left.isIdentification() && right.isIdentification()) {
-                if (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof Boolean || (this.varContext.hasVar(left.asString()) && this.varContext.getVarType(left.asString()) instanceof String)) {
+                if (this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.numOperator().op, "The left variable does not have a supported type for this operation: " + this.varContext.getVarType(left.asString()));
                     return SKIP_ERROR;
                 }
-                if (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof Boolean || (this.varContext.hasVar(right.asString()) && this.varContext.getVarType(right.asString()) instanceof String)) {
+                if (this.varContext.getVarType(right.asString()) instanceof Boolean || this.varContext.getVarType(right.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.numOperator().op, "The right variable does not have a supported type for this operation: " + this.varContext.getVarType(right.asString()));
                     return SKIP_ERROR;
                 }
@@ -386,23 +386,17 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         if(right.isSkipError() || !right.hasValue()){
             return SKIP_ERROR;
         }
-        final String operator = ctx.op.getText();
-        if( !(operator.equals("AND") || operator.equals("OR")) ){
-            return SKIP_ERROR;
-        }
-
-        // Both boolean
-        // TODO: add to try catch (IllegalStateException => wrong op) AND DELETE CONDITIONAL ABOVE COMMENT
-        if( left.isBoolean() && right.isBoolean() ){
-            final Boolean value = BooleanUtil.evalAndOrOperator((Boolean) left.value(), (Boolean) right.value(), ctx.op);
-            return LYnkValidation.bool(value);
-        }
 
         try {
+            // Both boolean
+            if (left.isBoolean() && right.isBoolean()) {
+                final Boolean value = BooleanUtil.evalAndOrOperator((Boolean) left.value(), (Boolean) right.value(), ctx.op);
+                return LYnkValidation.bool(value);
+            }
 
             // left boolean right variable
             if (left.isBoolean() && right.isIdentification()) {
-                if (!(this.varContext.getVarType(right.asString()) instanceof Boolean) || !this.varContext.hasVar(right.asString())) {
+                if (!(this.varContext.getVarType(right.asString()) instanceof Boolean)) {
                     return SKIP_ERROR;
                 }
                 final Boolean rightValue = varContext.getBoolVarValue(right.asString());
@@ -412,20 +406,20 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // right boolean left variable
             if (right.isBoolean() && left.isIdentification()) {
-                if (!(this.varContext.getVarType(left.asString()) instanceof Boolean) || !this.varContext.hasVar(left.asString())) {
+                if (!(this.varContext.getVarType(left.asString()) instanceof Boolean)) {
                     return SKIP_ERROR;
                 }
                 final Boolean leftValue = varContext.getBoolVarValue(left.asString());
                 final Boolean value = BooleanUtil.evalAndOrOperator(leftValue, (Boolean) right.value(), ctx.op);
                 return LYnkValidation.bool(value);
             }
-            
+
             // left variable right variable
-            if( left.isIdentification() && right.isIdentification() ){
-                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && !(this.varContext.getVarType(left.asString()) instanceof Boolean))) {
+            if (left.isIdentification() && right.isIdentification()) {
+                if (!(this.varContext.getVarType(left.asString()) instanceof Boolean)) {
                     return SKIP_ERROR;
                 }
-                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && !(this.varContext.getVarType(right.asString()) instanceof Boolean))) {
+                if (!(this.varContext.getVarType(right.asString()) instanceof Boolean)) {
                     return SKIP_ERROR;
                 }
                 final Boolean leftValue = this.varContext.getBoolVarValue(left.asString());
@@ -438,11 +432,16 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.op, "The variable does not exist in the current context!" );
             return SKIP_ERROR;
         }
+        catch (IllegalStateException e){
+            addIssue(IssueType.ERROR, ctx.op, e.getMessage() );
+            return SKIP_ERROR;
+        }
         return LYnkValidation.VOID;
     }
 
     @Override
     public LYnkValidation visitArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx) {
+        //TODO: Verifiez si la verif de typage marche bien avec DOuble ou s'il faut modif avec Number
         // Either empty value or error already detected deeper in the tree
         final LYnkValidation left = visit(ctx.left);
         if (left.isSkipError() || !left.hasValue()) {
@@ -461,7 +460,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             }
             // right number left variable
             if (right.isNumeric() && left.isIdentification()) {
-                if (!(this.varContext.getVarType(left.asString()) instanceof Double) || !this.varContext.hasVar(left.asString()) ) {
+                if (!(this.varContext.getVarType(left.asString()) instanceof Double)) {
                     return SKIP_ERROR;
                 }
                 final Number leftValue = varContext.getNumVarValue(left.asString());
@@ -470,7 +469,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             }
             // left number right variable
             if (left.isNumeric() && right.isIdentification()) {
-                if (!(this.varContext.getVarType(right.asString()) instanceof Double) || !this.varContext.hasVar(right.asString()) ){
+                if (!(this.varContext.getVarType(right.asString()) instanceof Double)){
                     return SKIP_ERROR;
                 }
                 final Number rightValue = varContext.getNumVarValue(right.asString());
@@ -480,10 +479,10 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // left variable right variable
             if( left.isIdentification() && right.isIdentification() ){
-                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && !(this.varContext.getVarType(left.asString()) instanceof Double))) {
+                if (!(this.varContext.getVarType(left.asString()) instanceof Double)) {
                     return SKIP_ERROR;
                 }
-                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && !(this.varContext.getVarType(right.asString()) instanceof Double))) {
+                if (!(this.varContext.getVarType(right.asString()) instanceof Double)) {
                     return SKIP_ERROR;
                 }
                 final Number leftValue = this.varContext.getNumVarValue(left.asString());
@@ -516,7 +515,6 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
 
         // Both boolean
-        // TODO: add to try catch (IllegalStateException => wrong op)
         try {
             if (left.isBoolean() && right.isBoolean()) {
                 final Boolean value = BooleanUtil.evalAndOrOperator((Boolean) left.value(), (Boolean) right.value(), ctx.boolOperator().op);
@@ -524,7 +522,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             }
             // left boolean right variable
             if (left.isBoolean() && right.isIdentification()) {
-                if (!(this.varContext.getVarType(right.asString()) instanceof Boolean) || !this.varContext.hasVar(right.asString())) {
+                if (!(this.varContext.getVarType(right.asString()) instanceof Boolean)) {
                     return SKIP_ERROR;
                 }
                 final Boolean rightValue = varContext.getBoolVarValue(right.asString());
@@ -534,7 +532,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // right boolean left variable
             if (right.isBoolean() && left.isIdentification()) {
-                if (!(this.varContext.getVarType(left.asString()) instanceof Boolean) || !this.varContext.hasVar(left.asString())) {
+                if (!(this.varContext.getVarType(left.asString()) instanceof Boolean)) {
                     return SKIP_ERROR;
                 }
                 final Boolean leftValue = varContext.getBoolVarValue(left.asString());
@@ -544,10 +542,10 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
             // left variable right variable
             if( left.isIdentification() && right.isIdentification() ){
-                if (!this.varContext.hasVar(left.asString()) || (this.varContext.hasVar(left.asString()) && !(this.varContext.getVarType(left.asString()) instanceof Boolean))) {
+                if (!(this.varContext.getVarType(left.asString()) instanceof Boolean)) {
                     return SKIP_ERROR;
                 }
-                if (!this.varContext.hasVar(right.asString()) || (this.varContext.hasVar(right.asString()) && !(this.varContext.getVarType(right.asString()) instanceof Boolean))) {
+                if (!(this.varContext.getVarType(right.asString()) instanceof Boolean)) {
                     return SKIP_ERROR;
                 }
                 final Boolean leftValue = this.varContext.getBoolVarValue(left.asString());
@@ -587,28 +585,28 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             }
             // left literal right identification
             if( left.getType() == LYnkParser.LITERAL && right.getType() == LYnkParser.IDENTIFICATION){
-                if( !varContext.hasVar(right.getText()) || (varContext.hasVar(right.getText()) && !(varContext.getVarType(right.getText()) instanceof String))){
+                if( this.varContext.hasVar(right.getText()) && !(this.varContext.getVarType(right.getText()) instanceof String)){
                     return SKIP_ERROR;
                 }
-                final String rightValue = varContext.getStrVarValue(right.getText());
+                final String rightValue = this.varContext.getStrVarValue(right.getText());
                 final Boolean value = StringUtil.evalLiteralComparisonOperator(left.getText() , rightValue , ctx.arithmeticOperator().op);
                 return LYnkValidation.bool(value);
             }
             // right literal left identification
             if( right.getType() == LYnkParser.LITERAL && left.getType() == LYnkParser.IDENTIFICATION){
-                if( !varContext.hasVar(left.getText()) || (varContext.hasVar(left.getText()) && !(varContext.getVarType(left.getText()) instanceof String))){
+                if( this.varContext.hasVar(left.getText()) && !(this.varContext.getVarType(left.getText()) instanceof String)){
                     return SKIP_ERROR;
                 }
-                final String leftValue = varContext.getStrVarValue(left.getText());
+                final String leftValue = this.varContext.getStrVarValue(left.getText());
                 final Boolean value = StringUtil.evalLiteralComparisonOperator(leftValue , right.getText() , ctx.arithmeticOperator().op);
                 return LYnkValidation.bool(value);
             }
             // right identification left identification
             if( right.getType() == LYnkParser.IDENTIFICATION && left.getType() == LYnkParser.IDENTIFICATION){
-                if( !varContext.hasVar(left.getText()) || (varContext.hasVar(left.getText()) && !(varContext.getVarType(left.getText()) instanceof String))){
+                if( this.varContext.hasVar(left.getText()) && !(this.varContext.getVarType(left.getText()) instanceof String)){
                     return SKIP_ERROR;
                 }
-                if( !varContext.hasVar(right.getText()) || (varContext.hasVar(right.getText()) && !(varContext.getVarType(right.getText()) instanceof String))){
+                if( this.varContext.hasVar(right.getText()) && !(this.varContext.getVarType(right.getText()) instanceof String)){
                     return SKIP_ERROR;
                 }
                 final String leftValue = varContext.getStrVarValue(left.getText());
@@ -630,6 +628,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     
     @Override
     public LYnkValidation visitIdentificationVar(LYnkParser.IdentificationVarContext ctx){
+        // TODO: Revoir la maniere dont on stocke les variables et leurs valeurs 
         try {
             final Object variableValue = varContext.getVarValue(ctx.IDENTIFICATION().getText());
             if( variableValue instanceof Boolean){
