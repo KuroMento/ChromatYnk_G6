@@ -661,6 +661,100 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.bool(Boolean.FALSE);
     }
 
+
+    /**
+     * Statements
+     */
+
+    @Override
+    public LYnkValidation visitIfStatement(LYnkParser.IfStatementContext ctx){
+        final LYnkValidation boolExp = visit(ctx.booleanExpression());
+        if(boolExp.isSkipError() || !boolExp.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "Incorrect boolean expression in IF statement");
+            return SKIP_ERROR;
+        }
+        final LYnkValidation block = visit(ctx.blockStatement());
+        if(block.isSkipError() || !block.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "An error occurred in the block below");
+            return SKIP_ERROR;
+        }
+        return LYnkValidation.VOID;
+    }
+
+    @Override
+    public LYnkValidation visitWhileStatement(LYnkParser.WhileStatementContext ctx){
+        final LYnkValidation boolExp = visit(ctx.booleanExpression());
+        if(boolExp.isSkipError() || !boolExp.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "Incorrect boolean expression in IF statement");
+            return SKIP_ERROR;
+        }
+        final LYnkValidation block = visit(ctx.blockStatement());
+        if(block.isSkipError() || !block.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "An error occurred in the block below :");
+            return SKIP_ERROR;
+        }
+        return LYnkValidation.VOID;
+    }
+
+    @Override
+    public LYnkValidation visitForStatement(LYnkParser.ForStatementContext ctx){
+        if(this.varContext.hasVar(ctx.IDENTIFICATION().getText())){
+            addIssue(IssueType.ERROR, ctx.to, ctx.IDENTIFICATION().getText() + " already exist in the context. This should be a new variable!");
+            return SKIP_ERROR;
+        }
+        if( ctx.to.getType() != LYnkParser.LONG && ctx.to.getType() != LYnkParser.NUMBER ){
+            addIssue(IssueType.ERROR, ctx.to, "Expected a long or an integer value (at to) but found : " + ctx.to.getText());
+            return SKIP_ERROR;
+        }
+        if( ctx.from.getType() != LYnkParser.LONG && ctx.from.getType() != LYnkParser.NUMBER  ){
+            addIssue(IssueType.ERROR, ctx.from, "Expected a long or an integer value (at from) but found : " + ctx.from.getText());
+            return SKIP_ERROR;
+        }
+        if( ctx.step.getType() != LYnkParser.LONG && ctx.step.getType() != LYnkParser.NUMBER ){
+            addIssue(IssueType.ERROR, ctx.step, "Expected a long or an integer value (at step) but found : " + ctx.step.getText());
+            return SKIP_ERROR;
+        }
+        final LYnkValidation block = visit(ctx.blockStatement());
+        if(block.isSkipError() || !block.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "An error occurred in the block below :");
+            return SKIP_ERROR;
+        }
+        return LYnkValidation.VOID;
+    }
+
+    @Override
+    public LYnkValidation visitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx){
+        if(!ctx.arithmeticExpression().isEmpty()){
+            final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
+            if( arithmetic.isSkipError() || !arithmetic.hasValue()){
+                addIssue(IssueType.ERROR, ctx.getStart(), ctx.arithmeticExpression().getText() + " does not return an accepted value.");
+                return SKIP_ERROR;
+            }
+            return arithmetic;
+        }
+        if(!ctx.PERCENTAGE().getText().isEmpty()){
+            return LYnkValidation.doubleVar(Double.parseDouble(ctx.PERCENTAGE().getText()));
+        }
+        return LYnkValidation.doubleVar(null);
+    }
+
+    @Override
+    public LYnkValidation visitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx){
+        if(!ctx.arithmeticExpression().isEmpty()){
+            final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
+            if( arithmetic.isSkipError() || !arithmetic.hasValue()){
+                addIssue(IssueType.ERROR, ctx.getStart(), ctx.arithmeticExpression().getText() + " does not return an accepted value.");
+                return SKIP_ERROR;
+            }
+            return arithmetic;
+        }
+        if(!ctx.PERCENTAGE().getText().isEmpty()){
+            return LYnkValidation.doubleVar(Double.parseDouble(ctx.PERCENTAGE().getText()));
+        }
+        return LYnkValidation.doubleVar(null);
+    }
+
+
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException re){
         if(!REPORT_SYNTAX_ERRORS){

@@ -157,18 +157,9 @@ public class CursorManager {
         // Creates and add a temporary cursor to the selected one
         long id = createCursorId();
         Cursor cursor = new Cursor(id);
-        getSelectedCursor().addMimic(cursor);
-
-        // If there is other temporary cursors, they are also duplicated
-        for( long key : this.temporaryCursors.keySet()){
-            long idMimic = createCursorId();
-            Cursor newDuplicatedCursor = new Cursor(idMimic);
-            Cursor cursorMimic = this.temporaryCursors.get(key);
-            cursorMimic.addMimic(newDuplicatedCursor);
-            temporaryCursors.put(newDuplicatedCursor.getId(),newDuplicatedCursor);
-        }
-
-        this.temporaryCursors.put(cursor.getId(),cursor); // Add at the end to avoid duplicating one more cursor
+        // Copy the selected cursor
+        copyCursor(cursor);
+        cursors.get(cursorId).addMimic(cursor);
     }
 
     /**
