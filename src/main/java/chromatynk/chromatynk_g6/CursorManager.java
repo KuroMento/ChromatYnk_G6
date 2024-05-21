@@ -171,7 +171,7 @@ public class CursorManager {
     /**
      * Add a temporary cursor for the selected and the other temporary cursors when a MIMIC/MIRROR instruction is used.
      */
-    public void addMimics(){
+    public void addMimics(long cursorId){
         // Creates and add a temporary cursor to the selected one
         long id = createCursorId();
         Cursor cursor = new Cursor(id);
@@ -184,25 +184,25 @@ public class CursorManager {
      * Deletes all the temporary cursors created by one specific MIMIC/MIRROR instruction.
      * @throws <code>MimicStackEmptyException</code>
      */
-    public void deleteMimics() throws MimicStackEmptyException {
-        long deleteSelectedId = getSelectedCursor().deleteMimic();
-        this.temporaryCursors.remove(deleteSelectedId,this.temporaryCursors.get(deleteSelectedId));
-        for( long key : this.temporaryCursors.keySet()){
-            long deleteId = this.temporaryCursors.get(key).deleteMimic();
-            this.temporaryCursors.remove(deleteId, this.temporaryCursors.get(key));
-        }
+    public void deleteMimics(long cursorId) throws MimicStackEmptyException {
+        cursors.get(cursorId).deleteMimic();
     }
 
-    /**
-     * Delete every single temporary cursors created by a MIMIC/MIRROR instruction.
-     * @throws <code>MimicStackEmptyException</code>
-     */
-    public void deleteAllMimics() throws MimicStackEmptyException {
-        while( !(getSelectedCursor().getMimics().isEmpty()) ){
-            deleteMimics();
-        }
+    public void addMirror(int x1, int y1, int x2, int y2){
+        // Creates and add a temporary cursor to the selected one
+        long id = createCursorId();
+        Cursor cursor = new Cursor(id);
+        // Copy the selected cursor
+        copyCursor(cursor);
+        double[] line = new double[2]; //y = ax + b
+        line[0] = (y2-y1)/(x2-x1); //a
+        line[1] = +
+    //b
     }
 
+    public void addMirror(int x1, int y1){
+        addMirror(x1, y1, 960, 540); //TODO: modify x2 and y2 with the correct values
+    }
     // The methods used by the Interpreter to modify cursors properties.
     /**
      * Move forward every active cursor (Selected and Temporary).
@@ -211,8 +211,8 @@ public class CursorManager {
      */
     public void forward(int value) throws NegativeNumberException {
         getSelectedCursor().forward(value);
-        for(long key : this.temporaryCursors.keySet()){
-            this.temporaryCursors.get(key).forward(value);
+        for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
+            mimicCursor.forward(value);
         }
     }
 
@@ -267,6 +267,9 @@ public class CursorManager {
      */
     public void hide(){
         getSelectedCursor().hide();
+        for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
+            mimicCursor.hide();
+        }
     }
 
     /**
@@ -274,6 +277,9 @@ public class CursorManager {
      */
     public void show(){
         getSelectedCursor().show();
+        for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
+            mimicCursor.show();
+        }
     }
 
     /**

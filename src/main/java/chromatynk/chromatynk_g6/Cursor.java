@@ -47,7 +47,7 @@ public class Cursor {
     private boolean isVisible;
 
     /**
-     * A stack that keeps track of duplicated cursors when the user call MIMIC or MIRROR
+     * A stack that keeps track of duplicated cursors when the user call MIMIC
      */
     private Stack<Cursor> mimics;
 
