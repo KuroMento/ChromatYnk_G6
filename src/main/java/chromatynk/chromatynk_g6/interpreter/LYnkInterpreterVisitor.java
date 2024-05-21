@@ -27,12 +27,13 @@ import static chromatynk.chromatynk_g6.interpreter.LYnkInterpreter.VOID;
 public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
     private Console console;
-    private LYnkVariable variableList ;
+    private final LYnkVariable variableList ;
     private CursorManager cursorManager;
-    public LYnkInterpreterVisitor(){
+    public LYnkInterpreterVisitor(final LYnkVariable variableList){
         super();
         this.console = new Console();
         this.cursorManager = new CursorManager();
+        this.variableList = variableList;
         //this.behaviour = Behaviour.DIRECT;
         //this.instructions = new ArrayDeque<>();
     }
@@ -420,6 +421,38 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         }
     }
 
+    @Override
+    public Object visitMimicStatement(LYnkParser.MimicStatementContext ctx){
+        try {
+            int toCopyId = Integer.parseInt(ctx.LONG().getText());
+            cursorManager.addMimics(toCopyId);
+            visit(ctx.blockStatement());
+            cursorManager.deleteMimics(toCopyId);
+        }
+        finally {
+            return VOID;
+        }
+    }
+
+    @Override
+    public Object visitMirrorStatement(LYnkParser.MirrorStatementContext ctx){
+        try{
+            int x1 = (int) visit(ctx.x1);
+            int y1 = (int) visit(ctx.y1);
+            if(!ctx.x2.isEmpty()){
+                int x2 = (int) visit(ctx.x2);
+                int y2 = (int) visit(ctx.y2);
+                cursorManager.addMirror(x1, y1, x2, y2);
+            }
+            else{
+                cursorManager.addMirror(x1, y1);
+            }
+        }
+        finally {
+            return VOID;
+        }
+    }
+
     /**
      * Visit a color statement
      * @param ctx the parse tree
@@ -764,5 +797,4 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     private static String getTypeName(final Object o){
         return o != null ? o.getClass().getSimpleName() : "null";
     }
-
 }

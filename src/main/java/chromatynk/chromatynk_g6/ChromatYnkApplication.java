@@ -1,5 +1,6 @@
 package chromatynk.chromatynk_g6;
-
+import chromatynk.chromatynk_g6.diagnostic.LYnkIssue;
+import chromatynk.chromatynk_g6.interpreter.LYnkInterpreter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,12 +10,17 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class ChromatYnkApplication extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private CursorManager cursorManager;
     public static void main(String[] args) {
+        verifyInput();
         launch(args);
     }
 
@@ -101,6 +107,42 @@ public class ChromatYnkApplication extends Application {
             this.rootLayout.setBottom(interpreterField);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void verifyInput(){
+        final LYnkInterpreter interpreter = new LYnkInterpreter();
+        Scanner sc = new Scanner(System.in);
+        String sentence = sc.nextLine();
+        try{
+            final List<LYnkIssue> issues = interpreter.validate(sentence);
+            if(!issues.isEmpty()){ //Verify if the line entered contains any error (grammar or logical)
+                System.err.println("Found issues: ");
+                for(int i = 0; i< issues.size(); i++){
+                    final LYnkIssue issue = issues.get(i);
+                    System.err.println(String.format("%s (%d:%d): %s", issue.type(), issue.lineNumber(), issue.lineOffset(), issue.message()));
+                    if(!issue.details().isEmpty()){
+                        System.err.println(issue.details());
+                    }
+                }
+                System.exit(1);
+            }
+            else { //if there are no errors, the line is valid, and it can be copied for it to be used by mimics and mirrors
+                this.cursorManager.addValidLine(sentence);
+            }
+        }
+        catch (final Exception e){
+            System.err.println("Code validate failed: " + e.getMessage());
+            e.printStackTrace();;
+            System.exit(1);
+        }
+        try{
+            interpreter.eval(sentence, new ArrayList<>(0));
+        }
+        catch (final Exception e){
+            System.err.println("Code execute failed: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 }

@@ -149,6 +149,24 @@ public class CursorManager {
         getSelectedCursor().show(); // showing the newly selected cursor
     }
 
+    /**
+     * Set the input cursor with the same value as selected cursor
+     * @param cursor the cursor to change
+     */
+    public void copyCursor(Cursor cursor){
+        try {
+            cursor.setPosX(getSelectedCursor().getPosX());
+            cursor.setPosY(getSelectedCursor().getPosY());
+            cursor.setRotationAngle(getSelectedCursor().getRotationAngle());
+            cursor.setOpacity(getSelectedCursor().getOpacity());
+            cursor.setThickness(getSelectedCursor().getThickness());
+            cursor.setColor(getSelectedCursor().getColor());
+            cursor.setVisible(getSelectedCursor().isVisible());
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+    }
 
     /**
      * Add a temporary cursor for the selected and the other temporary cursors when a MIMIC/MIRROR instruction is used.
@@ -205,8 +223,8 @@ public class CursorManager {
      */
     public void backward(int value) throws NegativeNumberException {
         getSelectedCursor().backward(value);
-        for(long key : this.temporaryCursors.keySet()){
-            this.temporaryCursors.get(key).backward(value);
+        for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
+            mimicCursor.backward(value);
         }
     }
 
@@ -216,8 +234,8 @@ public class CursorManager {
      */
     public void turn(float value){
         getSelectedCursor().rotateCursor(value);
-        for(long key : this.temporaryCursors.keySet()){
-            this.temporaryCursors.get(key).rotateCursor(value);
+        for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
+            mimicCursor.rotateCursor(value);
         }
     }
 
@@ -229,8 +247,8 @@ public class CursorManager {
      */
     public void move(int x, int y) throws NegativeNumberException {
         getSelectedCursor().moveCursor(x,y);
-        for(long key : this.temporaryCursors.keySet()){
-            this.temporaryCursors.get(key).moveCursor(x,y);
+        for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
+            mimicCursor.moveCursor(x,y);
         }
     }
 
@@ -265,8 +283,8 @@ public class CursorManager {
      */
     public void press(float value) throws OutOfRangeException {
         getSelectedCursor().setOpacity(value);
-        for(long key : this.temporaryCursors.keySet()){
-            this.temporaryCursors.get(key).setOpacity(value);
+        for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
+            mimicCursor.setOpacity(value);
         }
     }
 
@@ -277,8 +295,8 @@ public class CursorManager {
      */
     public void thick(float value) throws NegativeNumberException {
         getSelectedCursor().setThickness(value);
-        for(long key : this.temporaryCursors.keySet()){
-            this.temporaryCursors.get(key).setThickness(value);
+        for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
+            mimicCursor.setThickness(value);
         }
     }
 
@@ -288,8 +306,8 @@ public class CursorManager {
      */
     public void color(Color color){
         getSelectedCursor().setColor(color);
-        for(long key : this.temporaryCursors.keySet()){
-            this.temporaryCursors.get(key).setColor(color);
+        for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
+            mimicCursor.setColor(color);
         }
     }
 
@@ -300,10 +318,8 @@ public class CursorManager {
      */
     public void lookAt(int x, int y){
         getSelectedCursor().lookAt(x,y);
-        for(long key : this.temporaryCursors.keySet()){
-            // TODO: lookAtMirror if needed.
-            this.temporaryCursors.get(key).lookAt(x,y);
+        for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
+            mimicCursor.lookAt(x,y);
         }
     }
-
 }

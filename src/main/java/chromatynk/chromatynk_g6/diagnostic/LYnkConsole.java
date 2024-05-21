@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.BitSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import static chromatynk.chromatynk_g6.diagnostic.LYnkValidation.SKIP_ERROR;
@@ -40,6 +41,10 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         final int line = token.getLine();
         final int offset = token.getCharPositionInLine() + 1;
         this.issues.add(new LYnkIssue(issueType, message, line, offset, ""));
+    }
+
+    public List<LYnkIssue> getIssues(){
+        return issues.stream().toList();
     }
 
     /**
@@ -627,7 +632,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     
     @Override
     public LYnkValidation visitIdentificationVar(LYnkParser.IdentificationVarContext ctx){
-        // TODO: Revoir la maniere dont on stocke les variables et leurs valeurs 
+        // TODO: Revoir la maniere dont on stocke les variables et leurs valeurs
         try {
             final Object variableValue = varContext.getVarValue(ctx.IDENTIFICATION().getText());
             if( variableValue instanceof Boolean){

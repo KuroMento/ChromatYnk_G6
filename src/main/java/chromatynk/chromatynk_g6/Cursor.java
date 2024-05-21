@@ -6,6 +6,7 @@ import chromatynk.chromatynk_g6.exceptions.cursorExceptions.MimicStackEmptyExcep
 import javafx.scene.paint.Color;
 import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 
@@ -51,6 +52,16 @@ public class Cursor {
     private Stack<Cursor> mimics;
 
     /**
+     * A stack that keeps track of duplicated cursors when the user call MIRROR
+     */
+    private Stack<Cursor> mirror;
+
+    /**
+     * Contains all the lines that were valid, for them to be used later in case of a mirror or a mimic
+     */
+    private ArrayList<String> validLine;
+
+    /**
      * Complete Constructor of the class <code>Cursor</code> :
      * @param id the identification of the cursor.
      * @param posX the position on horizontal axe.
@@ -71,6 +82,8 @@ public class Cursor {
         this.opacity = opacity;
         this.isVisible = isVisible;
         this.mimics = new Stack<Cursor>();
+        this.mirror = new Stack<Cursor>();
+        this.validLine = new ArrayList<>();
     }
 
     /**
@@ -86,6 +99,9 @@ public class Cursor {
         this.color = Color.rgb(0,0,0);
         this.opacity = 1;
         this.isVisible = true;
+        this.mimics = new Stack<Cursor>();
+        this.mirror = new Stack<Cursor>();
+        this.validLine = new ArrayList<>();
     }
 
     //Getters and Setters
