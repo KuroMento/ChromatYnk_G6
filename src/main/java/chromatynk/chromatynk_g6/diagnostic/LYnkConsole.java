@@ -12,7 +12,6 @@ import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.io.PrintStream;
 import java.util.BitSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
