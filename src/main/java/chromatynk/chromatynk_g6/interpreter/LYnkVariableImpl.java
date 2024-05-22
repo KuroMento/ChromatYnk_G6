@@ -237,7 +237,12 @@ public class LYnkVariableImpl implements LYnkVariable{
     @Override
     public boolean setStrVarValue(String name, final Object value){
         if(isLegal(name)){
-            variableMap.put(name,new VariableSTR((String) value));
+            if(variableMap.containsKey(name)){
+                ((VariableSTR)variableMap.get(name)).setValue((String) value);
+            }
+            else{
+                variableMap.put(name,new VariableSTR((String) value));
+            }
             return true;
         }
         return false;
@@ -251,7 +256,12 @@ public class LYnkVariableImpl implements LYnkVariable{
     @Override
     public boolean setBoolVarValue(String name, final Object value){
         if(isLegal(name)){
-            variableMap.put(name,new VariableBOOL((Boolean) value));
+            if(variableMap.containsKey(name)){
+                ((VariableBOOL)variableMap.get(name)).setValue((Boolean) value);
+            }
+            else{
+                variableMap.put(name,new VariableBOOL((Boolean) value));
+            }
             return true;
         }
         return false;
@@ -265,7 +275,12 @@ public class LYnkVariableImpl implements LYnkVariable{
     @Override
     public boolean setNumVarValue(String name, final Object value){
         if(isLegal(name)){
-            variableMap.put(name,new VariableDOUBLE((Double) value));
+            if(variableMap.containsKey(name)){
+                ((VariableDOUBLE)variableMap.get(name)).setValue((Double) value);
+            }
+            else{
+                variableMap.put(name,new VariableDOUBLE((Double) value));
+            }
             return true;
         }
         return false;
