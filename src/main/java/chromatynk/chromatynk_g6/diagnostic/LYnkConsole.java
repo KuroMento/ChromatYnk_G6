@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import static chromatynk.chromatynk_g6.diagnostic.LYnkValidation.SKIP_ERROR;
+import static chromatynk.chromatynk_g6.diagnostic.LYnkValidation.VOID;
 
 public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTLRErrorListener {
 
@@ -665,6 +666,41 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.bool(Boolean.FALSE);
     }
 
+    /**
+     * Statement Parameter X and Y
+     */
+
+    @Override
+    public LYnkValidation visitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx){
+        if(!ctx.arithmeticExpression().isEmpty()){
+            final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
+            if( arithmetic.isSkipError() || !arithmetic.hasValue()){
+                addIssue(IssueType.ERROR, ctx.getStart(), ctx.arithmeticExpression().getText() + " does not return an accepted value.");
+                return SKIP_ERROR;
+            }
+            return arithmetic;
+        }
+        if(!ctx.PERCENTAGE().getText().isEmpty()){
+            return LYnkValidation.doubleVar(Double.parseDouble(ctx.PERCENTAGE().getText()));
+        }
+        return LYnkValidation.doubleVar(null);
+    }
+
+    @Override
+    public LYnkValidation visitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx){
+        if(!ctx.arithmeticExpression().isEmpty()){
+            final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
+            if( arithmetic.isSkipError() || !arithmetic.hasValue()){
+                addIssue(IssueType.ERROR, ctx.getStart(), ctx.arithmeticExpression().getText() + " does not return an accepted value.");
+                return SKIP_ERROR;
+            }
+            return arithmetic;
+        }
+        if(!ctx.PERCENTAGE().getText().isEmpty()){
+            return LYnkValidation.doubleVar(Double.parseDouble(ctx.PERCENTAGE().getText()));
+        }
+        return LYnkValidation.doubleVar(null);
+    }
 
     /**
      * Statements
@@ -727,37 +763,285 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     }
 
     @Override
-    public LYnkValidation visitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx){
-        if(!ctx.arithmeticExpression().isEmpty()){
-            final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
-            if( arithmetic.isSkipError() || !arithmetic.hasValue()){
-                addIssue(IssueType.ERROR, ctx.getStart(), ctx.arithmeticExpression().getText() + " does not return an accepted value.");
-                return SKIP_ERROR;
-            }
-            return arithmetic;
+    public LYnkValidation visitMimicStatement(LYnkParser.MimicStatementContext ctx){
+        if(ctx.LONG().getText().isEmpty()){
+            addIssue(IssueType.ERROR, ctx.LONG().getSymbol(), "Mimic statement is missing a cursorId");
+            return SKIP_ERROR;
         }
-        if(!ctx.PERCENTAGE().getText().isEmpty()){
-            return LYnkValidation.doubleVar(Double.parseDouble(ctx.PERCENTAGE().getText()));
-        }
-        return LYnkValidation.doubleVar(null);
+        final LYnkValidation block = visit(ctx.blockStatement());
+        return block;
     }
 
     @Override
-    public LYnkValidation visitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx){
-        if(!ctx.arithmeticExpression().isEmpty()){
-            final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
-            if( arithmetic.isSkipError() || !arithmetic.hasValue()){
-                addIssue(IssueType.ERROR, ctx.getStart(), ctx.arithmeticExpression().getText() + " does not return an accepted value.");
+    public LYnkValidation visitMirrorStatement(LYnkParser.MirrorStatementContext ctx){
+        // 2 parameters (x1, y1)
+        if(ctx.x2.isEmpty() && ctx.y2.isEmpty() && !ctx.x1.isEmpty() && !ctx.y1.isEmpty()){
+            final LYnkValidation x1Value = visitNumStatementParameterX(ctx.x1);
+            if( x1Value.isSkipError() || !x1Value.hasValue()){
+                addIssue(IssueType.ERROR, ctx.x1.getStart(), "The first parameter has a null value or a wrong type : " + ctx.x1.getText());
                 return SKIP_ERROR;
             }
-            return arithmetic;
+            final LYnkValidation y1Value = visitNumStatementParameterY(ctx.y1);
+            if( y1Value.isSkipError() || !y1Value.hasValue()){
+                addIssue(IssueType.ERROR, ctx.y1.getStart(), "The second parameter has a null value or a wrong type : " + ctx.y1.getText());
+                return SKIP_ERROR;
+            }
+            return VOID;
         }
-        if(!ctx.PERCENTAGE().getText().isEmpty()){
-            return LYnkValidation.doubleVar(Double.parseDouble(ctx.PERCENTAGE().getText()));
+        // 1 or 3 parameters
+        if( !ctx.x2.isEmpty() && ctx.y2.isEmpty() || ctx.x2.isEmpty() && !ctx.y2.isEmpty() || ctx.x1.isEmpty() && !ctx.y1.isEmpty() || !ctx.x1.isEmpty() && ctx.y1.isEmpty()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "Mirror statement requires 2 or 4 arguments but found 3!");
+            return SKIP_ERROR;
         }
-        return LYnkValidation.doubleVar(null);
+        // 4 parameters (x1, y1, x2, y2)
+        if(!ctx.x2.isEmpty() && !ctx.y2.isEmpty() && !ctx.x1.isEmpty() && !ctx.y1.isEmpty()){
+            final LYnkValidation x1Value = visitNumStatementParameterX(ctx.x1);
+            if( x1Value.isSkipError() || !x1Value.hasValue()){
+                addIssue(IssueType.ERROR, ctx.x1.getStart(), "The first parameter has a null value or a wrong type : " + ctx.x1.getText());
+                return SKIP_ERROR;
+            }
+            final LYnkValidation y1Value = visitNumStatementParameterY(ctx.y1);
+            if( y1Value.isSkipError() || !y1Value.hasValue()){
+                addIssue(IssueType.ERROR, ctx.y1.getStart(), "The second parameter has a null value or a wrong type : " + ctx.y1.getText());
+                return SKIP_ERROR;
+            }
+            final LYnkValidation x2Value = visitNumStatementParameterX(ctx.x2);
+            if( x2Value.isSkipError() || !x2Value.hasValue()){
+                addIssue(IssueType.ERROR, ctx.x2.getStart(), "The third parameter has a null value or a wrong type : " + ctx.x2.getText());
+                return SKIP_ERROR;
+            }
+            final LYnkValidation y2Value = visitNumStatementParameterY(ctx.y2);
+            if( y2Value.isSkipError() || !y2Value.hasValue()){
+                addIssue(IssueType.ERROR, ctx.y2.getStart(), "The fourth parameter has a null value or a wrong type : " + ctx.y2.getText());
+                return SKIP_ERROR;
+            }
+            return VOID;
+        }
+        // No parameters
+        addIssue(IssueType.ERROR, ctx.getStart(), "No parameters were found in MIRROR statement");
+        return SKIP_ERROR;
     }
 
+    @Override
+    public LYnkValidation visitForwardStatement(LYnkParser.ForwardStatementContext ctx){
+        if(!ctx.numStatementParameterX().isEmpty()){
+            final LYnkValidation fwdValue = visitNumStatementParameterX(ctx.numStatementParameterX());
+            if( fwdValue.isSkipError() || !fwdValue.hasValue()){
+                addIssue(IssueType.ERROR, ctx.getStart(), "The value passed in FWD is null or the wrong type: " + ctx.numStatementParameterX().getText());
+                return SKIP_ERROR;
+            }
+            return VOID;
+        }
+        // no params
+        addIssue(IssueType.ERROR, ctx.getStart(), "FWD statement was not given a parameter");
+        return SKIP_ERROR;
+    }
+
+    @Override
+    public LYnkValidation visitBackwardStatement(LYnkParser.BackwardStatementContext ctx){
+        if(!ctx.numStatementParameterX().isEmpty()){
+            final LYnkValidation bwdValue = visitNumStatementParameterX(ctx.numStatementParameterX());
+            if( bwdValue.isSkipError() || !bwdValue.hasValue()){
+                addIssue(IssueType.ERROR, ctx.getStart(), "The value passed in FWD is null or the wrong type: " + ctx.numStatementParameterX().getText());
+                return SKIP_ERROR;
+            }
+            return VOID;
+        }
+        // no params
+        addIssue(IssueType.ERROR, ctx.getStart(), "BWD statement was not given a parameter");
+        return SKIP_ERROR;
+    }
+
+    @Override
+    public LYnkValidation visitMoveStatement(LYnkParser.MoveStatementContext ctx){
+        // no params
+        if(ctx.x.isEmpty() && ctx.y.isEmpty()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "MOV statement was not given a parameter");
+            return SKIP_ERROR;
+        }
+
+        // x or y empty
+        if(!ctx.x.isEmpty() && ctx.y.isEmpty() || ctx.x.isEmpty() && !ctx.y.isEmpty()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "MOV statement was given only 1 parameter");
+            return SKIP_ERROR;
+        }
+
+        // 2 parameters
+        final LYnkValidation xValue = visitNumStatementParameterX(ctx.x);
+        if( xValue.isSkipError() || !xValue.hasValue()){
+            addIssue(IssueType.ERROR, ctx.x.getStart(), "The x parameter has a null value or a wrong type : " + ctx.x.getText());
+            return SKIP_ERROR;
+        }
+        final LYnkValidation yValue = visitNumStatementParameterY(ctx.y);
+        if( yValue.isSkipError() || !yValue.hasValue()){
+            addIssue(IssueType.ERROR, ctx.y.getStart(), "The y parameter has a null value or a wrong type : " + ctx.y.getText());
+            return SKIP_ERROR;
+        }
+        return VOID;
+    }
+
+    @Override
+    public LYnkValidation visitPositionStatement(LYnkParser.PositionStatementContext ctx){
+        // no params
+        if(ctx.x.isEmpty() && ctx.y.isEmpty()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "MOV statement was not given a parameter");
+            return SKIP_ERROR;
+        }
+
+        // x or y empty
+        if(!ctx.x.isEmpty() && ctx.y.isEmpty() || ctx.x.isEmpty() && !ctx.y.isEmpty()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "MOV statement was given only 1 parameter");
+            return SKIP_ERROR;
+        }
+
+        // 2 parameters
+        final LYnkValidation xValue = visitNumStatementParameterX(ctx.x);
+        if( xValue.isSkipError() || !xValue.hasValue()){
+            addIssue(IssueType.ERROR, ctx.x.getStart(), "The x parameter has a null value or a wrong type : " + ctx.x.getText());
+            return SKIP_ERROR;
+        }
+        final LYnkValidation yValue = visitNumStatementParameterY(ctx.y);
+        if( yValue.isSkipError() || !yValue.hasValue()){
+            addIssue(IssueType.ERROR, ctx.y.getStart(), "The x parameter has a null value or a wrong type : " + ctx.y.getText());
+            return SKIP_ERROR;
+        }
+        return VOID;
+    }
+
+    @Override
+    public LYnkValidation visitHideStatement(LYnkParser.HideStatementContext ctx){
+        return VOID;
+    }
+
+    @Override
+    public LYnkValidation visitShowStatement(LYnkParser.ShowStatementContext ctx){
+        return VOID;
+    }
+
+    @Override
+    public LYnkValidation visitColorStatement(LYnkParser.ColorStatementContext ctx) {
+        // no params
+        if( ctx.HEXCODE().getText().isEmpty() || ctx.arithmeticExpression().isEmpty()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement was not given parameters");
+            return SKIP_ERROR;
+        }
+        // 1 or 2 params when expected 3
+        if( (ctx.arithmeticExpression(0).isEmpty() && ctx.arithmeticExpression(1).isEmpty() && !ctx.arithmeticExpression(2).isEmpty()) || (ctx.arithmeticExpression(0).isEmpty() && !ctx.arithmeticExpression(1).isEmpty() && !ctx.arithmeticExpression(2).isEmpty())){
+            addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement found 1 or 2 parameter for arithmeticExpressions but expected 3: " + ctx.arithmeticExpression().toString());
+            return SKIP_ERROR;
+        }
+        return VOID;
+    }
+
+    @Override
+    public LYnkValidation visitCursorStatement(LYnkParser.CursorStatementContext ctx){
+        // no params
+        if( ctx.LONG().getText().isEmpty() ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "CURSOR statement was not given a parameter");
+            return SKIP_ERROR;
+        }
+        // TODO: cursorManager ?? id already exist? -> error
+        return VOID;
+    }
+
+    @Override
+    public LYnkValidation visitSelectStatement(LYnkParser.SelectStatementContext ctx){
+        // no params
+        if( ctx.LONG().getText().isEmpty() ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "SELECT statement was not given a parameter");
+            return SKIP_ERROR;
+        }
+        //  TODO: cursorManager ?? id already exist? -> error
+        return VOID;
+    }
+
+    @Override
+    public LYnkValidation visitRemoveStatement(LYnkParser.RemoveStatementContext ctx){
+        // no params
+        if( ctx.LONG().getText().isEmpty() ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "REMOVE statement was not given a parameter");
+            return SKIP_ERROR;
+        }
+        // TODO: cursorManager ?? id doesn't exist? -> error
+        return VOID;
+    }
+
+    @Override
+    public LYnkValidation visitPressStatement(LYnkParser.PressStatementContext ctx){
+        if( ctx.PERCENTAGE().getText().isEmpty() || ctx.arithmeticExpression().isEmpty()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "PRESS statement was not given a parameter");
+            return SKIP_ERROR;
+        }
+        final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
+        if( arithmetic.isSkipError() || !arithmetic.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error");
+            return SKIP_ERROR;
+        }
+        return VOID;
+    }
+
+    @Override
+    public LYnkValidation visitThickStatement(LYnkParser.ThickStatementContext ctx){
+        if( ctx.arithmeticExpression().isEmpty() ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "THICK statement was not given a parameter");
+            return SKIP_ERROR;
+        }
+        final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
+        if( arithmetic.isSkipError() || !arithmetic.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error");
+            return SKIP_ERROR;
+        }
+        return VOID;
+    }
+
+    @Override
+    public LYnkValidation visitLookAtStatement(LYnkParser.LookAtStatementContext ctx){
+        // no params
+        if( ctx.x.isEmpty() && ctx.y.isEmpty() ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "LOOKAT statement was not given a parameter");
+            return SKIP_ERROR;
+        }
+        // 1 param
+        if( !ctx.x.isEmpty() && ctx.y.isEmpty() || ctx.x.isEmpty() && !ctx.y.isEmpty() ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "LOOKAT statement was given only 1 parameter");
+            return SKIP_ERROR;
+        }
+        // 2 parameters
+        final LYnkValidation xValue = visitNumStatementParameterX(ctx.x);
+        if( xValue.isSkipError() || !xValue.hasValue()){
+            addIssue(IssueType.ERROR, ctx.x.getStart(), "The x parameter has a null value or a wrong type : " + ctx.x.getText());
+            return SKIP_ERROR;
+        }
+        final LYnkValidation yValue = visitNumStatementParameterY(ctx.y);
+        if( yValue.isSkipError() || !yValue.hasValue()){
+            addIssue(IssueType.ERROR, ctx.y.getStart(), "The y parameter has a null value or a wrong type : " + ctx.y.getText());
+            return SKIP_ERROR;
+        }
+        return VOID;
+    }
+
+    @Override
+    public LYnkValidation visitRotationStatement(LYnkParser.RotationStatementContext ctx){
+        if( ctx.arithmeticExpression().isEmpty() ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "TURN statement was not given a parameter");
+            return SKIP_ERROR;
+        }
+        final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
+        if( arithmetic.isSkipError() || !arithmetic.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error");
+            return SKIP_ERROR;
+        }
+        return VOID;
+    }
+
+    /**
+     * Variable declarations
+     */
+
+    @Override
+    public LYnkValidation visitStringDeclaration(LYnkParser.StringDeclarationContext ctx){
+
+    }
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException re){
