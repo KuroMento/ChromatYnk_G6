@@ -56,7 +56,7 @@ public class LYnkInterpreter {
     public List<LYnkIssue> validate(final String input){
         final LYnkLexer lexer = new LYnkLexer(CharStreams.fromString(input));
         final LYnkParser parser = new LYnkParser(new CommonTokenStream(lexer));
-        final LYnkConsole console = new LYnkConsole();
+        final LYnkConsole console = new LYnkConsole(stdout);
         //remove standard listeners
         lexer.removeErrorListeners();
         parser.removeErrorListeners();
