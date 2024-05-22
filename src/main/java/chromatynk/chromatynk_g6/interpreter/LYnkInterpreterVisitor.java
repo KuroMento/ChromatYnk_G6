@@ -10,12 +10,6 @@ import chromatynk.chromatynk_g6.utils.BooleanUtil;
 import chromatynk.chromatynk_g6.utils.NumberUtil;
 import chromatynk.chromatynk_g6.utils.StringUtil;
 import javafx.scene.paint.Color;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static chromatynk.chromatynk_g6.interpreter.LYnkInterpreter.VOID;
 
@@ -68,7 +62,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     public Object visitNotExpression(LYnkParser.NotExpressionContext ctx) {
         final Object condition = visit(ctx.booleanExpression());
         if (condition instanceof Boolean) {
-            return ((Boolean) condition).booleanValue();
+            return (Boolean) condition;
         }
         console.addLine("NOT needs a boolean comparison to function");
         return VOID;
@@ -332,7 +326,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
                 if (variableList.setNumVarValue(variableName, variableValue)) {
                     visit(ctx.blockStatement());
                 }
-                ;
             }
             variableList.delete(variableName);
         }
@@ -386,8 +379,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
             tmp = tmp.substring(0, tmp.length()-1); //the entry without the % (only the number is kept)
             Double value = Double.parseDouble(tmp);
             value = (value/100)*1920; //TODO: Convertir 1920 en attribut de la classe
-            int result = (int) value.doubleValue();
-            return result;
+            return (int) value.doubleValue();
 
         }
         else{
