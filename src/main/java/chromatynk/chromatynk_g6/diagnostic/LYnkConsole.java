@@ -1,5 +1,6 @@
 package chromatynk.chromatynk_g6.diagnostic;
 
+import chromatynk.chromatynk_g6.CursorManager;
 import chromatynk.chromatynk_g6.LYnk.LYnkBaseVisitor;
 import chromatynk.chromatynk_g6.LYnk.LYnkParser;
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
@@ -12,10 +13,7 @@ import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.util.BitSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static chromatynk.chromatynk_g6.diagnostic.LYnkValidation.SKIP_ERROR;
 import static chromatynk.chromatynk_g6.diagnostic.LYnkValidation.VOID;
@@ -28,14 +26,18 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     private Set<LYnkIssue> issues;
 
     private LYnkVariableImpl varContext;
+    private CursorManager cursorContext;
+
+    private List<String> validStatements;
 
     //When the value is false, the syntaxError method returns without displaying errors.
     private static final boolean REPORT_SYNTAX_ERRORS = true;
-    private String errorMsg = "";
 
     public LYnkConsole(){
         this.issues = new LinkedHashSet<>(0);
         this.varContext = new LYnkVariableImpl();
+        this.cursorContext = new CursorManager();
+        this.validStatements = new ArrayList<String>();
     }
 
     private void addIssue(final IssueType issueType, final Token token, String message) {
@@ -55,8 +57,23 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
      */
     @Override
     public LYnkValidation visitProgram(final LYnkParser.ProgramContext ctx){
-        final LYnkValidation result = super.visitProgram(ctx);
-        return result;
+        if(!ctx.EOF().getText().isEmpty()) {
+            LYnkValidation tempValidation = VOID;
+            for (LYnkParser.StatementContext statement : ctx.statement()) {
+                if (tempValidation.isSkipError() || !tempValidation.hasValue()) {
+                    return SKIP_ERROR;
+                }
+                final LYnkValidation statementValidation = visit(statement);
+                if (!statementValidation.isSkipError() && statementValidation.hasValue()) {
+                    validStatements.add(statement.getText());
+                } else {
+                    tempValidation = statementValidation;
+                }
+            }
+            return tempValidation;
+        }
+        addIssue(IssueType.ERROR, ctx.EOF().getSymbol(), "The input file/program does not contain an end of file (i.e. EOF)");
+        return SKIP_ERROR;
     }
 
     /**
@@ -940,7 +957,10 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), "CURSOR statement was not given a parameter");
             return SKIP_ERROR;
         }
-        // TODO: cursorManager ?? id already exist? -> error
+        if( this.cursorContext.cursorExist(Long.parseLong(ctx.LONG().getText())) ){
+            addIssue(IssueType.ERROR, ctx.LONG().getSymbol(), "The cursor n°" + ctx.LONG().getText() + " is already in use");
+            return SKIP_ERROR;
+        }
         return VOID;
     }
 
@@ -951,7 +971,10 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), "SELECT statement was not given a parameter");
             return SKIP_ERROR;
         }
-        //  TODO: cursorManager ?? id already exist? -> error
+        if( !this.cursorContext.cursorExist(Long.parseLong(ctx.LONG().getText())) ){
+            addIssue(IssueType.ERROR, ctx.LONG().getSymbol(), "The cursor n°" + ctx.LONG().getText() + " does not exist in the current context!");
+            return SKIP_ERROR;
+        }
         return VOID;
     }
 
@@ -962,7 +985,10 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), "REMOVE statement was not given a parameter");
             return SKIP_ERROR;
         }
-        // TODO: cursorManager ?? id doesn't exist? -> error
+        if( !this.cursorContext.cursorExist(Long.parseLong(ctx.LONG().getText())) ){
+            addIssue(IssueType.ERROR, ctx.LONG().getSymbol(), "The cursor n°" + ctx.LONG().getText() + " does not exist in the current context!");
+            return SKIP_ERROR;
+        }
         return VOID;
     }
 
@@ -1040,7 +1066,120 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
     @Override
     public LYnkValidation visitStringDeclaration(LYnkParser.StringDeclarationContext ctx){
+        String variable = ctx.IDENTIFICATION().getText();
+        // no param
+        if(variable.isEmpty()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "A variable name is needed in STR statement");
+            return SKIP_ERROR;
+        }
+        // only var name
+        if( !variable.isEmpty() && this.varContext.hasVar(variable) && ctx.LITERAL().getText().isEmpty()){
+            addIssue(IssueType.ERROR, ctx.IDENTIFICATION().getSymbol(), variable + " already exist in this context!");
+            return SKIP_ERROR;
+        }
+        if( !variable.isEmpty() && !this.varContext.hasVar(variable) && ctx.LITERAL().getText().isEmpty()){
+            return VOID;
+        }
+        // var name and its value
+        if( !variable.isEmpty() && this.varContext.hasVar(variable) && !ctx.LITERAL().getText().isEmpty()){
+            return VOID;
+        }
+        if( !variable.isEmpty() && !this.varContext.hasVar(variable) && !ctx.LITERAL().getText().isEmpty()){
+            return VOID;
+        }
+        return SKIP_ERROR;
+    }
 
+    @Override
+    public LYnkValidation visitBoolDeclaration(LYnkParser.BoolDeclarationContext ctx){
+        String variable = ctx.IDENTIFICATION().getText();
+        // no param
+        if(variable.isEmpty()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "A variable name is needed in BOOL statement");
+            return SKIP_ERROR;
+        }
+        // only var name
+        if( !variable.isEmpty() && this.varContext.hasVar(variable) && ctx.booleanExpression().isEmpty()){
+            addIssue(IssueType.ERROR, ctx.IDENTIFICATION().getSymbol(), variable + " already exist in this context!");
+            return SKIP_ERROR;
+        }
+        if( !variable.isEmpty() && !this.varContext.hasVar(variable) && ctx.booleanExpression().isEmpty()){
+            return VOID;
+        }
+        // var name and its value
+        if( !variable.isEmpty() && this.varContext.hasVar(variable) && !ctx.booleanExpression().isEmpty()){
+            final LYnkValidation bool = visit(ctx.booleanExpression());
+            if( bool.isSkipError() || !bool.hasValue()){
+                addIssue(IssueType.ERROR, ctx.getStart(), "The bool expression has a null value or has an error");
+                return SKIP_ERROR;
+            }
+            return VOID;
+        }
+        if( !variable.isEmpty() && !this.varContext.hasVar(variable) && !ctx.booleanExpression().isEmpty()){
+            final LYnkValidation bool = visit(ctx.booleanExpression());
+            if( bool.isSkipError() || !bool.hasValue()){
+                addIssue(IssueType.ERROR, ctx.getStart(), "The bool expression has a null value or has an error");
+                return SKIP_ERROR;
+            }
+            return VOID;
+        }
+        return SKIP_ERROR;
+    }
+
+    @Override
+    public LYnkValidation visitNumberDeclaration(LYnkParser.NumberDeclarationContext ctx){
+        String variable = ctx.IDENTIFICATION().getText();
+        // no param
+        if(variable.isEmpty()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "A variable name is needed in NUM statement");
+            return SKIP_ERROR;
+        }
+        // only var name
+        if( !variable.isEmpty() && this.varContext.hasVar(variable) && ctx.arithmeticExpression().isEmpty()){
+            addIssue(IssueType.ERROR, ctx.IDENTIFICATION().getSymbol(), variable + " already exist in this context!");
+            return SKIP_ERROR;
+        }
+        if( !variable.isEmpty() && !this.varContext.hasVar(variable) && ctx.arithmeticExpression().isEmpty()){
+            return VOID;
+        }
+        // var name and its value
+        if( !variable.isEmpty() && this.varContext.hasVar(variable) && !ctx.arithmeticExpression().isEmpty()){
+            final LYnkValidation number = visit(ctx.arithmeticExpression());
+            if( number.isSkipError() || !number.hasValue()){
+                addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression has a null value or has an error");
+                return SKIP_ERROR;
+            }
+            return VOID;
+        }
+        if( !variable.isEmpty() && !this.varContext.hasVar(variable) && !ctx.arithmeticExpression().isEmpty()){
+            final LYnkValidation number = visit(ctx.arithmeticExpression());
+            if( number.isSkipError() || !number.hasValue()){
+                addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression has a null value or has an error");
+                return SKIP_ERROR;
+            }
+            return VOID;
+        }
+        return SKIP_ERROR;
+    }
+
+    @Override
+    public LYnkValidation visitDeleteDeclaration(LYnkParser.DeleteDeclarationContext ctx){
+        String variable = ctx.IDENTIFICATION().getText();
+        // no param
+        if(variable.isEmpty()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "A variable name is needed in DEL statement");
+            return SKIP_ERROR;
+        }
+        // Delete existing var
+        if( !variable.isEmpty() && this.varContext.hasVar(variable)){
+            return VOID;
+        }
+        // Delete non-existant var
+        if( !variable.isEmpty() && !this.varContext.hasVar(variable)){
+            addIssue(IssueType.ERROR, ctx.IDENTIFICATION().getSymbol(), ctx.IDENTIFICATION().getText() + " does not exist in the current context");
+            return SKIP_ERROR;
+        }
+        return SKIP_ERROR;
     }
 
     @Override
@@ -1048,15 +1187,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         if(!REPORT_SYNTAX_ERRORS){
             return;
         }
-        this.issues.add(new LYnkIssue(IssueType.ERROR, msg, charPositionInLine, line, ""));
-
-        String sourceName = recognizer.getInputStream().getSourceName();
-        if (!sourceName.isEmpty()) {
-            sourceName = String.format("%s:%d:%d: ", sourceName, line, charPositionInLine);
-        }
-
-        System.err.println(sourceName+"line "+line+":"+charPositionInLine+" "+msg);
-        this.errorMsg = this.errorMsg + "\n" + sourceName+"line "+line+":"+charPositionInLine+" "+msg;
+        this.issues.add(new LYnkIssue(IssueType.ERROR, msg, charPositionInLine, line, "(syntax error)"));
     }
 
     @Override
