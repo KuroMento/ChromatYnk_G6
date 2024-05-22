@@ -24,19 +24,13 @@ public class CursorManager {
     private long selectedCursorId;
 
     /**
-     * A map to track the total amount of duplicated and temporary cursors
-     */
-    private Map<Long,Cursor> temporaryCursors;
-
-    /**
      * Constructor of CursorManager adding by default a generic cursor to the list of active cursors.
      */
     public CursorManager(){
         Cursor defaultCursor = new Cursor(0);
         this.selectedCursorId = defaultCursor.getId();
-        this.cursors = new HashMap<Long,Cursor>();
+        this.cursors = new HashMap<>();
         this.cursors.put(defaultCursor.getId(),defaultCursor);
-        this.temporaryCursors = new HashMap<Long,Cursor>();
     }
 
     // Getters/Setters
@@ -49,13 +43,6 @@ public class CursorManager {
 
     public long getSelectedCursorId() { return this.selectedCursorId;}
     private void setSelectedCursorId(long id) { this.selectedCursorId = id; }
-
-    public Map<Long,Cursor> getTemporaryCursors(){
-        return this.cursors;
-    }
-    public void setTemporaryCursors(Map<Long, Cursor> cursors) {
-        this.cursors = cursors;
-    }
 
     /**
      * Grabs a cursor within those active.
@@ -88,9 +75,9 @@ public class CursorManager {
      */
     public long createCursorId(){
         Set<Long> idSet = this.cursors.keySet();
-        long newId = (long) (idSet.size() + 1);
+        long newId = (idSet.size() + 1);
         while( this.cursors.containsKey(newId)){
-            newId += 1l;
+            newId += 1;
         }
         return newId;
     }
@@ -106,7 +93,7 @@ public class CursorManager {
     /**
      * Add a new Cursor to the active cursors based on a given id.
      * @param id The id of the cursor you want to add
-     * @throws <code>CursorAlreadyExistingException</code>
+     * @throws CursorAlreadyExistingException the cursor already exist
      */
     public void addCursor(long id) throws CursorAlreadyExistingException {
         if( cursorExist(id) ){
@@ -118,7 +105,7 @@ public class CursorManager {
     /**
      * Removes a cursor from the active cursor if it exists.
      * @param id The id of the cursor to remove
-     * @throws <code>MissingCursorException</code>
+     * @throws MissingCursorException a cursor does not exist
      */
     public void removeCursor(long id) throws MissingCursorException, CursorException {
         if( !cursorExist(id) ){
@@ -133,8 +120,8 @@ public class CursorManager {
     /**
      * Allows to select a cursor within the existing cursors
      * @param id The identification of the wanted cursor
-     * @throws <code>MissingCursorException</code>
-     * @throws <code>CursorException</code>
+     * @throws MissingCursorException a cursor does not exist
+     * @throws CursorException the cursor is used in a block
      */
     public void selectCursor(long id) throws MissingCursorException, CursorException {
         if( !cursorExist(id) ){
@@ -174,6 +161,20 @@ public class CursorManager {
      * Add a temporary cursor for the selected and the other temporary cursors when a MIMIC/MIRROR instruction is used.
      */
     public void addMimics(long cursorId){
+        // If some mimics are already existing
+        if(cursors.get(cursorId).getMimics().size() >= 1){
+            // Add mimic cursor to each existing mimic cursor
+            Cursor[] existingMimicsCursors = new Cursor[cursors.get(cursorId).getMimics().size()];
+            cursors.get(cursorId).getMimics().copyInto(existingMimicsCursors);
+            for(Cursor mimicCursor : existingMimicsCursors){
+                // Creates and add a temporary cursor to the selected one
+                long id = createCursorId();
+                Cursor cursor = new Cursor(id);
+                // Copy the mimic cursor
+                copyCursor(cursor, mimicCursor.getId());
+                cursors.get(cursorId).addMimic(cursor);
+            }
+        }
         // Creates and add a temporary cursor to the selected one
         long id = createCursorId();
         Cursor cursor = new Cursor(id);
@@ -184,14 +185,10 @@ public class CursorManager {
 
     /**
      * Deletes all the temporary cursors created by one specific MIMIC/MIRROR instruction.
+     * @throws MimicStackEmptyException a mimic stack is empty
      */
-    public void deleteMimics(long cursorId){
-        try {
-            cursors.get(cursorId).deleteMimic();
-        }
-        catch (Exception e){
-            System.out.println(e);
-        }
+    public void deleteMimics(long cursorId) throws MimicStackEmptyException {
+        cursors.get(cursorId).deleteMimic();
     }
 
     /**
@@ -209,8 +206,16 @@ public class CursorManager {
         float b = (float) (y2-y1)/(x2-x1);
         float c = y1 - b*x1;
         // add mirror cursor to each existing mirror cursor
-        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+        Cursor[] existingMirrorCursors = new Cursor[this.getSelectedCursor().getMirror().size()];
+        this.getSelectedCursor().getMirror().copyInto(existingMirrorCursors);
+        for(Cursor mirrorCursor : existingMirrorCursors){
             addMirrorCursor(theta, b, c, mirrorCursor.getId());
+        }
+        // add mirror cursor to each existing mimic cursor
+        Cursor[] existingMimicCursors = new Cursor[this.getSelectedCursor().getMimics().size()];
+        this.getSelectedCursor().getMimics().copyInto(existingMirrorCursors);
+        for(Cursor mimicCursor : existingMimicCursors){
+            addMirrorCursor(theta, b, c, mimicCursor.getId());
         }
         addMirrorCursor(theta, b, c, getSelectedCursorId());
     }
@@ -262,7 +267,7 @@ public class CursorManager {
     /**
      * Move forward every active cursor (Selected and Temporary).
      * @param value The distance to move forward
-     * @throws <code>NegativeNumberException</code>
+     * @throws NegativeNumberException a number is negative
      */
     public void forward(int value) throws NegativeNumberException {
         getSelectedCursor().forward(value);
@@ -277,7 +282,7 @@ public class CursorManager {
     /**
      * Move backward every active cursor (Selected and Temporary).
      * @param value The distance to move backward
-     * @throws <code>NegativeNumberException</code>
+     * @throws NegativeNumberException a number is negative
      */
     public void backward(int value) throws NegativeNumberException {
         getSelectedCursor().backward(value);
@@ -307,7 +312,7 @@ public class CursorManager {
      * Move every cursor's position by the amount passed in the parameters. (i.e. Moves the cursor based on its relative position)
      * @param x value to add on the horizontal axis
      * @param y value to add on the vertical axis
-     * @throws <code>NegativeNumberException</code>
+     * @throws NegativeNumberException a number is negative
      */
     public void move(int x, int y) throws NegativeNumberException {
         getSelectedCursor().moveCursor(x,y);
@@ -323,7 +328,7 @@ public class CursorManager {
      * Add to every cursor's position the amount passed in the parameters. (i.e. Change the cursor position based on its relative position)
      * @param x value to add on the horizontal axis
      * @param y value to add on the vertical axis
-     * @throws NegativeNumberException
+     * @throws NegativeNumberException a number is negative
      */
     public void position(int x, int y) throws NegativeNumberException {
         getSelectedCursor().moveCursor(x,y);
@@ -358,7 +363,7 @@ public class CursorManager {
     /**
      * Set the opacity of every active cursor.
      * @param value The new opacity value
-     * @throws <code>OutOfRangeException</code>
+     * @throws OutOfRangeException out of range
      */
     public void press(float value) throws OutOfRangeException {
         getSelectedCursor().setOpacity(value);
@@ -373,7 +378,7 @@ public class CursorManager {
     /**
      * Set the thickness of every active cursor.
      * @param value The new thickness value
-     * @throws <code>NegativeNumberException</code>
+     * @throws NegativeNumberException a number is negative
      */
     public void thick(float value) throws NegativeNumberException {
         getSelectedCursor().setThickness(value);
