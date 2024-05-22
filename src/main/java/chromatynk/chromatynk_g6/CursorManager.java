@@ -150,18 +150,20 @@ public class CursorManager {
     }
 
     /**
-     * Set the input cursor with the same value as selected cursor
+     * Set the input cursor with the same value as the cursor of given cursorId
      * @param cursor the cursor to change
+     * @param cursorId the cursor id to copy from
      */
-    public void copyCursor(Cursor cursor){
+    public void copyCursor(Cursor cursor, long cursorId){
         try {
-            cursor.setPosX(getSelectedCursor().getPosX());
-            cursor.setPosY(getSelectedCursor().getPosY());
-            cursor.setRotationAngle(getSelectedCursor().getRotationAngle());
-            cursor.setOpacity(getSelectedCursor().getOpacity());
-            cursor.setThickness(getSelectedCursor().getThickness());
-            cursor.setColor(getSelectedCursor().getColor());
-            cursor.setVisible(getSelectedCursor().isVisible());
+            Cursor cursorToCopy = cursors.get(cursorId);
+            cursor.setPosX(cursorToCopy.getPosX());
+            cursor.setPosY(cursorToCopy.getPosY());
+            cursor.setRotationAngle(cursorToCopy.getRotationAngle());
+            cursor.setOpacity(cursorToCopy.getOpacity());
+            cursor.setThickness(cursorToCopy.getThickness());
+            cursor.setColor(cursorToCopy.getColor());
+            cursor.setVisible(cursorToCopy.isVisible());
         }
         catch (Exception e){
             System.out.println(e);
@@ -176,7 +178,7 @@ public class CursorManager {
         long id = createCursorId();
         Cursor cursor = new Cursor(id);
         // Copy the selected cursor
-        copyCursor(cursor);
+        copyCursor(cursor, getSelectedCursorId());
         cursors.get(cursorId).addMimic(cursor);
     }
 
@@ -212,6 +214,8 @@ public class CursorManager {
         }
         addMirrorCursor(theta, b, c, getSelectedCursorId());
     }
+
+
 
     /**
      * Creates a line between the middle of the canvas and a given point.
