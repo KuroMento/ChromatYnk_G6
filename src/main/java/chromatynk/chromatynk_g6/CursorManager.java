@@ -182,27 +182,78 @@ public class CursorManager {
 
     /**
      * Deletes all the temporary cursors created by one specific MIMIC/MIRROR instruction.
-     * @throws <code>MimicStackEmptyException</code>
      */
-    public void deleteMimics(long cursorId) throws MimicStackEmptyException {
-        cursors.get(cursorId).deleteMimic();
+    public void deleteMimics(long cursorId){
+        try {
+            cursors.get(cursorId).deleteMimic();
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
     }
 
+    /**
+     * Takes the line between 2 points and creates a symmetrical cursor of the selected cursor.
+     * @param x1 x coordinate of the first point
+     * @param y1 y coordinate of the first point
+     * @param x2 x coordinate of the second point
+     * @param y2 y coordinate of the second point
+     */
     public void addMirror(int x1, int y1, int x2, int y2){
-        // Creates and add a temporary cursor to the selected one
-        long id = createCursorId();
-        Cursor cursor = new Cursor(id);
-        // Copy the selected cursor
-        copyCursor(cursor);
-        double[] line = new double[2]; //y = ax + b
-        line[0] = (y2-y1)/(x2-x1); //a
-        line[1] = +
-    //b
+        // Angle between the line and the x-axis
+        double theta = Math.atan((double) (y2-y1)/(x2-x1));
+        theta = Math.toDegrees(theta);
+        // (-a)*y = b*x + c
+        float b = (float) (y2-y1)/(x2-x1);
+        float c = y1 - b*x1;
+        // add mirror cursor to each existing mirror cursor
+        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+            addMirrorCursor(theta, b, c, mirrorCursor.getId());
+        }
+        addMirrorCursor(theta, b, c, getSelectedCursorId());
     }
 
+    /**
+     * Creates a line between the middle of the canvas and a given point.
+     * @param x1 x coordinate of the point
+     * @param y1 y coordinate of the point
+     */
     public void addMirror(int x1, int y1){
         addMirror(x1, y1, 960, 540); //TODO: modify x2 and y2 with the correct values
     }
+
+    /**
+     * Add a mirror cursor from a cursor of cursorId
+     * @param theta angle of the line
+     * @param b line parameter
+     * @param c line parameter
+     * @param cursorId the id of the cursor that is mirrored
+     */
+    public void addMirrorCursor(double theta, float b, float c, long cursorId){
+        // Creates and add a temporary cursor to the selected one
+        long id = createCursorId();
+        Cursor cursor = new Cursor(id);
+        int x0 = cursors.get(cursorId).getPosX();
+        int y0 = cursors.get(cursorId).getPosY();
+        // Copy a cursor
+        copyCursor(cursor, cursorId);
+        // Angle of the mirror cursor with the x-axis
+        double alpha = (2*theta)-cursors.get(cursorId).getRotationAngle();
+        cursor.setRotationAngle((float) alpha);
+        int x = (int) ((x0*(1 - Math.pow(b,2)) - 2*b*(-y0+c))/(1 + Math.pow(b,2)));
+        int y = (int) ((y0*((b*b)-1)+2*(b*x0+c))/(1+b*b));
+        cursor.setPosX(x);
+        cursor.setPosY(y);
+        getSelectedCursor().addMirror(cursor);
+    }
+
+    /**
+     * Deletes all the temporary cursors created by one specific MIRROR instruction.
+     */
+    public void deleteMirror(long cursorId){
+        cursors.get(cursorId).deleteMirror();
+    }
+
     // The methods used by the Interpreter to modify cursors properties.
     /**
      * Move forward every active cursor (Selected and Temporary).
@@ -213,6 +264,9 @@ public class CursorManager {
         getSelectedCursor().forward(value);
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.forward(value);
+        }
+        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+            mirrorCursor.forward(value);
         }
     }
 
@@ -226,6 +280,9 @@ public class CursorManager {
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.backward(value);
         }
+        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+            mirrorCursor.backward(value);
+        }
     }
 
     /**
@@ -236,6 +293,9 @@ public class CursorManager {
         getSelectedCursor().rotateCursor(value);
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.rotateCursor(value);
+        }
+        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+            mirrorCursor.rotateCursor(-value);
         }
     }
 
@@ -249,6 +309,9 @@ public class CursorManager {
         getSelectedCursor().moveCursor(x,y);
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.moveCursor(x,y);
+        }
+        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+            mirrorCursor.moveCursor(x,y);
         }
     }
 
@@ -270,6 +333,9 @@ public class CursorManager {
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.hide();
         }
+        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+            mirrorCursor.hide();
+        }
     }
 
     /**
@@ -279,6 +345,9 @@ public class CursorManager {
         getSelectedCursor().show();
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.show();
+        }
+        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+            mirrorCursor.show();
         }
     }
 
@@ -292,6 +361,9 @@ public class CursorManager {
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.setOpacity(value);
         }
+        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+            mirrorCursor.setOpacity(value);
+        }
     }
 
     /**
@@ -304,6 +376,9 @@ public class CursorManager {
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.setThickness(value);
         }
+        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+            mirrorCursor.setThickness(value);
+        }
     }
 
     /**
@@ -314,6 +389,9 @@ public class CursorManager {
         getSelectedCursor().setColor(color);
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.setColor(color);
+        }
+        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+            mirrorCursor.setColor(color);
         }
     }
 
@@ -326,6 +404,9 @@ public class CursorManager {
         getSelectedCursor().lookAt(x,y);
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.lookAt(x,y);
+        }
+        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
+            mirrorCursor.lookAt(x,y);
         }
     }
 }

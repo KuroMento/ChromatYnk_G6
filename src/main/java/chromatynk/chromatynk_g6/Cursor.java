@@ -185,6 +185,8 @@ public class Cursor {
 
     public Stack<Cursor> getMimics(){ return this.mimics;}
 
+    public Stack<Cursor> getMirror(){ return this.mirror;}
+
     //Methods
 
     /**
@@ -333,6 +335,19 @@ public class Cursor {
         if( this.mimics.isEmpty() ) throw new MimicStackEmptyException();
         Cursor cursor = this.mimics.pop();
         return cursor.getId();
+    }
+
+    /**
+     * Add a mirror cursor that will be used for an instruction block MIRROR
+     * @param cursor the added cursor
+     */
+    public void addMirror(Cursor cursor){ mirror.push(cursor); }
+
+    /**
+     * Delete all mirrors after the end of an instruction block for MIRROR
+     */
+    public void deleteMirror(){
+        this.mirror.empty();
     }
 
     /**

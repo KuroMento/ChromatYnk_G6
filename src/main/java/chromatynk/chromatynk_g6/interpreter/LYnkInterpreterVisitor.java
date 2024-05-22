@@ -62,7 +62,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         }
         console.addLine("Operator " + "'" + ctx.op.getText() + "' " + "not supported for String");
         return VOID;
-        //throw new IllegalStateException(String.format("Operator '%s' not supported for String", ctx.op.getText())); might be needed instead of the return VOID
     }
 
     /**
@@ -77,7 +76,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
             return ((Boolean) condition).booleanValue();
         }
         console.addLine("NOT needs a boolean comparison to function");
-        throw new IllegalStateException("NOT needs a boolean comparison to function");
+        return VOID;
     }
 
     /**
@@ -421,6 +420,11 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         }
     }
 
+    /**
+     * Visit a mimic statement
+     * @param ctx the parse tree
+     * @return VOID as mimic is applied to a block of instruction
+     */
     @Override
     public Object visitMimicStatement(LYnkParser.MimicStatementContext ctx){
         try {
@@ -434,11 +438,17 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         }
     }
 
+    /**
+     * Visit a mirror statement
+     * @param ctx the parse tree
+     * @return VOID as mirror is applied to a block of instruction
+     */
     @Override
     public Object visitMirrorStatement(LYnkParser.MirrorStatementContext ctx){
         try{
             int x1 = (int) visit(ctx.x1);
             int y1 = (int) visit(ctx.y1);
+            long id = cursorManager.getSelectedCursorId();
             if(!ctx.x2.isEmpty()){
                 int x2 = (int) visit(ctx.x2);
                 int y2 = (int) visit(ctx.y2);
@@ -447,6 +457,8 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
             else{
                 cursorManager.addMirror(x1, y1);
             }
+            visit(ctx.blockStatement());
+            cursorManager.deleteMirror(id);
         }
         finally {
             return VOID;
@@ -483,10 +495,9 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         try {
             cursorManager.forward((int) visit(ctx.numStatementParameterX()));
         }
-        catch(NegativeNumberException e){
+        finally {
             return VOID;
         }
-        return VOID;
     }
 
     /**
@@ -499,10 +510,9 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         try {
             cursorManager.forward((int) visit(ctx.numStatementParameterX()));
         }
-        catch (NegativeNumberException e){
+        finally {
             return VOID;
         }
-        return VOID;
     }
 
     /**
@@ -790,7 +800,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     }
 
     /**
-     * Return the type of an object.
+     * Return the type of the object.
      * @param o The object.
      * @return The type of the object passed in argument.
      */
