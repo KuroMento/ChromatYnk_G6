@@ -68,21 +68,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         return VOID;
     }
 
-    /**
-     * Visit an arithmetic comparison
-     * @param ctx the parse tree
-     * @return the value of the expression
-     */
-    @Override
-    public Object visitArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx){
-        final Object leftCondition = shouldBeNumber(visit(ctx.left));
-        final Object rightCondition = shouldBeNumber(visit(ctx.right));
-        if(leftCondition instanceof Number && rightCondition instanceof Number){
-            return NumberUtil.evalNumberComparisonOperator((Number) leftCondition,(Number) rightCondition,ctx.arithmeticOperator().op);
-        }
-        console.addLine("Operator " + "'" + ctx.op.getText() + "' " + "not supported for Number");
-        return VOID;
-    }
 
     /**
      * Visit a comparison expression between boolean
@@ -101,43 +86,16 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     }
 
     /**
-     * Compare to string together and returns the result of the comparison
+     * Visit a comparison expression between numbers or literals
      * @param ctx the parse tree
      * @return the value of the comparison
      */
     @Override
-    public Object visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx){
-        final int leftType = ctx.left.getType();
-        final int rightType = ctx.right.getType();
-        final Object leftCondition;
-        final Object rightCondition;
-        try {
-            if (leftType == LYnkParser.LITERAL && rightType == LYnkParser.LITERAL) {
-                leftCondition = ctx.left.getText();
-                rightCondition = ctx.right.getText();
-                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.literalOperator().op);
-            }
-            if (leftType == LYnkParser.LITERAL && rightType == LYnkParser.IDENTIFICATION) {
-                leftCondition = ctx.left.getText();
-                rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
-                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.literalOperator().op);
-            }
-            if (leftType == LYnkParser.IDENTIFICATION && rightType == LYnkParser.LITERAL) {
-                leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
-                rightCondition = ctx.right.getText();
-                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.literalOperator().op);
-            }
-            if (leftType == LYnkParser.IDENTIFICATION && rightType == LYnkParser.IDENTIFICATION) {
-                leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
-                rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(1));
-                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.literalOperator().op);
-            }
-        }
-        finally {
-            console.addLine("Operator " + "'" + ctx.op.getText() + "' " + "not supported for String");
-            return VOID;
-        }
+    public Object visitArithmeticLiteralComparison(LYnkParser.ArithmeticLiteralComparisonContext ctx){
+        //TODO: the entire method
+        return VOID;
     }
+
 
     /**
      * Visit an identification expression

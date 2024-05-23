@@ -562,19 +562,113 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     }
 
     @Override
-    public LYnkValidation visitArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx) {
-        // Either empty value or error already detected deeper in the tree
-        final LYnkValidation left = visit(ctx.left);
-        if (left.isSkipError() || !left.hasValue()) {
-            return SKIP_ERROR;
-        }
-        final LYnkValidation right = visit(ctx.right);
-        if (right.isSkipError() || !right.hasValue()) {
-            return SKIP_ERROR;
+    public LYnkValidation visitArithmeticLiteralComparison(LYnkParser.ArithmeticLiteralComparisonContext ctx) {
+        // left and right not null
+        if( ctx.left != null && ctx.right != null && ctx.leftLiteral == null && ctx.rightLiteral == null ){
+            // Either empty value or error already detected deeper in the tree
+            final LYnkValidation left = visit(ctx.left);
+            if (left.isSkipError() ) {
+                return SKIP_ERROR;
+            }
+            final LYnkValidation right = visit(ctx.right);
+            if (right.isSkipError()) {
+                return SKIP_ERROR;
+            }
+            //left and right are numbers
+            if (left.isNumeric() && right.isNumeric()) {
+                final Boolean value = NumberUtil.evalNumberComparisonOperator((Number) left.value(), (Number) right.value(), ctx.arithmeticOperator().op);
+                return LYnkValidation.bool(value);
+            }
+            // left number right variable
+            if (left.isNumeric() && right.isIdentification()) {
+                if (!(this.varContext.getVarType(right.asString()) instanceof Double)){
+                    addIssue(IssueType.ERROR, ctx.right.getStart(), ctx.right.getText() + " isn't a Double but is compared to another one");
+                    return SKIP_ERROR;
+                }
+                final Number rightValue = varContext.getNumVarValue(right.asString());
+                final Boolean value = NumberUtil.evalNumberComparisonOperator((Number) left.value(), rightValue, ctx.arithmeticOperator().op);
+                return LYnkValidation.bool(value);
+            }
+            // left variable right number
+            if (left.isIdentification() && right.isNumeric()) {
+                if (!(this.varContext.getVarType(left.asString()) instanceof Double)){
+                    addIssue(IssueType.ERROR, ctx.left.getStart(), ctx.left.getText() + " isn't a Double but is compared to another one");
+                    return SKIP_ERROR;
+                }
+                final Number leftValue = varContext.getNumVarValue(left.asString());
+                final Boolean value = NumberUtil.evalNumberComparisonOperator(leftValue, (Number) right.value(), ctx.arithmeticOperator().op);
+                return LYnkValidation.bool(value);
+            }
+
+            // left variable and right variable
+            if( left.isIdentification() && right.isIdentification() ){
+                // left literal && right double
+                if (this.varContext.getVarType(left.asString()) instanceof String && this.varContext.getVarType(right.asString()) instanceof Double) {
+                    addIssue(IssueType.ERROR, ctx.left.getStart(), "The left variable (" + ctx.left.getText() + ") isn't a Double but is compared to another one");
+                    return SKIP_ERROR;
+                }
+                // left double && right literal
+                if (this.varContext.getVarType(right.asString()) instanceof String && this.varContext.getVarType(left.asString()) instanceof Double) {
+                    addIssue(IssueType.ERROR, ctx.right.getStart(), "The right variable (" + ctx.right.getText() + " isn't a Double but is compared to another one");
+                    return SKIP_ERROR;
+                }
+
+                // left double && right double
+                if (this.varContext.getVarType(left.asString()) instanceof Double && this.varContext.getVarType(right.asString()) instanceof Double) {
+                    final Number leftValue = this.varContext.getNumVarValue(left.asString());
+                    final Number rightValue = this.varContext.getNumVarValue(right.asString());
+                    final Boolean value = NumberUtil.evalNumberComparisonOperator(leftValue, rightValue, ctx.op.op);
+                    return LYnkValidation.bool(value);
+                }
+                // left String && right String
+                if (this.varContext.getVarType(right.asString()) instanceof String && this.varContext.getVarType(right.asString()) instanceof String) {
+                    final String leftValue = this.varContext.getStrVarValue(left.asString());
+                    final String rightValue = this.varContext.getStrVarValue(right.asString());
+                    final Boolean value = StringUtil.evalLiteralComparisonOperator(leftValue, rightValue, ctx.op.op);
+                    return LYnkValidation.bool(value);
+                }
+
+            }
         }
 
+        final Token leftLiteral = ctx.leftLiteral;
+        if( leftLiteral != null && leftLiteral.getType() != LYnkParser.LITERAL){
+            return SKIP_ERROR;
+        }
+        final Token rightLiteral = ctx.rightLiteral;
+        if( rightLiteral != null && rightLiteral.getType() != LYnkParser.LITERAL){
+            return SKIP_ERROR;
+        }
         // left and right not null
+        // left != null right != null && leftL == null pareil rightL
         try {
+            /**
+             * left identification but not right
+             */
+            if(left.isIdentification() && !right.isIdentification()){
+                // right number left variable
+                if (right.isNumeric() && left.isIdentification()) {
+                    if (!(this.varContext.getVarType(left.asString()) instanceof Double)) {
+                        addIssue(IssueType.ERROR, ctx.left.getStart(), ctx.left.getText() + " isn't a Double but is compared to another one");
+                        return SKIP_ERROR;
+                    }
+                    final Number leftValue = varContext.getNumVarValue(left.asString());
+                    final Boolean value = NumberUtil.evalNumberComparisonOperator(leftValue, (Number) right.value(), ctx.arithmeticOperator().op);
+                    return LYnkValidation.bool(value);
+                }
+                // left identification and rightLiteral not null
+                if(leftLiteral==null && !(rightLiteral==null) && left.isIdentification()){
+                    if(!(this.varContext.getVarType(left.asString()) instanceof String)){
+                        addIssue(IssueType.ERROR, ctx.left.getStart(), left.asString() + " is not a String but was compared to: " + rightLiteral.getText());
+                        return SKIP_ERROR;
+                    }
+                    final Boolean value = StringUtil.evalLiteralComparisonOperator(this.varContext.getStrVarValue(left.asString()), rightLiteral.getText(), ctx.op.op);
+                    return LYnkValidation.bool(value);
+                }
+            }
+            /**
+             * right identification but not left
+             */
             // Both numeric values
             if (left.isNumeric() && right.isNumeric()) {
                 final Boolean value = NumberUtil.evalNumberComparisonOperator((Number) left.value(), (Number) right.value(), ctx.arithmeticOperator().op);
@@ -601,21 +695,29 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 return LYnkValidation.bool(value);
             }
 
-            // left variable right variable
-            if( left.isIdentification() && right.isIdentification() ){
-                if (!(this.varContext.getVarType(left.asString()) instanceof Double)) {
-                    addIssue(IssueType.ERROR, ctx.left.getStart(), ctx.left.getText() + " isn't a Double but is compared to another one");
-                    return SKIP_ERROR;
-                }
-                if (!(this.varContext.getVarType(right.asString()) instanceof Double)) {
-                    addIssue(IssueType.ERROR, ctx.right.getStart(), ctx.right.getText() + " isn't a Double but is compared to another one");
-                    return SKIP_ERROR;
-                }
-                final Number leftValue = this.varContext.getNumVarValue(left.asString());
-                final Number rightValue = this.varContext.getNumVarValue(right.asString());
-                final Boolean value = NumberUtil.evalNumberComparisonOperator(leftValue, rightValue, ctx.arithmeticOperator().op);
+            /**
+             * Literal comparisons
+             */
+            // leftLiteral and rightLiteral not null
+            if( !(leftLiteral==null) && !(rightLiteral==null)){
+                final Boolean value = StringUtil.evalLiteralComparisonOperator(leftLiteral.getText(), rightLiteral.getText(), ctx.op.op);
                 return LYnkValidation.bool(value);
             }
+
+            // leftLiteral not null and right identification
+            if(!(leftLiteral==null) && rightLiteral==null && right.isIdentification()){
+                if(!(this.varContext.getVarType(right.asString()) instanceof String)){
+                    addIssue(IssueType.ERROR, ctx.right.getStart(), right.asString() + " is not a String but was compared to: " + leftLiteral.getText());
+                    return SKIP_ERROR;
+                }
+                final Boolean value = StringUtil.evalLiteralComparisonOperator(leftLiteral.getText(), this.varContext.getStrVarValue(right.asString()), ctx.op.op);
+                return LYnkValidation.bool(value);
+            }
+
+            /**
+             * Identification comparisons
+             */
+
         }
         catch(IllegalStateException e){
             addIssue(IssueType.ERROR, ctx.arithmeticOperator().op, e.getMessage());
@@ -690,72 +792,6 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
         catch(IllegalStateException e){
             addIssue(IssueType.ERROR, ctx.boolOperator().op, e.getMessage());
-            return SKIP_ERROR;
-        }
-        catch(VariableDoesNotExistException e){
-            addIssue(IssueType.ERROR, ctx.getStart(), e.getMessage() + " does not exist in the current context");
-            return SKIP_ERROR;
-        }
-        return LYnkValidation.bool(null);
-    }
-
-    @Override
-    public LYnkValidation visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx){
-        // Either empty value or error already detected deeper in the tree
-        final Token left = ctx.left;
-        if (left.getType() != LYnkParser.LITERAL && left.getType() != LYnkParser.IDENTIFICATION ) {
-            return SKIP_ERROR;
-        }
-        final Token right = ctx.right;
-        if (right.getType() != LYnkParser.LITERAL && right.getType() != LYnkParser.IDENTIFICATION ){
-            return SKIP_ERROR;
-        }
-
-        // left and right not null
-        try {
-            // Both are Literal
-            if( left.getType() == LYnkParser.LITERAL && right.getType() == LYnkParser.LITERAL){
-                final Boolean value = StringUtil.evalLiteralComparisonOperator(left.getText() , right.getText() , ctx.literalOperator().op);
-                return LYnkValidation.bool(value);
-            }
-            // left literal right identification
-            if( left.getType() == LYnkParser.LITERAL && right.getType() == LYnkParser.IDENTIFICATION){
-                if( !(this.varContext.getVarType(right.getText()) instanceof String)){
-                    addIssue(IssueType.ERROR, ctx.right.getTokenSource().nextToken(), "The right variable isn't a string in this context: " + this.varContext.getVariableMap());
-                    return SKIP_ERROR;
-                }
-                final String rightValue = this.varContext.getStrVarValue(right.getText());
-                final Boolean value = StringUtil.evalLiteralComparisonOperator(left.getText() , rightValue , ctx.literalOperator().op);
-                return LYnkValidation.bool(value);
-            }
-            // right literal left identification
-            if( right.getType() == LYnkParser.LITERAL && left.getType() == LYnkParser.IDENTIFICATION){
-                if( !(this.varContext.getVarType(left.getText()) instanceof String)){
-                    addIssue(IssueType.ERROR, ctx.left.getTokenSource().nextToken(), "The left variable isn't a string in this context: " + this.varContext.getVariableMap());
-                    return SKIP_ERROR;
-                }
-                final String leftValue = this.varContext.getStrVarValue(left.getText());
-                final Boolean value = StringUtil.evalLiteralComparisonOperator(leftValue , right.getText() , ctx.literalOperator().op);
-                return LYnkValidation.bool(value);
-            }
-            // right identification left identification
-            if( right.getType() == LYnkParser.IDENTIFICATION && left.getType() == LYnkParser.IDENTIFICATION){
-                if( !(this.varContext.getVarType(left.getText()) instanceof String)){
-                    addIssue(IssueType.ERROR, ctx.left.getTokenSource().nextToken(), "The left variable isn't a string in this context: " + this.varContext.getVariableMap());
-                    return SKIP_ERROR;
-                }
-                if( !(this.varContext.getVarType(right.getText()) instanceof String)){
-                    addIssue(IssueType.ERROR, ctx.right.getTokenSource().nextToken(), "The right variable isn't a string in this context: " + this.varContext.getVariableMap());
-                    return SKIP_ERROR;
-                }
-                final String leftValue = varContext.getStrVarValue(left.getText());
-                final String rightValue = varContext.getStrVarValue(right.getText());
-                final Boolean value = StringUtil.evalLiteralComparisonOperator(leftValue , rightValue , ctx.literalOperator().op);
-                return LYnkValidation.bool(value);
-            }
-        }
-        catch(IllegalStateException e){
-            addIssue(IssueType.ERROR, ctx.literalOperator().op, e.getMessage());
             return SKIP_ERROR;
         }
         catch(VariableDoesNotExistException e){

@@ -32,13 +32,16 @@ statement : ifStatement
 booleanExpression: '(' booleanExpression ')'                                                       #parenthesisVar
                     | left=booleanExpression op=('AND' | 'OR') right=booleanExpression             #andOrExpression
                     | 'NOT' booleanExpression                                                      #notExpression
-                    | (left=arithmeticExpression | leftLiteral=LITERAL) op=arithmeticOperator (right=arithmeticExpression | rightLiteral=LITERAL)   #arithmeticLiteralComparison
+                    | left=IDENTIFICATION op=arithmeticOperator right=IDENTIFICATION               #varComparison
+                    | (left=arithmeticExpression | leftLiteral=LITERAL) op=arithmeticOperator (right=arithmeticExpression | rightLiteral=LITERAL)  #arithmeticLiteralComparison
                     | left=booleanExpression op=boolOperator right=booleanExpression               #booleanComparison
                     | IDENTIFICATION                                                               #identificationVar
                     | 'TRUE'                                                                       #trueVar
                     | 'FALSE'                                                                      #falseVar
                     ;
 
+// varCompStatement: Iden ariOp Iden
+//
 arithmeticExpression : '(' arithmeticExpression ')'                                                         #parenthesisExpression
                         | left=arithmeticExpression op=(MULTIPLICATION|DIVISION) right=arithmeticExpression #mulDivExpression
                         | left=arithmeticExpression op=(PLUS|MINUS) right=arithmeticExpression              #plusMinusExpression
