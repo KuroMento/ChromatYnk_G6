@@ -674,16 +674,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 final Boolean value = NumberUtil.evalNumberComparisonOperator((Number) left.value(), (Number) right.value(), ctx.arithmeticOperator().op);
                 return LYnkValidation.bool(value);
             }
-            // right number left variable
-            if (right.isNumeric() && left.isIdentification()) {
-                if (!(this.varContext.getVarType(left.asString()) instanceof Double)) {
-                    addIssue(IssueType.ERROR, ctx.left.getStart(), ctx.left.getText() + " isn't a Double but is compared to another one");
-                    return SKIP_ERROR;
-                }
-                final Number leftValue = varContext.getNumVarValue(left.asString());
-                final Boolean value = NumberUtil.evalNumberComparisonOperator(leftValue, (Number) right.value(), ctx.arithmeticOperator().op);
-                return LYnkValidation.bool(value);
-            }
+
             // left number right variable
             if (left.isNumeric() && right.isIdentification()) {
                 if (!(this.varContext.getVarType(right.asString()) instanceof Double)){
