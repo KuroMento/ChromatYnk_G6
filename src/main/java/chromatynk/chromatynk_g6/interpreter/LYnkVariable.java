@@ -1,9 +1,11 @@
 package chromatynk.chromatynk_g6.interpreter;
 
+import chromatynk.chromatynk_g6.Variable;
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.io.PrintStream;
+import java.util.Map;
 
 public interface LYnkVariable {
     boolean hasVar(String name);
@@ -20,6 +22,7 @@ public interface LYnkVariable {
     Double getNumVarValue(String name) throws VariableDoesNotExistException;
     Object getVarType(final TerminalNode identifier) throws VariableDoesNotExistException;
     Object getVarType(String name) throws VariableDoesNotExistException;
+    Map<String, Variable> getVariableMap();
     boolean setNumVarValue(String name, final Object value);
 
 }

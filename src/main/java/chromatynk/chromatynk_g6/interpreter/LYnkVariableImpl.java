@@ -48,7 +48,7 @@ public class LYnkVariableImpl implements LYnkVariable{
     @Override
     public void delete(String name) throws VariableDoesNotExistException{
         //If the variable does not exist
-        if(!variableMap.containsKey(name)) throw new VariableDoesNotExistException("Variable " + name + " does not exist");
+        if(!variableMap.containsKey(name)) throw new VariableDoesNotExistException(name);
         //If the variable exist we remove it
         else{
             variableMap.remove(name);
@@ -115,7 +115,7 @@ public class LYnkVariableImpl implements LYnkVariable{
         if(variableMap.containsKey(name)) {
             return ((VariableSTR) variableMap.get(name)).getValue();
         }
-        throw new VariableDoesNotExistException();
+        throw new VariableDoesNotExistException(name);
     }
     /**
      * Get the value of a boolean variable
@@ -142,7 +142,7 @@ public class LYnkVariableImpl implements LYnkVariable{
         if(variableMap.containsKey(name)) {
             return ((VariableBOOL) variableMap.get(name)).getValue();
         }
-        throw new VariableDoesNotExistException();
+        throw new VariableDoesNotExistException(name);
     }
     /**
      * Get the value of a double variable
@@ -214,6 +214,11 @@ public class LYnkVariableImpl implements LYnkVariable{
             }
         }
         throw new VariableDoesNotExistException(name);
+    }
+
+    @Override
+    public Map<String, Variable> getVariableMap() {
+        return variableMap;
     }
 
     /**

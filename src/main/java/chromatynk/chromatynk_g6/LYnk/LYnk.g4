@@ -32,9 +32,8 @@ statement : ifStatement
 booleanExpression: '(' booleanExpression ')'                                                       #parenthesisVar
                     | left=booleanExpression op=('AND' | 'OR') right=booleanExpression             #andOrExpression
                     | 'NOT' booleanExpression                                                      #notExpression
-                    | left=arithmeticExpression op=arithmeticOperator right=arithmeticExpression   #arithmeticComparison
+                    | (left=arithmeticExpression | leftLiteral=LITERAL) op=arithmeticOperator (right=arithmeticExpression | rightLiteral=LITERAL)   #arithmeticLiteralComparison
                     | left=booleanExpression op=boolOperator right=booleanExpression               #booleanComparison
-                    | left=(LITERAL | IDENTIFICATION) op=arithmeticOperator right=(LITERAL | IDENTIFICATION) #literalComparison
                     | IDENTIFICATION                                                               #identificationVar
                     | 'TRUE'                                                                       #trueVar
                     | 'FALSE'                                                                      #falseVar

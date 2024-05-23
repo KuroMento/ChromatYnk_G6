@@ -486,6 +486,10 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
     @Override
     public LYnkValidation visitNotExpression(LYnkParser.NotExpressionContext ctx){
+        if(ctx.booleanExpression() == null){
+            addIssue(IssueType.ERROR, ctx.getStart(), "The NOT boolean expression is empty or null");
+            return SKIP_ERROR;
+        }
         return visit(ctx.booleanExpression());
     }
 
@@ -600,6 +604,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             // left variable right variable
             if( left.isIdentification() && right.isIdentification() ){
                 if (!(this.varContext.getVarType(left.asString()) instanceof Double)) {
+                    addIssue(IssueType.ERROR, ctx.left.getStart(), ctx.left.getText() + " isn't a Double but is compared to another one");
                     return SKIP_ERROR;
                 }
                 if (!(this.varContext.getVarType(right.asString()) instanceof Double)) {
@@ -688,7 +693,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return SKIP_ERROR;
         }
         catch(VariableDoesNotExistException e){
-            addIssue(IssueType.ERROR, ctx.getStart(), "Une variable n'existe pas dans ce contexte!");
+            addIssue(IssueType.ERROR, ctx.getStart(), e.getMessage() + " does not exist in the current context");
             return SKIP_ERROR;
         }
         return LYnkValidation.bool(null);
@@ -702,7 +707,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return SKIP_ERROR;
         }
         final Token right = ctx.right;
-        if (right.getType() != LYnkParser.LITERAL || right.getType() != LYnkParser.IDENTIFICATION ){
+        if (right.getType() != LYnkParser.LITERAL && right.getType() != LYnkParser.IDENTIFICATION ){
             return SKIP_ERROR;
         }
 
@@ -754,7 +759,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return SKIP_ERROR;
         }
         catch(VariableDoesNotExistException e){
-            addIssue(IssueType.ERROR, ctx.getStart(), "Une variable n'existe pas dans ce contexte!");
+            addIssue(IssueType.ERROR, ctx.getStart(), e.getMessage() + " does not exist in the current context");
             return SKIP_ERROR;
         }
         return LYnkValidation.bool(null);
