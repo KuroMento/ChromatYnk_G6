@@ -53,18 +53,6 @@ public class LYnkBaseListener implements LYnkListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLiteralComparison(LYnkParser.LiteralComparisonContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterFalseVar(LYnkParser.FalseVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -101,18 +89,6 @@ public class LYnkBaseListener implements LYnkListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBooleanComparison(LYnkParser.BooleanComparisonContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -120,6 +96,18 @@ public class LYnkBaseListener implements LYnkListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBooleanComparison(LYnkParser.BooleanComparisonContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArithmeticLiteralComparison(LYnkParser.ArithmeticLiteralComparisonContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArithmeticLiteralComparison(LYnkParser.ArithmeticLiteralComparisonContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

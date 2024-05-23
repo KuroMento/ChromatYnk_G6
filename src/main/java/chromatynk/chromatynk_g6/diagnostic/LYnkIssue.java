@@ -4,4 +4,10 @@ public record LYnkIssue(IssueType type, String message , int lineNumber, int lin
     public boolean isError(){
         return this.type == IssueType.ERROR;
     }
+
+    @Override
+    public String toString(){
+        final String affichage = lineNumber + ": " + message;
+        return affichage;
+    }
 }

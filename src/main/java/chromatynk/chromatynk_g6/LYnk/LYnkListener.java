@@ -40,18 +40,6 @@ public interface LYnkListener extends ParseTreeListener {
 	 */
 	void exitTrueVar(LYnkParser.TrueVarContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code literalComparison}
-	 * labeled alternative in {@link LYnkParser#booleanExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterLiteralComparison(LYnkParser.LiteralComparisonContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code literalComparison}
-	 * labeled alternative in {@link LYnkParser#booleanExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitLiteralComparison(LYnkParser.LiteralComparisonContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code falseVar}
 	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
@@ -88,18 +76,6 @@ public interface LYnkListener extends ParseTreeListener {
 	 */
 	void exitNotExpression(LYnkParser.NotExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code arithmeticComparison}
-	 * labeled alternative in {@link LYnkParser#booleanExpression}.
-	 * @param ctx the parse tree
-	 */
-	void enterArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code arithmeticComparison}
-	 * labeled alternative in {@link LYnkParser#booleanExpression}.
-	 * @param ctx the parse tree
-	 */
-	void exitArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code booleanComparison}
 	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
@@ -111,6 +87,18 @@ public interface LYnkListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBooleanComparison(LYnkParser.BooleanComparisonContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code arithmeticLiteralComparison}
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterArithmeticLiteralComparison(LYnkParser.ArithmeticLiteralComparisonContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code arithmeticLiteralComparison}
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitArithmeticLiteralComparison(LYnkParser.ArithmeticLiteralComparisonContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code parenthesisVar}
 	 * labeled alternative in {@link LYnkParser#booleanExpression}.

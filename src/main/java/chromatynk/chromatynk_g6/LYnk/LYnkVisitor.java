@@ -30,13 +30,6 @@ public interface LYnkVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTrueVar(LYnkParser.TrueVarContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code literalComparison}
-	 * labeled alternative in {@link LYnkParser#booleanExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code falseVar}
 	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
@@ -58,19 +51,19 @@ public interface LYnkVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNotExpression(LYnkParser.NotExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code arithmeticComparison}
-	 * labeled alternative in {@link LYnkParser#booleanExpression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code booleanComparison}
 	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBooleanComparison(LYnkParser.BooleanComparisonContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code arithmeticLiteralComparison}
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArithmeticLiteralComparison(LYnkParser.ArithmeticLiteralComparisonContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code parenthesisVar}
 	 * labeled alternative in {@link LYnkParser#booleanExpression}.

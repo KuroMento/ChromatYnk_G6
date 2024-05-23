@@ -39,13 +39,6 @@ public class LYnkBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements L
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLiteralComparison(LYnkParser.LiteralComparisonContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitFalseVar(LYnkParser.FalseVarContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -67,14 +60,14 @@ public class LYnkBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements L
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitArithmeticComparison(LYnkParser.ArithmeticComparisonContext ctx) { return visitChildren(ctx); }
+	@Override public T visitBooleanComparison(LYnkParser.BooleanComparisonContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitBooleanComparison(LYnkParser.BooleanComparisonContext ctx) { return visitChildren(ctx); }
+	@Override public T visitArithmeticLiteralComparison(LYnkParser.ArithmeticLiteralComparisonContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

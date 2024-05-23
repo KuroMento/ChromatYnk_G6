@@ -115,22 +115,22 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
             if (leftType == LYnkParser.LITERAL && rightType == LYnkParser.LITERAL) {
                 leftCondition = ctx.left.getText();
                 rightCondition = ctx.right.getText();
-                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.literalOperator().op);
             }
             if (leftType == LYnkParser.LITERAL && rightType == LYnkParser.IDENTIFICATION) {
                 leftCondition = ctx.left.getText();
                 rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
-                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.literalOperator().op);
             }
             if (leftType == LYnkParser.IDENTIFICATION && rightType == LYnkParser.LITERAL) {
                 leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
                 rightCondition = ctx.right.getText();
-                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.literalOperator().op);
             }
             if (leftType == LYnkParser.IDENTIFICATION && rightType == LYnkParser.IDENTIFICATION) {
                 leftCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(0));
                 rightCondition = variableList.getStrVarValue(ctx.IDENTIFICATION().get(1));
-                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.arithmeticOperator().op);
+                return StringUtil.evalLiteralComparisonOperator((String) leftCondition, (String) rightCondition, ctx.literalOperator().op);
             }
         }
         finally {

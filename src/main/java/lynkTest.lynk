@@ -1,0 +1,3 @@
+STR machin = "Aaaahhhh"
+STR truc = "truc"
+IF ( truc > machin ) { COLOR #123210 }

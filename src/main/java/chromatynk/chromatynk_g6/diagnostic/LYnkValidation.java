@@ -1,7 +1,10 @@
 package chromatynk.chromatynk_g6.diagnostic;
 
+import chromatynk.chromatynk_g6.interpreter.LYnkInterpreter;
+import chromatynk.chromatynk_g6.interpreter.LYnkInterpreterVisitor;
+
 public record LYnkValidation(LYnkType type, Object value) {
-    public static final LYnkValidation VOID = new LYnkValidation(LYnkType.VOID, null);
+    public static final LYnkValidation VOID = new LYnkValidation(LYnkType.VOID, LYnkInterpreter.VOID);
     public static final LYnkValidation SKIP_ERROR = new LYnkValidation(LYnkType.SKIP_ERROR, null);
 
     public boolean isBoolean(){return this.type == LYnkType.BOOLEAN;}

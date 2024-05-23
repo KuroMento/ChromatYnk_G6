@@ -13,8 +13,6 @@ import java.util.Map;
 
 public class LYnkVariableImpl implements LYnkVariable{
 
-    private final PrintStream stdout;
-
     private Map<String, Variable> variableMap;
 
     /**
@@ -24,8 +22,7 @@ public class LYnkVariableImpl implements LYnkVariable{
             "LOOKAT", "CURSOR", "SELECT", "REMOVE", "IF", "FOR", "WHILE", "MIMIC", "MIRROR", "NUM", "STR", "BOOL",
             "DEL", "FROM", "TO", "STEP", "AND", "OR", "NOT", "TRUE", "FALSE"};
 
-    public  LYnkVariableImpl(final PrintStream stdout){
-        this.stdout = stdout;
+    public  LYnkVariableImpl(){
         this.variableMap = new HashMap<>();
     }
 
@@ -89,7 +86,7 @@ public class LYnkVariableImpl implements LYnkVariable{
                 return (((VariableDOUBLE) var).getValue());
             }
         }
-        throw new VariableDoesNotExistException();
+        throw new VariableDoesNotExistException(name);
     }
 
 
@@ -171,7 +168,7 @@ public class LYnkVariableImpl implements LYnkVariable{
         if(variableMap.containsKey(name)) {
             return ((VariableDOUBLE) variableMap.get(name)).getValue();
         }
-        throw new VariableDoesNotExistException();
+        throw new VariableDoesNotExistException(name);
     }
 
     /**
@@ -216,7 +213,7 @@ public class LYnkVariableImpl implements LYnkVariable{
                 return 0d;
             }
         }
-        throw new VariableDoesNotExistException();
+        throw new VariableDoesNotExistException(name);
     }
 
     /**
