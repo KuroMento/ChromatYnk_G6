@@ -50,23 +50,6 @@ public class LYnkVariableImpl implements LYnkVariable{
     }
 
     @Override
-    public Object getVarValue(final TerminalNode identifier) throws VariableDoesNotExistException{
-        if(variableMap.containsKey(identifier.getText())){
-            Variable var = variableMap.get(identifier.getText());
-            if(var instanceof VariableSTR){
-                return (((VariableSTR) var).getValue());
-            }
-            if(var instanceof VariableBOOL){
-                return (((VariableBOOL) var).getValue());
-            }
-            if(var instanceof VariableDOUBLE){
-                return (((VariableDOUBLE) var).getValue());
-            }
-        }
-        throw new VariableDoesNotExistException();
-    }
-
-    @Override
     public Object getVarValue(String name) throws VariableDoesNotExistException{
         if(variableMap.containsKey(name)){
             Variable var = variableMap.get(name);
@@ -86,20 +69,6 @@ public class LYnkVariableImpl implements LYnkVariable{
 
     /**
      * Get the value of a String variable
-     * @param identifier the variable
-     * @return String value
-     * @throws VariableDoesNotExistException the variable does not exist
-     */
-    @Override
-    public String getStrVarValue(final TerminalNode identifier) throws VariableDoesNotExistException{
-        if(variableMap.containsKey(identifier.getText())) {
-            return ((VariableSTR) variableMap.get(identifier.getText())).getValue();
-        }
-        throw new VariableDoesNotExistException();
-    }
-
-    /**
-     * Get the value of a String variable
      * @param name the String variable name
      * @return String value
      * @throws VariableDoesNotExistException the variable does not exist
@@ -110,19 +79,6 @@ public class LYnkVariableImpl implements LYnkVariable{
             return ((VariableSTR) variableMap.get(name)).getValue();
         }
         throw new VariableDoesNotExistException(name);
-    }
-    /**
-     * Get the value of a boolean variable
-     * @param identifier the boolean variable
-     * @return boolean value
-     * @throws VariableDoesNotExistException the variable does not exist
-     */
-    @Override
-    public Boolean getBoolVarValue(final TerminalNode identifier) throws VariableDoesNotExistException{
-        if(variableMap.containsKey(identifier.getText())) {
-            return ((VariableBOOL) variableMap.get(identifier.getText())).getValue();
-        }
-        throw new VariableDoesNotExistException();
     }
 
     /**
@@ -138,19 +94,7 @@ public class LYnkVariableImpl implements LYnkVariable{
         }
         throw new VariableDoesNotExistException(name);
     }
-    /**
-     * Get the value of a double variable
-     * @param identifier the double variable
-     * @return double value
-     * @throws VariableDoesNotExistException the variable does not exist
-     */
-    @Override
-    public Double getNumVarValue(final TerminalNode identifier) throws VariableDoesNotExistException{
-        if(variableMap.containsKey(identifier.getText())) {
-            return ((VariableDOUBLE) variableMap.get(identifier.getText())).getValue();
-        }
-        throw new VariableDoesNotExistException();
-    }
+
     /**
      * Get the value of a double variable
      * @param name the double variable name
@@ -165,28 +109,6 @@ public class LYnkVariableImpl implements LYnkVariable{
         throw new VariableDoesNotExistException(name);
     }
 
-    /**
-     * Get the type of variable identifier
-     * @param identifier the variable to check
-     * @return the type of the variable
-     * @throws VariableDoesNotExistException the variable does not exist
-     */
-    @Override
-    public Object getVarType(final TerminalNode identifier) throws VariableDoesNotExistException{
-        if(variableMap.containsKey(identifier.getText())){
-            Variable var = variableMap.get(identifier.getText());
-            if(var instanceof VariableSTR){
-                return new String();
-            }
-            if(var instanceof VariableBOOL){
-                return Boolean.TRUE;
-            }
-            if(var instanceof VariableDOUBLE){
-                return 0d;
-            }
-        }
-        throw new VariableDoesNotExistException();
-    }
     /**
      * Get the type of variable identifier
      * @param name String name of the variable to check

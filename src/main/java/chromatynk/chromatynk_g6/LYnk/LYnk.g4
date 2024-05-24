@@ -40,8 +40,6 @@ booleanExpression: '(' booleanExpression ')'                                    
                     | 'FALSE'                                                                      #falseVar
                     ;
 
-// varCompStatement: Iden ariOp Iden
-//
 arithmeticExpression : '(' arithmeticExpression ')'                                                         #parenthesisExpression
                         | left=arithmeticExpression op=(MULTIPLICATION|DIVISION) right=arithmeticExpression #mulDivExpression
                         | left=arithmeticExpression op=(PLUS|MINUS) right=arithmeticExpression              #plusMinusExpression

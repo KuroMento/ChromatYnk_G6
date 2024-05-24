@@ -1,18 +1,13 @@
 package chromatynk.chromatynk_g6;
-import chromatynk.chromatynk_g6.diagnostic.LYnkIssue;
+import chromatynk.chromatynk_g6.interpreter.CursorManager;
 import chromatynk.chromatynk_g6.interpreter.LYnkInterpreter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class ChromatYnkApplication extends Application {
 

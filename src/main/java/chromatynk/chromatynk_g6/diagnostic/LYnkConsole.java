@@ -446,6 +446,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         final Double value = Double.parseDouble(ctx.NUMBER().getText());
         if( value == null ){
             addIssue(IssueType.ERROR, ctx.getStart(), "A value in a number expression is null");
+            return SKIP_ERROR;
         }
         return LYnkValidation.doubleVar(value);
     }
@@ -479,6 +480,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         Double value = Double.parseDouble(ctx.DOUBLE().getText());
         if( value == null ){
             addIssue(IssueType.ERROR, ctx.getStart(), "A value in an arithmetic expression is null");
+            return SKIP_ERROR;
         }
         return LYnkValidation.doubleVar(value);
     }
@@ -846,7 +848,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             final String value = ctx.PERCENTAGE().getText().substring(0,ctx.PERCENTAGE().getText().length()-1);
             return LYnkValidation.doubleVar(Double.parseDouble(value));
         }
-        addIssue(IssueType.ERROR, ctx.getStart(), "Statement parameter is empty!");
+        addIssue(IssueType.ERROR, ctx.getStart(), "Statement parameter X is empty!");
         return LYnkValidation.doubleVar(null);
     }
 
@@ -860,8 +862,9 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             }
             return arithmetic;
         }
-        if(!(ctx.PERCENTAGE().getText()==null)){
-            return LYnkValidation.doubleVar(Double.parseDouble(ctx.PERCENTAGE().getText()));
+        if(!(ctx.PERCENTAGE().getText() == null)){
+            final String value = ctx.PERCENTAGE().getText().substring(0,ctx.PERCENTAGE().getText().length()-1);
+            return LYnkValidation.doubleVar(Double.parseDouble(value));
         }
         addIssue(IssueType.ERROR, ctx.getStart(), "Statement parameter Y is empty!");
         return LYnkValidation.doubleVar(null);
@@ -1204,10 +1207,16 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), "PRESS statement was not given a parameter");
             return SKIP_ERROR;
         }
-        final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
-        if( arithmetic.isSkipError() || !arithmetic.hasValue()){
-            addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error");
-            return SKIP_ERROR;
+        if(ctx.arithmeticExpression() != null) {
+            final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
+            if (arithmetic.isSkipError() || !arithmetic.hasValue()) {
+                addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error");
+                return SKIP_ERROR;
+            }
+            return VOID;
+        }
+        if(ctx.PERCENTAGE() != null){
+            return VOID;
         }
         addIssue(IssueType.WARNING, ctx.getStart(), "Press statement unrecognizable");
         return SKIP_ERROR;
@@ -1230,12 +1239,12 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     @Override
     public LYnkValidation visitLookAtStatement(LYnkParser.LookAtStatementContext ctx){
         // no params
-        if( ctx.x == null && ctx.y == null ){
+        if( ctx.LONG() == null && ctx.x == null && ctx.y == null ){
             addIssue(IssueType.ERROR, ctx.getStart(), "LOOKAT statement was not given a parameter");
             return SKIP_ERROR;
         }
         // 1 param
-        if( !(ctx.x == null) && ctx.y == null || ctx.x == null && !(ctx.y == null) ){
+        if( ctx.LONG() == null && (!(ctx.x == null) && ctx.y == null || ctx.x == null && !(ctx.y == null)) ){
             addIssue(IssueType.ERROR, ctx.getStart(), "LOOKAT statement was given only 1 parameter");
             return SKIP_ERROR;
         }
