@@ -1,4 +1,4 @@
-package chromatynk.chromatynk_g6;
+package chromatynk.chromatynk_g6.interpreter;
 
 import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;
 import chromatynk.chromatynk_g6.exceptions.OutOfRangeException;

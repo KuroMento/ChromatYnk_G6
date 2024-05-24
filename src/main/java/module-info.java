@@ -6,4 +6,6 @@ module chromatynk.chromatynk_g6 {
 
     opens chromatynk.chromatynk_g6 to javafx.fxml;
     exports chromatynk.chromatynk_g6;
+    exports chromatynk.chromatynk_g6.interpreter;
+    opens chromatynk.chromatynk_g6.interpreter to javafx.fxml;
 }

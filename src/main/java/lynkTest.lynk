@@ -1,3 +1,32 @@
-STR machin = "Aaaahhhh"
-STR truc = "truc"
-IF ( truc > "truc" ) { COLOR #123210 }
+FWD 4
+BWD 4
+TURN 50
+MOV 25% 50%
+POS 20 1
+HIDE
+SHOW
+PRESS 0.2
+COLOR #112233
+COLOR 35 26 109
+THICK 10
+CURSOR 2
+CURSOR 3
+LOOKAT 2
+LOOKAT 20 200
+SELECT 2
+REMOVE 3
+IF ( TRUE ) { PRESS 0.2
+              COLOR #112233
+              COLOR 35 26 109 }
+FOR i TO 10 STEP 2 {
+BWD 4
+TURN 50
+MOV 25% 50% }
+WHILE ( FALSE ) { FWD 2 }
+MIMIC 2 { BWD 5 }
+MIRROR 1 1 3 3 { BWD 2 }
+MIRROR 1 10 { THICK 5 }
+NUM nume = 5
+STR stre = "22"
+BOOL boole = TRUE
+DEL nume

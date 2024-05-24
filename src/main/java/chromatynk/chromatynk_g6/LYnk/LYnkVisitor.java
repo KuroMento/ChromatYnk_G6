@@ -44,6 +44,13 @@ public interface LYnkVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAndOrExpression(LYnkParser.AndOrExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code varComparison}
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarComparison(LYnkParser.VarComparisonContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code notExpression}
 	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
@@ -153,6 +160,18 @@ public interface LYnkVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNumOperator(LYnkParser.NumOperatorContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LYnkParser#numStatementParameterX}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LYnkParser#numStatementParameterY}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LYnkParser#ifStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -170,24 +189,6 @@ public interface LYnkVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitWhileStatement(LYnkParser.WhileStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LYnkParser#numParameter}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumParameter(LYnkParser.NumParameterContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LYnkParser#numStatementParameterX}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LYnkParser#numStatementParameterY}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LYnkParser#mimicStatement}.
 	 * @param ctx the parse tree

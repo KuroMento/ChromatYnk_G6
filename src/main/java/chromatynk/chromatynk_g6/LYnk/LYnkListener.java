@@ -64,6 +64,18 @@ public interface LYnkListener extends ParseTreeListener {
 	 */
 	void exitAndOrExpression(LYnkParser.AndOrExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code varComparison}
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
+	 * @param ctx the parse tree
+	 */
+	void enterVarComparison(LYnkParser.VarComparisonContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code varComparison}
+	 * labeled alternative in {@link LYnkParser#booleanExpression}.
+	 * @param ctx the parse tree
+	 */
+	void exitVarComparison(LYnkParser.VarComparisonContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code notExpression}
 	 * labeled alternative in {@link LYnkParser#booleanExpression}.
 	 * @param ctx the parse tree
@@ -250,6 +262,26 @@ public interface LYnkListener extends ParseTreeListener {
 	 */
 	void exitNumOperator(LYnkParser.NumOperatorContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LYnkParser#numStatementParameterX}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LYnkParser#numStatementParameterX}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LYnkParser#numStatementParameterY}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LYnkParser#numStatementParameterY}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LYnkParser#ifStatement}.
 	 * @param ctx the parse tree
 	 */
@@ -279,36 +311,6 @@ public interface LYnkListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitWhileStatement(LYnkParser.WhileStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LYnkParser#numParameter}.
-	 * @param ctx the parse tree
-	 */
-	void enterNumParameter(LYnkParser.NumParameterContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LYnkParser#numParameter}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumParameter(LYnkParser.NumParameterContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LYnkParser#numStatementParameterX}.
-	 * @param ctx the parse tree
-	 */
-	void enterNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LYnkParser#numStatementParameterX}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LYnkParser#numStatementParameterY}.
-	 * @param ctx the parse tree
-	 */
-	void enterNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LYnkParser#numStatementParameterY}.
-	 * @param ctx the parse tree
-	 */
-	void exitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LYnkParser#mimicStatement}.
 	 * @param ctx the parse tree

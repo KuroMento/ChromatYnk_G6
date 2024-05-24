@@ -1,4 +1,4 @@
-package chromatynk.chromatynk_g6;
+package chromatynk.chromatynk_g6.interpreter;
 
 public final class VariableSTR extends Variable{
     //String value of the variable

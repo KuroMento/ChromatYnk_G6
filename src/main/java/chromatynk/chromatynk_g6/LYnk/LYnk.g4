@@ -26,7 +26,7 @@ statement : ifStatement
             | boolDeclaration
             | numberDeclaration
             | stringDeclaration
-            | blockStatement
+            | deleteDeclaration
             ;
 
 booleanExpression: '(' booleanExpression ')'                                                       #parenthesisVar
@@ -52,18 +52,17 @@ arithmeticExpression : '(' arithmeticExpression ')'                             
                         | IDENTIFICATION                                                                    #identificationExpression
                         ;
 
+// Operators and parameters
 arithmeticOperator : op=(EQUAL | GREATER | LESS | GREATER_OR_EQUAL | LESS_OR_EQUAL | NOT_EQUAL);
 boolOperator : op=( EQUAL | NOT_EQUAL );
 numOperator : op=(PLUS | MINUS | MULTIPLICATION | DIVISION);
-
-ifStatement : 'IF' booleanExpression blockStatement;
-forStatement : 'FOR' IDENTIFICATION ('FROM' from=(NUMBER|LONG))? 'TO' to=(NUMBER|LONG) ('STEP' step=(NUMBER|LONG))?  blockStatement;
-whileStatement : 'WHILE' booleanExpression blockStatement;
-
-numParameter : LONG | NUMBER | DOUBLE | PERCENTAGE | IDENTIFICATION; //Identification added to use variable in parameters
 numStatementParameterX : (arithmeticExpression | PERCENTAGE);
 numStatementParameterY : (arithmeticExpression | PERCENTAGE);
 
+// Statements with block
+ifStatement : 'IF' booleanExpression blockStatement;
+forStatement : 'FOR' IDENTIFICATION ('FROM' from=(NUMBER|LONG))? 'TO' to=(NUMBER|LONG) ('STEP' step=(NUMBER|LONG))? blockStatement;
+whileStatement : 'WHILE' booleanExpression blockStatement;
 mimicStatement : 'MIMIC' LONG blockStatement;
 mirrorStatement : 'MIRROR' (x1=numStatementParameterX y1=numStatementParameterY
                            | x1=numStatementParameterX y1=numStatementParameterY x2=numStatementParameterX y2=numStatementParameterY)

@@ -1,4 +1,4 @@
-package chromatynk.chromatynk_g6;
+package chromatynk.chromatynk_g6.interpreter;
 
 public final class VariableBOOL extends Variable{
     //Boolean value of the variable

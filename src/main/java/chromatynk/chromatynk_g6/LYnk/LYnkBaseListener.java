@@ -77,6 +77,18 @@ public class LYnkBaseListener implements LYnkListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterVarComparison(LYnkParser.VarComparisonContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarComparison(LYnkParser.VarComparisonContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNotExpression(LYnkParser.NotExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -269,6 +281,30 @@ public class LYnkBaseListener implements LYnkListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIfStatement(LYnkParser.IfStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -300,42 +336,6 @@ public class LYnkBaseListener implements LYnkListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitWhileStatement(LYnkParser.WhileStatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNumParameter(LYnkParser.NumParameterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNumParameter(LYnkParser.NumParameterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

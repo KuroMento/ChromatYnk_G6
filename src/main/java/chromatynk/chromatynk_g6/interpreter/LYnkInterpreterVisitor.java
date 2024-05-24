@@ -1,14 +1,11 @@
 package chromatynk.chromatynk_g6.interpreter;
 
 import chromatynk.chromatynk_g6.Console;
-import chromatynk.chromatynk_g6.Cursor;
-import chromatynk.chromatynk_g6.CursorManager;
 import chromatynk.chromatynk_g6.LYnk.LYnkBaseVisitor;
 import chromatynk.chromatynk_g6.LYnk.LYnkParser;
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
 import chromatynk.chromatynk_g6.utils.BooleanUtil;
 import chromatynk.chromatynk_g6.utils.NumberUtil;
-import chromatynk.chromatynk_g6.utils.StringUtil;
 import javafx.scene.paint.Color;
 
 import static chromatynk.chromatynk_g6.interpreter.LYnkInterpreter.VOID;
@@ -105,7 +102,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitIdentificationVar(LYnkParser.IdentificationVarContext ctx){
         try {
-            return variableList.getVarValue(ctx.IDENTIFICATION());
+            return variableList.getVarValue(ctx.IDENTIFICATION().getText());
         }
         finally{
             return VOID;
@@ -226,7 +223,7 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     @Override
     public Object visitIdentificationExpression(final LYnkParser.IdentificationExpressionContext ctx){
         try {
-            return variableList.getVarValue(ctx.IDENTIFICATION());
+            return variableList.getVarValue(ctx.IDENTIFICATION().getText());
         }
         finally{
             return VOID;
@@ -308,21 +305,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
             visitWhileStatement(ctx);
         }
         return VOID;
-    }
-
-    /**
-     * Visit a parameter = a value, variable or %
-     * @param ctx the parse tree
-     * @return the value of the expression with % between 0 and 1
-     */
-    @Override
-    public Object visitNumParameter(LYnkParser.NumParameterContext ctx){
-        if(ctx.getChild(0).getText().contains("%")){
-            return Double.parseDouble(ctx.getChild(0).getText().replace("%",""))/100;
-        }
-        else{
-            return (Number) ctx.getChild(0);
-        }
     }
 
     /**

@@ -1,13 +1,7 @@
 package chromatynk.chromatynk_g6.interpreter;
 
-import chromatynk.chromatynk_g6.Variable;
-import chromatynk.chromatynk_g6.VariableDOUBLE;
-import chromatynk.chromatynk_g6.VariableSTR;
-import chromatynk.chromatynk_g6.VariableBOOL;
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
-import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
