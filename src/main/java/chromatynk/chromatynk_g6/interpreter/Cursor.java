@@ -1,12 +1,10 @@
-package chromatynk.chromatynk_g6;
+package chromatynk.chromatynk_g6.interpreter;
 
 import chromatynk.chromatynk_g6.exceptions.OutOfRangeException;
-import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorAlreadyExistingException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.MimicStackEmptyException;
 import javafx.scene.paint.Color;
 import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 
@@ -57,11 +55,6 @@ public class Cursor {
     private Stack<Cursor> mirror;
 
     /**
-     * Contains all the lines that were valid, for them to be used later in case of a mirror or a mimic
-     */
-    private ArrayList<String> validLine;
-
-    /**
      * Complete Constructor of the class <code>Cursor</code> :
      * @param id the identification of the cursor.
      * @param posX the position on horizontal axe.
@@ -83,7 +76,6 @@ public class Cursor {
         this.isVisible = isVisible;
         this.mimics = new Stack<Cursor>();
         this.mirror = new Stack<Cursor>();
-        this.validLine = new ArrayList<>();
     }
 
     /**
@@ -101,7 +93,6 @@ public class Cursor {
         this.isVisible = true;
         this.mimics = new Stack<Cursor>();
         this.mirror = new Stack<Cursor>();
-        this.validLine = new ArrayList<>();
     }
 
     //Getters and Setters
