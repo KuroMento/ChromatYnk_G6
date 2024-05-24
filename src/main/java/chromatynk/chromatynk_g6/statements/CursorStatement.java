@@ -10,6 +10,6 @@ public class CursorStatement extends Statement{
     }
 
     public long getCursorId() {
-        return cursorId;
+        return this.cursorId;
     }
 }

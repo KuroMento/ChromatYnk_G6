@@ -3,22 +3,22 @@ package chromatynk.chromatynk_g6.statements;
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 
 public class ForStatement extends Statement{
-    private long variableId;
+    private String variableName;
     private int from;
     private int to;
     private int step;
     private BlockStatement block;
-    public ForStatement(long variableId, int from, int to, int step, BlockStatement block, LYnkVariableImpl varContext){
+    public ForStatement(String variableName, int from, int to, int step, BlockStatement block, LYnkVariableImpl varContext){
         super("FOR", varContext);
-        this.variableId = variableId;
+        this.variableName = variableName;
         this.from = from;
         this.to = to;
         this.step = step;
         this.block = block;
     }
 
-    public long getVariableId() {
-        return variableId;
+    public String getVariableName() {
+        return variableName;
     }
 
     public int getFrom() {
