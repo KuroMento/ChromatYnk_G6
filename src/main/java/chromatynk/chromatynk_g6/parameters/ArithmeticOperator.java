@@ -1,12 +1,12 @@
 package chromatynk.chromatynk_g6.parameters;
 
 public enum ArithmeticOperator {
-    EQUAL(0),
-    NOT_EQUAL(1),
-    GREATER(2),
-    LESS(3),
-    GREATER_EQUAL(4),
-    LESS_EQUAL(5);
+    EQUAL(48),
+    NOT_EQUAL(49),
+    GREATER(52),
+    LESS(50),
+    GREATER_EQUAL(53),
+    LESS_EQUAL(51);
 
     private final int index;
 

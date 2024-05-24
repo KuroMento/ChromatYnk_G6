@@ -1,12 +1,14 @@
 package chromatynk.chromatynk_g6.parameters;
 
-public enum BoolOperator {
-    EQUAL(48),
-    NOT_EQUAL(49);
+public enum NumberOperator {
+    PLUS(45),
+    MINUS(46),
+    MULTIPLICATION(43),
+    DIVISION(44);
 
     private final int index;
 
-    BoolOperator(int index){
+    NumberOperator(int index){
         this.index = index;
     }
 

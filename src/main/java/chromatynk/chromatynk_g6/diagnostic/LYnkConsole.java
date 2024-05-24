@@ -35,6 +35,8 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     private LYnkVariableImpl varContext;
     private CursorManager cursorContext;
 
+    private int width;
+    private int height;
     private List<String> validStatements;
 
     //When the value is false, the syntaxError method returns without displaying errors.
