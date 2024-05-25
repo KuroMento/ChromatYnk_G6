@@ -12,4 +12,9 @@ public class RemoveStatement extends Statement{
     public long getCursorId() {
         return cursorId;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " " + this.cursorId;
+    }
 }

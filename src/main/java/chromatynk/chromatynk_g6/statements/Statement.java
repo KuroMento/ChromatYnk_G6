@@ -22,5 +22,8 @@ public abstract class Statement {
         this.varContext = varContext;
     }
 
-    public void execute(){}
+    @Override
+    public String toString() {
+        return this.keyword;
+    }
 }

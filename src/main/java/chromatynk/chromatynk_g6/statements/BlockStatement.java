@@ -13,8 +13,22 @@ public class BlockStatement extends Statement{
         this.block = new ArrayList<>();
     }
 
+    public void addStatement(Statement statement){
+        block.add(statement);
+    }
+
     public List<Statement> getBlock() {
         return block;
+    }
+
+    @Override
+    public String toString() {
+        String blockMsg = "{ ";
+        for(Statement statement : block){
+            blockMsg = blockMsg + " " + statement.toString();
+        }
+        blockMsg = blockMsg + " }";
+        return blockMsg;
     }
 
     /*

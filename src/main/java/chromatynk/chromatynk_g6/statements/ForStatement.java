@@ -36,6 +36,12 @@ public class ForStatement extends Statement{
     public BlockStatement getBlock() {
         return block;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " " + this.variableName + " FROM " + this.from + " TO " + this.to + " STEP " + this.step + " " + this.block.toString();
+    }
+
     /*
     public void execute(){
         if(to >= from && step > 0){

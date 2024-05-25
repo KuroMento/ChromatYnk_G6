@@ -21,6 +21,11 @@ public class IfStatement extends Statement{
         return block;
     }
 
+    @Override
+    public String toString() {
+        return super.toString() + " ( " + this.expression.toString() + " ) " + this.block.toString();
+    }
+
     /*
     public void execute(){
         if(expression.evaluate()){

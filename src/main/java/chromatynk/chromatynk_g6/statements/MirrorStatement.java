@@ -1,6 +1,7 @@
 package chromatynk.chromatynk_g6.statements;
 
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
+import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticExpression;
 
 public class MirrorStatement extends Statement{
     private ArithmeticExpression x1;
@@ -18,20 +19,27 @@ public class MirrorStatement extends Statement{
         this.block = block;
         this.isCentralMirror = false;
     }
+    public MirrorStatement(ArithmeticExpression  x1, ArithmeticExpression  y1, BlockStatement block, LYnkVariableImpl varContext){
+        super("MIRROR", varContext);
+        this.x1 = x1;
+        this.y1 = y1;
+        this.block = block;
+        this.isCentralMirror = true;
+    }
 
-    public int getX1() {
+    public ArithmeticExpression  getX1() {
         return x1;
     }
 
-    public int getY1() {
+    public ArithmeticExpression  getY1() {
         return y1;
     }
 
-    public int getX2() {
+    public ArithmeticExpression  getX2() {
         return x2;
     }
 
-    public int getY2() {
+    public ArithmeticExpression  getY2() {
         return y2;
     }
 

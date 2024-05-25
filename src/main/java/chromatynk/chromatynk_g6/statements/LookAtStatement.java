@@ -36,4 +36,12 @@ public class LookAtStatement extends Statement{
     public boolean isIdLookAt() {
         return this.isIdLookAt;
     }
+
+    @Override
+    public String toString() {
+        if(isIdLookAt()){
+            return super.toString() + " " + this.cursorId;
+        }
+        return super.toString() + " " + this.x + " " + this.y;
+    }
 }

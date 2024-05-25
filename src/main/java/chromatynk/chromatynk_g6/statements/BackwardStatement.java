@@ -13,4 +13,9 @@ public class BackwardStatement extends Statement{
     public ArithmeticExpression getExpression() {
         return this.expression;
     }
+
+    @Override
+    public String toString(){
+        return getKeyword() + " " + expression.toString();
+    }
 }

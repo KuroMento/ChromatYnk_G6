@@ -13,4 +13,9 @@ public class ForwardStatement extends Statement{
     public ArithmeticExpression getExpression() {
         return this.expression;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " " + this.expression.toString();
+    }
 }

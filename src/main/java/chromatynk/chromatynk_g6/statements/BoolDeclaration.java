@@ -24,4 +24,9 @@ public class BoolDeclaration extends Statement{
     public BooleanExpression getExpression() {
         return expression;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " " + this.variableName + " " + this.expression.toString();
+    }
 }

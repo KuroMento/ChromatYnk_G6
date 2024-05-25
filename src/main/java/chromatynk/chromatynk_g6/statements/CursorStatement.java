@@ -12,4 +12,9 @@ public class CursorStatement extends Statement{
     public long getCursorId() {
         return this.cursorId;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " " + cursorId;
+    }
 }

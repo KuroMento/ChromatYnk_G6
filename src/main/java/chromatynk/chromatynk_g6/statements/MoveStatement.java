@@ -19,4 +19,9 @@ public class MoveStatement extends Statement{
     public ArithmeticExpression getY() {
         return y;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " " + this.x.toString() + " " + this.y.toString();
+    }
 }

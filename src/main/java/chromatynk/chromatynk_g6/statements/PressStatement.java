@@ -14,4 +14,9 @@ public class PressStatement extends Statement{
     public ArithmeticExpression getExpression() {
         return expression;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + "  " + this.expression.toString();
+    }
 }

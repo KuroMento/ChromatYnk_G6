@@ -23,4 +23,9 @@ public class StringDeclaration extends Statement {
     public String getExpression() {
         return expression;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + " " + this.variableName + " " + this.expression.toString();
+    }
 }
