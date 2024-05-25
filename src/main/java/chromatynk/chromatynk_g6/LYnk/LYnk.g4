@@ -90,8 +90,6 @@ numberDeclaration : 'NUM' IDENTIFICATION ('=' arithmeticExpression)?;
 deleteDeclaration : 'DEL' IDENTIFICATION;
 
 
-// PERCENTAGE : '%' => FWD arithmeticExpression (PERCENTAGE)?
-
 //Tokens
 
 IDENTIFICATION : [a-zA-Z] [a-zA-Z_0-9]*;

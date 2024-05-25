@@ -1,4 +1,4 @@
-package chromatynk.chromatynk_g6;
+package chromatynk.chromatynk_g6.interpreter;
 
 public enum Behaviour {
     DIRECT(0),

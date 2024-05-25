@@ -7,7 +7,10 @@ public record LYnkIssue(IssueType type, String message , int lineNumber, int lin
 
     @Override
     public String toString(){
-        final String affichage = lineNumber + ": " + message;
+        String affichage = lineNumber + ": " + message;
+        if(!details.isEmpty()) {
+            affichage = affichage + " (details: " + details + ") ";
+        }
         return affichage;
     }
 }

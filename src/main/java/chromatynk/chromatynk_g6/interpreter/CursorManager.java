@@ -60,6 +60,11 @@ public class CursorManager {
         return this.cursors.get(id);
     }
 
+    @Override
+    public String toString(){
+        return this.cursors.toString();
+    }
+
     /**
      * Checks if a cursor exists within the Canvas.
      * @param id The id of the wanted cursor to check

@@ -1,2 +1,0 @@
-BOOL a = NOT( TRUE AND TRUE ) OR FALSE
-NUM b = (3 + / 21 * 4 )
