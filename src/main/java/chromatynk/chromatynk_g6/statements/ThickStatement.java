@@ -14,4 +14,9 @@ public class ThickStatement extends Statement{
     public ArithmeticExpression getExpression() {
         return expression;
     }
+
+    @Override
+    public String toString(){
+        return "THICK " + expression.toString();
+    }
 }

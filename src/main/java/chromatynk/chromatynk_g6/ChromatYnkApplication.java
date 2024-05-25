@@ -1,6 +1,5 @@
 package chromatynk.chromatynk_g6;
 import chromatynk.chromatynk_g6.interpreter.CursorManager;
-import chromatynk.chromatynk_g6.interpreter.LYnkInterpreter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

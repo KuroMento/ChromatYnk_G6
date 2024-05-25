@@ -3,16 +3,20 @@ package chromatynk.chromatynk_g6.statements;
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 
 public class MirrorStatement extends Statement{
-    private int x1;
-    private int y1;
-    private int x2;
-    private int y2;
-    public MirrorStatement(int x1, int y1, int x2, int y2, LYnkVariableImpl varContext){
+    private ArithmeticExpression x1;
+    private ArithmeticExpression  y1;
+    private ArithmeticExpression  x2;
+    private ArithmeticExpression  y2;
+    private boolean isCentralMirror;
+    private BlockStatement block;
+    public MirrorStatement(ArithmeticExpression x1, ArithmeticExpression  y1, ArithmeticExpression  x2, ArithmeticExpression  y2, BlockStatement block, LYnkVariableImpl varContext){
         super("MIRROR", varContext);
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        this.block = block;
+        this.isCentralMirror = false;
     }
 
     public int getX1() {
@@ -29,5 +33,17 @@ public class MirrorStatement extends Statement{
 
     public int getY2() {
         return y2;
+    }
+
+    public BlockStatement getBlock(){ return this.block; }
+
+    public boolean isCentralMirror(){ return this.isCentralMirror; }
+
+    @Override
+    public String toString() {
+        if(isCentralMirror()) {
+            return super.toString() + " " + this.x1 + " " + this.y1;
+        }
+        return super.toString() + " " + this.x1 + " " + this.y1 + " " + this.x2 + " " + this.y2;
     }
 }

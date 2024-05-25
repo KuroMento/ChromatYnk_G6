@@ -14,4 +14,9 @@ public class AndExpression extends BooleanExpression{
     public boolean evaluate(){
         return this.left.evaluate() && this.right.evaluate();
     }
+
+    @Override
+    public String toString(){
+        return left.toString() + " AND " + right.toString();
+    }
 }

@@ -21,6 +21,10 @@ public class WhileStatement extends Statement{
         return block;
     }
 
+    @Override
+    public String toString(){
+        return "WHILE " + expression.toString() + " " + block.toString();
+    }
     /*
     public void execute(){
         while(expression.evaluate()){

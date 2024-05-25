@@ -2,6 +2,7 @@ package chromatynk.chromatynk_g6.statements;
 
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlockStatement extends Statement{
@@ -9,6 +10,7 @@ public class BlockStatement extends Statement{
 
     public BlockStatement(LYnkVariableImpl varContext){
         super("BLOCK", varContext);
+        this.block = new ArrayList<>();
     }
 
     public List<Statement> getBlock() {

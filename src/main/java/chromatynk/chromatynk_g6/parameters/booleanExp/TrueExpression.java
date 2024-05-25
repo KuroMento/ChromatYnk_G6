@@ -9,4 +9,7 @@ public class TrueExpression extends BooleanExpression{
     public boolean evaluate(){
         return getValue();
     }
+
+    @Override
+    public String toString(){ return "TRUE"; }
 }

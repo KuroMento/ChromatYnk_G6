@@ -7,11 +7,18 @@ public class ColorStatement extends Statement{
     private ArithmeticExpression red;
     private ArithmeticExpression green;
     private ArithmeticExpression blue;
+
+    private String hexcode;
     public ColorStatement(ArithmeticExpression red, ArithmeticExpression green, ArithmeticExpression blue, LYnkVariableImpl varContext){
         super("COLOR", varContext);
         this.red = red;
         this.green = green;
         this.blue = blue;
+    }
+
+    public ColorStatement(String colorHex, LYnkVariableImpl varContext){
+        super("COLOR", varContext);
+        this.hexcode = colorHex;
     }
 
     public ArithmeticExpression getRed() {
@@ -24,5 +31,22 @@ public class ColorStatement extends Statement{
 
     public ArithmeticExpression getBlue() {
         return blue;
+    }
+
+    public String getHexcode(){ return this.hexcode; }
+
+    public boolean isHexCode(){ return this.hexcode != null; }
+    public boolean isHSV(){ return (0 <= this.red.evaluate() && this.red.evaluate() <= 1) && (0 <= this.green.evaluate() && this.green.evaluate() <= 1) && (0 <= this.blue.evaluate() && this.blue.evaluate() <= 1); }
+    public boolean isRGB(){ return (0 <= this.red.evaluate() && this.red.evaluate() <= 255) && (0 <= this.green.evaluate() && this.green.evaluate() <= 255) && (0 <= this.blue.evaluate() && this.blue.evaluate() <= 255);}
+
+    @Override
+    public String toString() {
+        if( isHexCode()) {
+            return super.toString() + " hexa : " + hexcode;
+        }
+        if( isRGB() ) {
+            return super.toString() + " rgb : " + this.red + " " + this.green + " " + this.blue;
+        }
+        return super.toString() + " hsv : " + this.red + " " + this.green + " " + this.blue;
     }
 }

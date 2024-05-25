@@ -1,5 +1,6 @@
 package chromatynk.chromatynk_g6.parameters.booleanExp;
 
+import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 import chromatynk.chromatynk_g6.parameters.BoolOperator;
 
 public class BoolComparison extends BooleanExpression{
@@ -28,5 +29,10 @@ public class BoolComparison extends BooleanExpression{
             case NOT_EQUAL: return (leftValue != rightValue);
             default: return getValue();
         }
+    }
+
+    @Override
+    public String toString(){
+        return left.toString() + operator.toString() + right.toString();
     }
 }

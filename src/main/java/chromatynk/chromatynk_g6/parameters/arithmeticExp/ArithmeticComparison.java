@@ -1,5 +1,6 @@
 package chromatynk.chromatynk_g6.parameters.arithmeticExp;
 
+import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 import chromatynk.chromatynk_g6.parameters.ArithmeticOperator;
 import chromatynk.chromatynk_g6.parameters.booleanExp.BooleanExpression;
 import chromatynk.chromatynk_g6.parameters.literalExp.LiteralExpression;
@@ -18,6 +19,7 @@ public class ArithmeticComparison extends BooleanExpression {
         final boolean compValue = compare();
         setValue(compValue);
     }
+
     @Override
     public boolean evaluate(){
         return compare();
@@ -72,5 +74,10 @@ public class ArithmeticComparison extends BooleanExpression {
             default:
                 return getValue();
         }
+    }
+
+    @Override
+    public String toString(){
+        return left.toString() + operator.toString() + right.toString();
     }
 }

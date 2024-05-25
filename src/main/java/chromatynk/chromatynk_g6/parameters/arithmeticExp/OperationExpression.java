@@ -32,4 +32,9 @@ public class OperationExpression extends ArithmeticExpression{
         return getValue();
     }
 
+    @Override
+    public String toString(){
+        return left.toString() + operator.toString() + right.toString();
+    }
+
 }

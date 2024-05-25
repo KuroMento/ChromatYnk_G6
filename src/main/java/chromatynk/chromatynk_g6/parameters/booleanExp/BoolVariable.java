@@ -24,4 +24,9 @@ public class BoolVariable extends BooleanExpression{
             return getValue();
         }
     }
+
+    @Override
+    public String toString(){
+        return this.identification;
+    }
 }

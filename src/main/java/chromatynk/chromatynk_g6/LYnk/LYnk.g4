@@ -58,7 +58,7 @@ numStatementParameterX : (arithmeticExpression | PERCENTAGE);
 numStatementParameterY : (arithmeticExpression | PERCENTAGE);
 
 // Statements with block
-ifStatement : 'IF' booleanExpression blockStatement;
+ifStatement : 'IF'  booleanExpression blockStatement;
 forStatement : 'FOR' IDENTIFICATION ('FROM' from=(NUMBER|LONG))? 'TO' to=(NUMBER|LONG) ('STEP' step=(NUMBER|LONG))? blockStatement;
 whileStatement : 'WHILE' booleanExpression blockStatement;
 mimicStatement : 'MIMIC' LONG blockStatement;
@@ -67,7 +67,7 @@ mirrorStatement : 'MIRROR' (x1=numStatementParameterX y1=numStatementParameterY
                            blockStatement; //MIRROR takes 2 or 4 values or %
 
 forwardStatement : 'FWD' numStatementParameterX; // FWD need an expression with a value or %
-backwardStatement : 'BWD' numStatementParameterX; // BWD need an expression with a value or %
+backwardStatement : 'BWD' numStatementParameterX ; // BWD need an expression with a value or %
 
 moveStatement : 'MOV' x=numStatementParameterX y=numStatementParameterY; // MOV need an expression with 2 values or %
 positionStatement : 'POS' x=numStatementParameterX y=numStatementParameterY; // POS need an expression with 2 values or %
@@ -114,5 +114,6 @@ LESS                : '<' ;
 LESS_OR_EQUAL       : '<=' ;
 GREATER             : '>' ;
 GREATER_OR_EQUAL    : '>=' ;
+
 
 SPACE : [ \r\n\t]+ -> skip;

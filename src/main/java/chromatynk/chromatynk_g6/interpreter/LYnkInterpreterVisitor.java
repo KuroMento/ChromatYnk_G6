@@ -1,6 +1,5 @@
 package chromatynk.chromatynk_g6.interpreter;
 
-import chromatynk.chromatynk_g6.Console;
 import chromatynk.chromatynk_g6.LYnk.LYnkBaseVisitor;
 import chromatynk.chromatynk_g6.LYnk.LYnkParser;
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
@@ -8,16 +7,14 @@ import chromatynk.chromatynk_g6.utils.BooleanUtil;
 import chromatynk.chromatynk_g6.utils.NumberUtil;
 import javafx.scene.paint.Color;
 
-import static chromatynk.chromatynk_g6.interpreter.LYnkInterpreter.VOID;
+import static chromatynk.chromatynk_g6.diagnostic.LYnkValidation.VOID;
 
 public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
 
-    private Console console;
     private final LYnkVariable variableList ;
     private CursorManager cursorManager;
     public LYnkInterpreterVisitor(final LYnkVariable variableList){
         super();
-        this.console = new Console();
         this.cursorManager = new CursorManager();
         this.variableList = variableList;
         //this.behaviour = Behaviour.DIRECT;
@@ -46,7 +43,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         if(leftCondition instanceof Boolean && rightCondition instanceof Boolean){
             return BooleanUtil.evalAndOrOperator((Boolean) leftCondition, (Boolean) rightCondition, ctx.op);
         }
-        console.addLine("Operator " + "'" + ctx.op.getText() + "' " + "not supported for String");
         return VOID;
     }
 
@@ -61,7 +57,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         if (condition instanceof Boolean) {
             return (Boolean) condition;
         }
-        console.addLine("NOT needs a boolean comparison to function");
         return VOID;
     }
 
@@ -78,7 +73,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         if(leftCondition instanceof Boolean && rightCondition instanceof Boolean){
             return BooleanUtil.evalBooleanComparisonOperator((Boolean) leftCondition, (Boolean) rightCondition, ctx.boolOperator().op);
         }
-        console.addLine("Operator " + "'" + ctx.op.getText() + "' " + "not supported for Boolean");
         return VOID;
     }
 
@@ -239,7 +233,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     public Object visitIfStatement(final LYnkParser.IfStatementContext ctx) {
         final Object condition = visit(ctx.booleanExpression());
         if(!(condition instanceof Boolean)){
-            console.addLine("IF needs a boolean comparison to function.");
         }
         if(Boolean.TRUE.equals(condition)){
             visit(ctx.blockStatement());
@@ -261,11 +254,9 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         int step = 1;
         try {
             if (variableList.hasVar(ctx.IDENTIFICATION().getText())) {
-                console.addLine("the variable used for the for statement already exists");
                 return VOID;
             }
             if (toCondition.isEmpty()) {
-                console.addLine("the TO in the for statement cannot be empty");
                 return VOID;
             }
             int to = Integer.parseInt(ctx.to.getText());
@@ -298,7 +289,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
     public Object visitWhileStatement(final LYnkParser.WhileStatementContext ctx){
         final Object condition = visit(ctx.booleanExpression());
         if(!(condition instanceof Boolean)){
-            console.addLine("WHILE needs a boolean comparison to function");
         }
         if(Boolean.TRUE.equals(condition)){
             visit(ctx.blockStatement());
@@ -696,7 +686,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         if (o instanceof Number ){
             return  o;
         }
-        console.addLine("Expected a number but found :" + getTypeName(o));
         throw new IllegalStateException("Expected a number but found :" + getTypeName(o));
     }
 
@@ -709,7 +698,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         if (o instanceof String ){
             return  o;
         }
-        console.addLine("Expected a string but found :" + getTypeName(o));
         throw new IllegalStateException("Expected a string but found :" + getTypeName(o));
     }
 
@@ -722,7 +710,6 @@ public class LYnkInterpreterVisitor extends LYnkBaseVisitor<Object> {
         if(o instanceof Boolean){
             return o;
         }
-        console.addLine("Expected a boolean but found : " + getTypeName(o));
         throw new IllegalStateException("Expected a boolean but found : " + getTypeName(o));
     }
 

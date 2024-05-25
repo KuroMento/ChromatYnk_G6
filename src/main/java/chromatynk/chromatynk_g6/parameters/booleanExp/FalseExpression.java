@@ -8,4 +8,7 @@ public class FalseExpression extends BooleanExpression{
     public boolean evaluate(){
         return getValue();
     }
+
+    @Override
+    public String toString(){ return "FALSE"; }
 }

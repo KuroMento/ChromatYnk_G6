@@ -10,4 +10,7 @@ public class LiteralExpression {
     public String evaluate(){
         return this.value;
     }
+
+    @Override
+    public String toString(){ return this.value; }
 }

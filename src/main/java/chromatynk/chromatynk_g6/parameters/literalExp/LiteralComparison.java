@@ -1,5 +1,7 @@
 package chromatynk.chromatynk_g6.parameters.literalExp;
 
+import chromatynk.chromatynk_g6.diagnostic.LYnkValidation;
+import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 import chromatynk.chromatynk_g6.parameters.ArithmeticOperator;
 import chromatynk.chromatynk_g6.parameters.booleanExp.BooleanExpression;
 
@@ -70,5 +72,10 @@ public class LiteralComparison extends BooleanExpression {
             default:
                 return getValue();
         }
+    }
+
+    @Override
+    public String toString(){
+        return left.toString() + operator.toString() + right.toString();
     }
 }

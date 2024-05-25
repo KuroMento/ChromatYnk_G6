@@ -10,6 +10,18 @@ import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.MissingCursorException;
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
+import chromatynk.chromatynk_g6.parameters.ArithmeticOperator;
+import chromatynk.chromatynk_g6.parameters.BoolOperator;
+import chromatynk.chromatynk_g6.parameters.NumberOperator;
+import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticComparison;
+import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticExpression;
+import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticVariable;
+import chromatynk.chromatynk_g6.parameters.arithmeticExp.OperationExpression;
+import chromatynk.chromatynk_g6.parameters.booleanExp.*;
+import chromatynk.chromatynk_g6.parameters.literalExp.LiteralComparison;
+import chromatynk.chromatynk_g6.parameters.literalExp.LiteralExpression;
+import chromatynk.chromatynk_g6.parameters.literalExp.LiteralVariable;
+import chromatynk.chromatynk_g6.statements.*;
 import chromatynk.chromatynk_g6.utils.BooleanUtil;
 import chromatynk.chromatynk_g6.utils.NumberUtil;
 import chromatynk.chromatynk_g6.utils.StringUtil;
@@ -110,8 +122,8 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 }
                 final LYnkValidation statementValidation = visit(statement);
                 if (!statementValidation.isSkipError()) {
-                    System.out.println(statement.getText());
-                    this.validStatements.add(statement.getText());
+                    System.out.println(statementValidation.asString());
+                    this.validStatements.add(statementValidation.asString()); // no voc du coup?
                 }
                 tempValidation = statementValidation;
 
@@ -139,17 +151,21 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     
     @Override
     public LYnkValidation visitBlockStatement(LYnkParser.BlockStatementContext ctx){
+        BlockStatement block = new BlockStatement(varContext);
         LYnkValidation tempValidation = VOID;
         for (LYnkParser.StatementContext statement : ctx.statement()) {
-            System.out.println(statement.getText());
-
             if (tempValidation.isSkipError() || !tempValidation.hasValue()) {
                 return SKIP_ERROR;
             }
             final LYnkValidation statementValidation = visit(statement);
+            if( statementValidation.isStatement() && statementValidation.hasValue() ){
+                final Statement blockStatement = (Statement) statementValidation.value();
+                block.addStatement(blockStatement);
+            }
+            //TODO: Creer liste de valid block statement qu'on renvoie dans le return
             tempValidation = statementValidation;
         }
-        return tempValidation;
+        return LYnkValidation.statement(block);
     }
 
     // Arithmetic Expression Visit
@@ -158,7 +174,12 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
      */
     @Override
     public LYnkValidation visitParenthesisExpression(LYnkParser.ParenthesisExpressionContext ctx){
-        return visit(ctx.arithmeticExpression());
+        final LYnkValidation exp = visit(ctx.arithmeticExpression());
+        if( exp.isSkipError() || !exp.hasValue() ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "The parenthesis arithmetic expression is empty or null");
+            return SKIP_ERROR;
+        }
+        return exp;
     }
 
     @Override
@@ -166,35 +187,32 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         // Either empty value or error already detected deeper in the tree
         final LYnkValidation left = visit(ctx.left);
         if(left.isSkipError() || !left.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "An expression in a division/multiplication is null");
             return SKIP_ERROR;
         }
         final LYnkValidation right = visit(ctx.right);
         if(right.isSkipError() || !right.hasValue()){
-            return SKIP_ERROR;
-        }
-
-        if( right == null || left == null ){
             addIssue(IssueType.ERROR, ctx.getStart(), "An expression in a division/multiplication is null");
             return SKIP_ERROR;
         }
 
         try {
+            if( NumberOperator.getOp(ctx.op.getType()).toString().equals("VOID")){
+                addIssue(IssueType.ERROR, ctx.op.getTokenSource().nextToken(), "Wrong operator: " + ctx.op.getText());
+                return SKIP_ERROR;
+            }
             // Left and Right are either a long or a double
-            if (left.isNumeric() && right.isNumeric()) {
-
-                if (ctx.op.getType() == LYnkParser.DIVISION && (right.value().equals(Double.valueOf("0")))) {
+            if (left.isNumExp() && right.isNumExp()) {
+                final OperationExpression multDivExp = new OperationExpression((ArithmeticExpression) left.value(), NumberOperator.getOp(ctx.op.getType()), (ArithmeticExpression) right.value());
+                if (ctx.op.getType() == LYnkParser.DIVISION && ((ArithmeticExpression) right.value()).evaluate() == 0d ) {
                     addIssue(IssueType.ERROR, ctx.op, "Division by 0 ou 0.0");
                     return SKIP_ERROR;
                 }
-                final Number result = NumberUtil.evalBinaryOperator((Number) left.value(), (Number) right.value(), ctx.op);
-                if (left.isDouble() || right.isDouble()) {
-                    return LYnkValidation.doubleVar((Double) result);
-                }
-                return LYnkValidation.number((Long) result);
+                return LYnkValidation.numExp(multDivExp);
             }
 
             // Left is a numeral and right is a variable
-            if (left.isNumeric() && right.isIdentification()) {
+            if (left.isNumExp() && right.isIdentification()) {
                 if (this.varContext.getVarType(right.asString()) instanceof Boolean || this.varContext.getVarType(right.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The right variable does not have a supported type for this operation: " + this.varContext.getVarType(right.asString()));
                     return SKIP_ERROR;
@@ -204,25 +222,19 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                     return SKIP_ERROR;
                 }
                 final Number rightValue = this.varContext.getNumVarValue(right.asString());
-                final Number result = NumberUtil.evalBinaryOperator((Number) left.value(), rightValue, ctx.op );
-                if (left.isDouble() || rightValue instanceof Double) {
-                    return LYnkValidation.doubleVar((Double) result);
-                }
-                return LYnkValidation.number((Long) result);
+                final OperationExpression multDivExp = new OperationExpression((ArithmeticExpression) left.value(), NumberOperator.getOp(ctx.op.getType()), new ArithmeticExpression(rightValue.doubleValue()));
+                return LYnkValidation.numExp(multDivExp);
             }
 
             // Right is a numeral and left is a variable
-            if (left.isIdentification() && right.isNumeric()) {
+            if (left.isIdentification() && right.isNumExp()) {
                 if (this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The left variable does not have a supported type for this operation: " + this.varContext.getVarType(left.asString()));
                     return SKIP_ERROR;
                 }
-                final Number leftValue = this.varContext.getNumVarValue(left.asString());
-                final Number result = NumberUtil.evalBinaryOperator(leftValue, (Number) right.value(), ctx.op );
-                if (right.isDouble() || leftValue  instanceof Double) {
-                    return LYnkValidation.doubleVar((Double) result);
-                }
-                return LYnkValidation.number((Long) result);
+                final Number leftValue = this.varContext.getNumVarValue(right.asString());
+                final OperationExpression multDivExp = new OperationExpression( new ArithmeticExpression(leftValue.doubleValue()), NumberOperator.getOp(ctx.op.getType()), (ArithmeticExpression) right.value());
+                return LYnkValidation.numExp(multDivExp);
             }
 
             // Left and right are variables
@@ -241,24 +253,16 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 }
                 final Number leftValue = this.varContext.getNumVarValue(left.asString());
                 final Number rightValue = this.varContext.getNumVarValue(right.asString());
-                final var result = NumberUtil.evalBinaryOperator(leftValue, rightValue, ctx.op);
-
-                if (leftValue instanceof Double || rightValue instanceof Double) {
-                    return LYnkValidation.doubleVar((Double) result);
-                }
-                return LYnkValidation.number((Long) result);
+                final OperationExpression multDivExp = new OperationExpression( new ArithmeticExpression(leftValue.doubleValue()), NumberOperator.getOp(ctx.op.getType()), new ArithmeticExpression(rightValue.doubleValue()));
+                return LYnkValidation.numExp(multDivExp);
             }
         }
         catch( VariableDoesNotExistException e){
             addIssue(IssueType.ERROR, ctx.op, "The variable does not exist in the current context!" );
             return SKIP_ERROR;
         }
-        catch (IllegalStateException e){
-            addIssue(IssueType.ERROR, ctx.op, e.getMessage() );
-            return SKIP_ERROR;
-        }
 
-        return LYnkValidation.number(null);
+        return LYnkValidation.numExp(null);
     }
 
     @Override
@@ -266,63 +270,59 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         // Either empty value or error already detected deeper in the tree
         final LYnkValidation left = visit(ctx.left);
         if(left.isSkipError() || !left.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "An expression in a plus/minus is null");
             return SKIP_ERROR;
         }
         final LYnkValidation right = visit(ctx.right);
         if(right.isSkipError() || !right.hasValue()){
-            return SKIP_ERROR;
-        }
-
-        if( right == null || left == null ){
-            addIssue(IssueType.ERROR, ctx.getStart(), "An expression in a addition/subtraction is null");
+            addIssue(IssueType.ERROR, ctx.getStart(), "An expression in a plus/minus is null");
             return SKIP_ERROR;
         }
 
         try {
+            if( NumberOperator.getOp(ctx.op.getType()).toString().equals("VOID")){
+                addIssue(IssueType.ERROR, ctx.op.getTokenSource().nextToken(), "Wrong operator: " + ctx.op.getText());
+                return SKIP_ERROR;
+            }
             // Left and Right are either a long or a double
-            if (left.isNumeric() && right.isNumeric()) {
-                if (ctx.op.getType() == LYnkParser.DIVISION && (right.value().equals(0))) {
-                    addIssue(IssueType.ERROR, ctx.op, "Division by 0!");
+            if (left.isNumExp() && right.isNumExp()) {
+                final OperationExpression plusMinusExp = new OperationExpression((ArithmeticExpression) left.value(), NumberOperator.getOp(ctx.op.getType()), (ArithmeticExpression) right.value());
+                if (ctx.op.getType() == LYnkParser.DIVISION && ((ArithmeticExpression) right.value()).evaluate() == 0d ) {
+                    addIssue(IssueType.ERROR, ctx.op, "Division by 0 ou 0.0");
                     return SKIP_ERROR;
                 }
-                final Number result = NumberUtil.evalBinaryOperator((Number) left.value(), (Number) right.value(), ctx.op);
-                if (left.isDouble() || right.isDouble()) {
-                    return LYnkValidation.doubleVar((Double) result);
-                }
-                return LYnkValidation.number((Long) result);
+                return LYnkValidation.numExp(plusMinusExp);
             }
 
             // Left is a numeral and right is a variable
-            if (left.isNumeric() && right.isIdentification()) {
+            if (left.isNumExp() && right.isIdentification()) {
                 if (this.varContext.getVarType(right.asString()) instanceof Boolean || this.varContext.getVarType(right.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The right variable does not have a supported type for this operation: " + this.varContext.getVarType(right.asString()));
                     return SKIP_ERROR;
                 }
-                final Number rightValue = this.varContext.getNumVarValue(right.asString());
-                final Number result = NumberUtil.evalBinaryOperator((Number) left.value(), rightValue, ctx.op );
-                if (left.isDouble() || rightValue instanceof Double) {
-                    return LYnkValidation.doubleVar((Double) result);
+                if (ctx.op.getType() == LYnkParser.DIVISION && (this.varContext.getNumVarValue(right.asString()).equals(Double.valueOf("0")))) {
+                    addIssue(IssueType.ERROR, ctx.op, "Division by " + right.asString() + " whose value is 0 or 0.0");
+                    return SKIP_ERROR;
                 }
-                return LYnkValidation.number((Long) result);
+                final Number rightValue = this.varContext.getNumVarValue(right.asString());
+                final OperationExpression plusMinusExp = new OperationExpression((ArithmeticExpression) left.value(), NumberOperator.getOp(ctx.op.getType()), new ArithmeticExpression(rightValue.doubleValue()));
+                return LYnkValidation.numExp(plusMinusExp);
             }
 
             // Right is a numeral and left is a variable
-            if (left.isIdentification() && right.isNumeric()) {
-                if ( this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
+            if (left.isIdentification() && right.isNumExp()) {
+                if (this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The left variable does not have a supported type for this operation: " + this.varContext.getVarType(left.asString()));
                     return SKIP_ERROR;
                 }
-                final Number leftValue = this.varContext.getNumVarValue(left.asString());
-                final Number result = NumberUtil.evalBinaryOperator(leftValue, (Number) right.value(), ctx.op );
-                if (right.isDouble() || leftValue  instanceof Double) {
-                    return LYnkValidation.doubleVar((Double) result);
-                }
-                return LYnkValidation.number((Long) result);
+                final Number leftValue = this.varContext.getNumVarValue(right.asString());
+                final OperationExpression plusMinusExp = new OperationExpression( new ArithmeticExpression(leftValue.doubleValue()), NumberOperator.getOp(ctx.op.getType()), (ArithmeticExpression) right.value());
+                return LYnkValidation.numExp(plusMinusExp);
             }
 
             // Left and right are variables
             if (left.isIdentification() && right.isIdentification()) {
-                if ( this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
+                if (this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.op, "The left variable does not have a supported type for this operation: " + this.varContext.getVarType(left.asString()));
                     return SKIP_ERROR;
                 }
@@ -330,26 +330,22 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                     addIssue(IssueType.ERROR, ctx.op, "The right variable does not have a supported type for this operation: " + this.varContext.getVarType(right.asString()));
                     return SKIP_ERROR;
                 }
+                if (ctx.op.getType() == LYnkParser.DIVISION && (this.varContext.getNumVarValue(right.asString()).equals(Double.valueOf("0")))) {
+                    addIssue(IssueType.ERROR, ctx.op, "Division by " + right.asString() + " whose value is 0 or 0.0");
+                    return SKIP_ERROR;
+                }
                 final Number leftValue = this.varContext.getNumVarValue(left.asString());
                 final Number rightValue = this.varContext.getNumVarValue(right.asString());
-                final var result = NumberUtil.evalBinaryOperator(leftValue, rightValue, ctx.op);
-
-                if (leftValue instanceof Double || rightValue instanceof Double) {
-                    return LYnkValidation.doubleVar((Double) result);
-                }
-                return LYnkValidation.number((Long) result);
+                final OperationExpression plusMinusExp = new OperationExpression( new ArithmeticExpression(leftValue.doubleValue()), NumberOperator.getOp(ctx.op.getType()), new ArithmeticExpression(rightValue.doubleValue()));
+                return LYnkValidation.numExp(plusMinusExp);
             }
         }
         catch( VariableDoesNotExistException e){
             addIssue(IssueType.ERROR, ctx.op, "The variable does not exist in the current context!" );
             return SKIP_ERROR;
         }
-        catch (IllegalStateException e){
-            addIssue(IssueType.ERROR, ctx.op, e.getMessage() );
-            return SKIP_ERROR;
-        }
 
-        return LYnkValidation.number(null);
+        return LYnkValidation.numExp(null);
     }
 
     @Override
@@ -357,58 +353,54 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         // Either empty value or error already detected deeper in the tree
         final LYnkValidation left = visit(ctx.left);
         if(left.isSkipError() || !left.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "An arithmetic expression is null");
             return SKIP_ERROR;
         }
         final LYnkValidation right = visit(ctx.right);
         if(right.isSkipError() || !right.hasValue()){
-            return SKIP_ERROR;
-        }
-
-        if( right == null || left == null ){
-            addIssue(IssueType.ERROR, ctx.getStart(), "An expression in a comparaison is null");
+            addIssue(IssueType.ERROR, ctx.getStart(), "An arithmetic expression is null");
             return SKIP_ERROR;
         }
 
         try {
+            if( NumberOperator.getOp(ctx.numOperator().op.getType()).toString().equals("VOID")){
+                addIssue(IssueType.ERROR, ctx.numOperator().op.getTokenSource().nextToken(), "Wrong operator: " + ctx.numOperator().op.getText());
+                return SKIP_ERROR;
+            }
             // Left and Right are either a long or a double
-            if (left.isNumeric() && right.isNumeric()) {
-                if (ctx.numOperator().op.getType() == LYnkParser.DIVISION && (right.value().equals(Double.valueOf("0")))) {
-                    addIssue(IssueType.ERROR, ctx.numOperator().op, "Division by 0!");
+            if (left.isNumExp() && right.isNumExp()) {
+                final OperationExpression Exp = new OperationExpression((ArithmeticExpression) left.value(), NumberOperator.getOp(ctx.numOperator().op.getType()), (ArithmeticExpression) right.value());
+                if (ctx.numOperator().op.getType() == LYnkParser.DIVISION && ((ArithmeticExpression) right.value()).evaluate() == 0d ) {
+                    addIssue(IssueType.ERROR, ctx.numOperator().op, "Division by 0 ou 0.0");
                     return SKIP_ERROR;
                 }
-                final Number result = NumberUtil.evalBinaryOperator((Number) left.value(), (Number) right.value(), ctx.numOperator().op);
-                if (left.isDouble() || right.isDouble()) {
-                    return LYnkValidation.doubleVar((Double) result);
-                }
-                return LYnkValidation.number((Long) result);
+                return LYnkValidation.numExp(Exp);
             }
 
             // Left is a numeral and right is a variable
-            if (left.isNumeric() && right.isIdentification()) {
-                if ( this.varContext.getVarType(right.asString()) instanceof Boolean || this.varContext.getVarType(right.asString()) instanceof String) {
+            if (left.isNumExp() && right.isIdentification()) {
+                if (this.varContext.getVarType(right.asString()) instanceof Boolean || this.varContext.getVarType(right.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.numOperator().op, "The right variable does not have a supported type for this operation: " + this.varContext.getVarType(right.asString()));
                     return SKIP_ERROR;
                 }
-                final Number rightValue = this.varContext.getNumVarValue(right.asString());
-                final Number result = NumberUtil.evalBinaryOperator((Number) left.value(), rightValue, ctx.numOperator().op );
-                if (left.isDouble() || rightValue instanceof Double) {
-                    return LYnkValidation.doubleVar((Double) result);
+                if (ctx.numOperator().op.getType() == LYnkParser.DIVISION && (this.varContext.getNumVarValue(right.asString()).equals(Double.valueOf("0")))) {
+                    addIssue(IssueType.ERROR, ctx.numOperator().op, "Division by " + right.asString() + " whose value is 0 or 0.0");
+                    return SKIP_ERROR;
                 }
-                return LYnkValidation.number((Long) result);
+                final Number rightValue = this.varContext.getNumVarValue(right.asString());
+                final OperationExpression Exp = new OperationExpression((ArithmeticExpression) left.value(), NumberOperator.getOp(ctx.numOperator().op.getType()), new ArithmeticExpression(rightValue.doubleValue()));
+                return LYnkValidation.numExp(Exp);
             }
 
             // Right is a numeral and left is a variable
-            if (left.isIdentification() && right.isNumeric()) {
+            if (left.isIdentification() && right.isNumExp()) {
                 if (this.varContext.getVarType(left.asString()) instanceof Boolean || this.varContext.getVarType(left.asString()) instanceof String) {
                     addIssue(IssueType.ERROR, ctx.numOperator().op, "The left variable does not have a supported type for this operation: " + this.varContext.getVarType(left.asString()));
                     return SKIP_ERROR;
                 }
-                final Number leftValue = this.varContext.getNumVarValue(left.asString());
-                final Number result = NumberUtil.evalBinaryOperator(leftValue, (Number) right.value(), ctx.numOperator().op );
-                if (right.isDouble() || leftValue  instanceof Double) {
-                    return LYnkValidation.doubleVar((Double) result);
-                }
-                return LYnkValidation.number((Long) result);
+                final Number leftValue = this.varContext.getNumVarValue(right.asString());
+                final OperationExpression Exp = new OperationExpression( new ArithmeticExpression(leftValue.doubleValue()), NumberOperator.getOp(ctx.numOperator().op.getType()), (ArithmeticExpression) right.value());
+                return LYnkValidation.numExp(Exp);
             }
 
             // Left and right are variables
@@ -421,26 +413,22 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                     addIssue(IssueType.ERROR, ctx.numOperator().op, "The right variable does not have a supported type for this operation: " + this.varContext.getVarType(right.asString()));
                     return SKIP_ERROR;
                 }
+                if (ctx.numOperator().op.getType() == LYnkParser.DIVISION && (this.varContext.getNumVarValue(right.asString()).equals(Double.valueOf("0")))) {
+                    addIssue(IssueType.ERROR, ctx.numOperator().op, "Division by " + right.asString() + " whose value is 0 or 0.0");
+                    return SKIP_ERROR;
+                }
                 final Number leftValue = this.varContext.getNumVarValue(left.asString());
                 final Number rightValue = this.varContext.getNumVarValue(right.asString());
-                final var result = NumberUtil.evalBinaryOperator(leftValue, rightValue, ctx.numOperator().op);
-
-                if (leftValue instanceof Double || rightValue instanceof Double) {
-                    return LYnkValidation.doubleVar((Double) result);
-                }
-                return LYnkValidation.number((Long) result);
+                final OperationExpression Exp = new OperationExpression( new ArithmeticExpression(leftValue.doubleValue()), NumberOperator.getOp(ctx.numOperator().op.getType()), new ArithmeticExpression(rightValue.doubleValue()));
+                return LYnkValidation.numExp(Exp);
             }
         }
         catch( VariableDoesNotExistException e){
             addIssue(IssueType.ERROR, ctx.numOperator().op, "The variable does not exist in the current context!" );
             return SKIP_ERROR;
         }
-        catch (IllegalStateException e){
-            addIssue(IssueType.ERROR, ctx.numOperator().op, e.getMessage() );
-            return SKIP_ERROR;
-        }
 
-        return LYnkValidation.number(null);
+        return LYnkValidation.numExp(null);
     }
 
     @Override
@@ -450,7 +438,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), "A value in a number expression is null");
             return SKIP_ERROR;
         }
-        return LYnkValidation.doubleVar(value);
+        return LYnkValidation.numExp(new ArithmeticExpression(value.doubleValue()));
     }
 
     @Override
@@ -460,21 +448,31 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), "A value in a long expression is null");
             return SKIP_ERROR;
         }
-        return LYnkValidation.doubleVar(value);
+        return LYnkValidation.numExp(new ArithmeticExpression(value.doubleValue()));
     }
 
     @Override
     public LYnkValidation visitIdentificationExpression(LYnkParser.IdentificationExpressionContext ctx){
         String variable = ctx.IDENTIFICATION().getText();
-        if( variable == null ){
-            addIssue(IssueType.ERROR, ctx.IDENTIFICATION().getSymbol(), "A value in an identification expression is null");
-            return SKIP_ERROR;
+        try {
+            if (variable == null || (!(this.varContext.getVarType(variable) instanceof Double) && !(this.varContext.getVarType(variable) instanceof String))) {
+                addIssue(IssueType.ERROR, ctx.IDENTIFICATION().getSymbol(), variable + " is not a double or a literal");
+                return SKIP_ERROR;
+            }
+            if( this.varContext.getVarType(variable) instanceof Double ){
+                final Double result = this.varContext.getNumVarValue(variable);
+                return LYnkValidation.numExp(new ArithmeticVariable(variable, this.varContext, result.doubleValue()));
+            }
+            if( this.varContext.getVarType(variable) instanceof String ){
+                final String result = this.varContext.getStrVarValue(variable);
+                return LYnkValidation.literalExp(new LiteralVariable(result, this.varContext, variable));
+            }
         }
-        if( !this.varContext.hasVar(variable)) {
+        catch (VariableDoesNotExistException e){
             addIssue(IssueType.ERROR, ctx.IDENTIFICATION().getSymbol(), variable + " does not exist in the current context");
             return SKIP_ERROR;
         }
-        return LYnkValidation.identification(variable);
+        return LYnkValidation.numExp(null);
     }
 
     @Override
@@ -484,7 +482,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), "A value in an arithmetic expression is null");
             return SKIP_ERROR;
         }
-        return LYnkValidation.doubleVar(value);
+        return LYnkValidation.numExp(new ArithmeticExpression(value.doubleValue()));
     }
     // Boolean Expression
 
@@ -528,23 +526,35 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
         try {
             // Both boolean
-            if (left.isBoolean() && right.isBoolean()) {
-                final Boolean value = BooleanUtil.evalAndOrOperator((Boolean) left.value(), (Boolean) right.value(), ctx.op);
-                return LYnkValidation.bool(value);
+            if (left.isBoolExp() && right.isBoolExp()) {
+                if( ctx.op.getText() == "AND" ){
+                    final AndExpression andExp = new AndExpression((BooleanExpression) left.value(), (BooleanExpression) right.value());
+                    return LYnkValidation.boolExp(andExp);
+                }
+                else{
+                    final OrExpression orExp = new OrExpression((BooleanExpression) left.value(), (BooleanExpression) right.value());
+                    return LYnkValidation.boolExp(orExp);
+                }
             }
 
             // left boolean right variable
-            if (left.isBoolean() && right.isIdentification()) {
+            if (left.isBoolExp() && right.isIdentification()) {
                 if (!(this.varContext.getVarType(right.asString()) instanceof Boolean)) {
                     return SKIP_ERROR;
                 }
                 final Boolean rightValue = varContext.getBoolVarValue(right.asString());
-                final Boolean value = BooleanUtil.evalAndOrOperator((Boolean) left.value(), rightValue, ctx.op);
-                return LYnkValidation.bool(value);
+                if( ctx.op.getText() == "AND" ){
+                    final AndExpression andExp = new AndExpression((BooleanExpression) left.value(), new BoolVariable(right.asString(), this.varContext, rightValue.booleanValue()));
+                    return LYnkValidation.boolExp(andExp);
+                }
+                else{
+                    final OrExpression orExp = new OrExpression((BooleanExpression) left.value(), new BoolVariable(right.asString(), this.varContext, rightValue.booleanValue()));
+                    return LYnkValidation.boolExp(orExp);
+                }
             }
 
             // right boolean left variable
-            if (right.isBoolean() && left.isIdentification()) {
+            if (right.isBoolExp() && left.isIdentification()) {
                 if (!(this.varContext.getVarType(left.asString()) instanceof Boolean)) {
                     return SKIP_ERROR;
                 }
@@ -571,10 +581,6 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), e.getMessage() + " does not exist in the current context");
             return SKIP_ERROR;
         }
-        catch (IllegalStateException e){
-            addIssue(IssueType.ERROR, ctx.op, e.getMessage() );
-            return SKIP_ERROR;
-        }
         return LYnkValidation.VOID;
     }
 
@@ -595,18 +601,28 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             if (left != null && right != null){
                 // Both Boolean
                 if(varContext.getVarType(left.getText()) instanceof Boolean && varContext.getVarType(right.getText()) instanceof Boolean){
-                    final Boolean value = BooleanUtil.evalBooleanComparisonOperator(varContext.getBoolVarValue(left.getText()), varContext.getBoolVarValue(right.getText()), ctx.op.op);
-                    return LYnkValidation.bool(value);
+                    if( ctx.op.op.getType() != LYnkParser.EQUAL && ctx.op.op.getType() != LYnkParser.NOT_EQUAL){
+                        addIssue(IssueType.ERROR, ctx.getStart(), "Wrong operator for booleans: " + ctx.op.op.getText());
+                        return SKIP_ERROR;
+                    }
+                    final Boolean leftValue = this.varContext.getBoolVarValue(left.getText());
+                    final Boolean rightValue = this.varContext.getBoolVarValue(right.getText());
+                    final BoolComparison boolComp = new BoolComparison(new BoolVariable(left.getText(), this.varContext, leftValue.booleanValue()), BoolOperator.getOp(ctx.op.op.getType()), new BoolVariable(right.getText(), this.varContext, rightValue.booleanValue()));
+                    return LYnkValidation.boolExp(boolComp);
                 }
                 // Both String
                 if(varContext.getVarType(left.getText()) instanceof String && varContext.getVarType(right.getText()) instanceof String){
-                    final Boolean value = StringUtil.evalLiteralComparisonOperator(varContext.getStrVarValue(left.getText()), varContext.getStrVarValue(right.getText()), ctx.op.op);
-                    return LYnkValidation.bool(value);
+                    final String leftValue = this.varContext.getStrVarValue(left.getText());
+                    final String rightValue = this.varContext.getStrVarValue(right.getText());
+                    final LiteralComparison literalComp = new LiteralComparison(new LiteralVariable(leftValue, this.varContext, left.getText()), ArithmeticOperator.getOp(ctx.op.op.getType()), new LiteralVariable(rightValue, this.varContext, right.getText()));
+                    return LYnkValidation.boolExp(literalComp);
                 }
                 // Both Boolean
                 if(varContext.getVarType(left.getText()) instanceof Double && varContext.getVarType(right.getText()) instanceof Double){
-                    final Boolean value = NumberUtil.evalNumberComparisonOperator(varContext.getNumVarValue(left.getText()), varContext.getNumVarValue(right.getText()), ctx.op.op);
-                    return LYnkValidation.bool(value);
+                    final Number leftValue = this.varContext.getNumVarValue(left.getText());
+                    final Number rightValue = this.varContext.getNumVarValue(right.getText());
+                    final ArithmeticComparison numComp = new ArithmeticComparison( new ArithmeticVariable(left.getText(), this.varContext, leftValue.doubleValue()), ArithmeticOperator.getOp(ctx.op.op.getType()), new ArithmeticVariable(right.getText(), this.varContext, rightValue.doubleValue()));
+                    return LYnkValidation.boolExp(numComp);
                 }
                 addIssue(IssueType.ERROR, ctx.getStart(), "Both variables " + left.getText() + " and " + right.getText() + " are not of the same type");
                 return SKIP_ERROR;
@@ -616,12 +632,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), e.getMessage() + " does not exist in the current context");
             return SKIP_ERROR;
         }
-        catch ( IllegalStateException e ){
-
-            addIssue(IssueType.ERROR, ctx.arithmeticOperator().op, e.getMessage());
-            return SKIP_ERROR;
-        }
-        return LYnkValidation.identification(null);
+        return LYnkValidation.boolExp(null);
     }
 
     @Override
@@ -640,29 +651,29 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 }
 
                 //left and right are numbers
-                if (left.isNumeric() && right.isNumeric()) {
-                    final Boolean value = NumberUtil.evalNumberComparisonOperator((Number) left.value(), (Number) right.value(), ctx.arithmeticOperator().op);
-                    return LYnkValidation.bool(value);
+                if (left.isNumExp() && right.isNumExp()) {
+                    final ArithmeticComparison numComp = new ArithmeticComparison( (ArithmeticExpression) left.value(), ArithmeticOperator.getOp(ctx.op.op.getType()), (ArithmeticExpression) right.value());
+                    return LYnkValidation.boolExp(numComp);
                 }
                 // left number right variable
-                if (left.isNumeric() && right.isIdentification()) {
+                if (left.isNumExp() && right.isIdentification()) {
                     if (!(this.varContext.getVarType(right.asString()) instanceof Double)) {
                         addIssue(IssueType.ERROR, ctx.right.getStart(), ctx.right.getText() + " isn't a Double but is compared to another one");
                         return SKIP_ERROR;
                     }
                     final Number rightValue = varContext.getNumVarValue(right.asString());
-                    final Boolean value = NumberUtil.evalNumberComparisonOperator((Number) left.value(), rightValue, ctx.arithmeticOperator().op);
-                    return LYnkValidation.bool(value);
+                    final ArithmeticComparison numComp = new ArithmeticComparison( (ArithmeticExpression) left.value(), ArithmeticOperator.getOp(ctx.op.op.getType()), new ArithmeticVariable(right.asString(), this.varContext, rightValue.doubleValue()));
+                    return LYnkValidation.boolExp(numComp);
                 }
                 // left variable right number
-                if (left.isIdentification() && right.isNumeric()) {
+                if (left.isIdentification() && right.isNumExp()) {
                     if (!(this.varContext.getVarType(left.asString()) instanceof Double)) {
                         addIssue(IssueType.ERROR, ctx.left.getStart(), ctx.left.getText() + " isn't a Double but is compared to another one");
                         return SKIP_ERROR;
                     }
                     final Number leftValue = varContext.getNumVarValue(left.asString());
-                    final Boolean value = NumberUtil.evalNumberComparisonOperator(leftValue, (Number) right.value(), ctx.arithmeticOperator().op);
-                    return LYnkValidation.bool(value);
+                    final ArithmeticComparison numComp = new ArithmeticComparison(new ArithmeticVariable(left.asString(), this.varContext, leftValue.doubleValue()), ArithmeticOperator.getOp(ctx.op.op.getType()), (ArithmeticExpression) right.value());
+                    return LYnkValidation.boolExp(numComp);
                 }
             }
             // leftLiteral and right not null
@@ -681,8 +692,8 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                     return SKIP_ERROR;
                 }
                 final String rightValue = this.varContext.getStrVarValue(right.asString());
-                final Boolean value = StringUtil.evalLiteralComparisonOperator(leftL.getText(), rightValue, ctx.op.op);
-                return LYnkValidation.bool(value);
+                final LiteralComparison literalComp = new LiteralComparison(new LiteralExpression(leftL.getText()), ArithmeticOperator.getOp(ctx.op.op.getType()), new LiteralVariable(rightValue, this.varContext, right.asString()));
+                return LYnkValidation.boolExp(literalComp);
             }
             // left and rightLiteral not null
             if (ctx.left != null && ctx.right == null && ctx.leftLiteral == null && ctx.rightLiteral != null){
@@ -700,15 +711,15 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                     return SKIP_ERROR;
                 }
                 final String leftValue = this.varContext.getStrVarValue(left.asString());
-                final Boolean value = StringUtil.evalLiteralComparisonOperator(leftValue, rightL.getText(), ctx.op.op);
-                return LYnkValidation.bool(value);
+                final LiteralComparison literalComp = new LiteralComparison(new LiteralVariable(leftValue, this.varContext, left.asString()), ArithmeticOperator.getOp(ctx.op.op.getType()), new LiteralExpression(rightL.getText()));
+                return LYnkValidation.boolExp(literalComp);
             }
             // leftLiteral and rightLiteral not null
             if (ctx.left == null && ctx.right == null && ctx.leftLiteral != null && ctx.rightLiteral != null){
                 final Token leftL = ctx.leftLiteral;
                 final Token rightL = ctx.rightLiteral;
-                final Boolean value = StringUtil.evalLiteralComparisonOperator(leftL.getText(), rightL.getText(), ctx.op.op);
-                return LYnkValidation.bool(value);
+                final LiteralComparison literalComp = new LiteralComparison(new LiteralExpression(leftL.getText()), ArithmeticOperator.getOp(ctx.op.op.getType()), new LiteralExpression(rightL.getText()));
+                return LYnkValidation.boolExp(literalComp);
             }
         }
         catch( VariableDoesNotExistException e ){
@@ -734,8 +745,8 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return SKIP_ERROR;
         }
 
-        if(right == null || left == null){
-            addIssue(IssueType.ERROR, ctx.getStart(), "A value is empty in a boolean comparaison");
+        if( ctx.op.op.getType() != LYnkParser.EQUAL && ctx.op.op.getType() != LYnkParser.NOT_EQUAL){
+            addIssue(IssueType.ERROR, ctx.getStart(), "Wrong operator for booleans: " + ctx.op.op.getText());
             return SKIP_ERROR;
         }
         // Both boolean
@@ -745,7 +756,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 return LYnkValidation.bool(value);
             }
             // left boolean right variable
-            if (left.isBoolean() && right.isIdentification()) {
+            if (left.isBoolExp() && right.isIdentification()) {
                 if (!(this.varContext.getVarType(right.asString()) instanceof Boolean)) {
                     addIssue(IssueType.ERROR, ctx.right.getStart(), ctx.right.getText() + " isn't a Boolean but is compared to another one");
                     return SKIP_ERROR;
@@ -756,7 +767,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             }
 
             // right boolean left variable
-            if (right.isBoolean() && left.isIdentification()) {
+            if (right.isBoolExp() && left.isIdentification()) {
                 if (!(this.varContext.getVarType(left.asString()) instanceof Boolean)) {
                     addIssue(IssueType.ERROR, ctx.left.getStart(), ctx.left.getText() + " isn't a Boolean but is compared to another one");
                     return SKIP_ERROR;
@@ -790,7 +801,6 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), e.getMessage() + " does not exist in the current context");
             return SKIP_ERROR;
         }
-        return LYnkValidation.bool(null);
     }
     
     @Override
@@ -801,25 +811,26 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return SKIP_ERROR;
         }
         try {
-            final Object variableValue = varContext.getVarValue(ctx.IDENTIFICATION().getText());
+            final String variable = ctx.IDENTIFICATION().getText();
+            final Object variableValue = varContext.getVarValue(variable);
             if( variableValue instanceof Boolean){
-                return LYnkValidation.bool((Boolean) variableValue);
+                final BoolVariable boolVar = new BoolVariable(variable, this.varContext, ((Boolean)variableValue).booleanValue());
+                return LYnkValidation.boolExp(boolVar);
             }
             if( variableValue instanceof String){
-                return LYnkValidation.string((String) variableValue);
+                final LiteralVariable literalVar = new LiteralVariable( (String) variableValue, this.varContext, variable);
+                return LYnkValidation.literalExp(literalVar);
             }
             if( variableValue instanceof Double){
-                return LYnkValidation.doubleVar((Double) variableValue);
-            }
-            if( variableValue instanceof Long){
-                return LYnkValidation.number((Long) variableValue);
+                final ArithmeticVariable numVar = new ArithmeticVariable(variable, this.varContext, ((Double)variableValue).doubleValue());
+                return LYnkValidation.numExp(numVar);
             }
         }
         catch(VariableDoesNotExistException e){
             addIssue(IssueType.ERROR, ctx.getStart(), e.getMessage() + " does not exist in the current context");
             return SKIP_ERROR;
         }
-        return LYnkValidation.identification(null);
+        return LYnkValidation.boolExp(null);
     }
 
     @Override
@@ -851,7 +862,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return LYnkValidation.doubleVar(Double.parseDouble(value));
         }
         addIssue(IssueType.ERROR, ctx.getStart(), "Statement parameter X is empty!");
-        return LYnkValidation.doubleVar(null);
+        return LYnkValidation.numExp(null);
     }
 
     @Override
@@ -869,7 +880,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return LYnkValidation.doubleVar(Double.parseDouble(value));
         }
         addIssue(IssueType.ERROR, ctx.getStart(), "Statement parameter Y is empty!");
-        return LYnkValidation.doubleVar(null);
+        return LYnkValidation.numExp(null);
     }
 
     /**
@@ -878,6 +889,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
     @Override
     public LYnkValidation visitIfStatement(LYnkParser.IfStatementContext ctx){
+
         if( ctx.booleanExpression() == null){
             addIssue(IssueType.ERROR, ctx.getStart(), " IF statement should have a boolean expression!");
             return SKIP_ERROR;
@@ -901,6 +913,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
     @Override
     public LYnkValidation visitWhileStatement(LYnkParser.WhileStatementContext ctx){
+        System.out.println(ctx.children);
         if( ctx.booleanExpression() == null){
             addIssue(IssueType.ERROR, ctx.getStart(), " WHILE statement should have a boolean expression!");
             return SKIP_ERROR;
@@ -934,7 +947,8 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.to, ctx.IDENTIFICATION().getText() + " already exist in the context. This should be a new variable!");
             return SKIP_ERROR;
         }
-        this.varContext.setNumVarValue(ctx.IDENTIFICATION().getText(), Double.parseDouble(ctx.to.getText()));
+        final String forVar = ctx.IDENTIFICATION().getText();
+        this.varContext.setNumVarValue(forVar, Double.parseDouble(ctx.to.getText()));
 
         if( ctx.to.getType() != LYnkParser.LONG && ctx.to.getType() != LYnkParser.NUMBER ){
             addIssue(IssueType.ERROR, ctx.to, "Expected a long or an integer value (at to) but found : " + ctx.to.getText());
@@ -958,9 +972,26 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             this.varContext.delete(ctx.IDENTIFICATION().getText());
         }
         catch (VariableDoesNotExistException e){
-            addIssue(IssueType.ERROR, ctx.IDENTIFICATION().getSymbol(), " The variable " + e.getMessage() + " does not exist in the FOR statement");
+            addIssue(IssueType.ERROR, ctx.IDENTIFICATION().getSymbol(), " The temporary variable " + e.getMessage() + " does not exist anymore in the FOR statement");
+            return SKIP_ERROR;
         }
-        return LYnkValidation.VOID;
+        // Getting back all the values for the ForStatement
+        int to = Integer.parseInt(ctx.to.getText());
+        int from;
+        int step;
+        if( ctx.from == null ){
+            from = 0;
+        }
+        else{
+            from = Integer.parseInt(ctx.from.getText());
+        }
+        if( ctx.step == null ){
+            step = 1;
+        }
+        else{
+            step = Integer.parseInt(ctx.step.getText());
+        }
+        return LYnkValidation.statement(new ForStatement(forVar,from,to,step,(BlockStatement) block.value(), this.varContext));
     }
 
     @Override
@@ -977,31 +1008,31 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     public LYnkValidation visitMirrorStatement(LYnkParser.MirrorStatementContext ctx){
         // 2 parameters (x1, y1)
         if(ctx.x2==null && ctx.y2==null && !(ctx.x1==null) && !(ctx.y1==null)){
-            final LYnkValidation x1Value = visitNumStatementParameterX(ctx.x1);
+            final LYnkValidation x1Value = visit(ctx.x1);
             if( x1Value.isSkipError() || !x1Value.hasValue()){
                 addIssue(IssueType.ERROR, ctx.x1.getStart(), "The first parameter has a null value or a wrong type : " + ctx.x1.getText());
                 return SKIP_ERROR;
             }
-            final LYnkValidation y1Value = visitNumStatementParameterY(ctx.y1);
+            final LYnkValidation y1Value = visit(ctx.y1);
             if( y1Value.isSkipError() || !y1Value.hasValue()){
                 addIssue(IssueType.ERROR, ctx.y1.getStart(), "The second parameter has a null value or a wrong type : " + ctx.y1.getText());
                 return SKIP_ERROR;
             }
             final LYnkValidation block = visit(ctx.blockStatement());
             if( block.isSkipError() || !block.hasValue()){
-                addIssue(IssueType.ERROR, ctx.blockStatement().getStart(), "An error occured in a MIRROR block");
+                addIssue(IssueType.ERROR, ctx.blockStatement().getStart(), "An error occurred in a MIRROR block");
                 return SKIP_ERROR;
             }
             return VOID;
         }
         // 1 or 3 parameters
         if( !(ctx.x2 == null) && ctx.y2 == null || ctx.x2 == null && !(ctx.y2 == null) || ctx.x1 == null && !(ctx.y1 == null) || !(ctx.x1 == null) && ctx.y1 == null){
-            addIssue(IssueType.ERROR, ctx.getStart(), "Mirror statement requires 2 or 4 arguments but found 3!");
+            addIssue(IssueType.ERROR, ctx.getStart(), "Mirror statement requires 2 or 4 arguments but found 1 or 3!");
             return SKIP_ERROR;
         }
         // 4 parameters (x1, y1, x2, y2)
         if(!(ctx.x2==null) && !(ctx.y2==null) && !(ctx.x1==null) && !(ctx.y1==null)){
-            final LYnkValidation x1Value = visitNumStatementParameterX(ctx.x1);
+            final LYnkValidation x1Value = visit(ctx.x1);
             if( x1Value.isSkipError() || !x1Value.hasValue()){
                 addIssue(IssueType.ERROR, ctx.x1.getStart(), "The first parameter has a null value or a wrong type : " + ctx.x1.getText());
                 return SKIP_ERROR;
@@ -1011,7 +1042,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 addIssue(IssueType.ERROR, ctx.y1.getStart(), "The second parameter has a null value or a wrong type : " + ctx.y1.getText());
                 return SKIP_ERROR;
             }
-            final LYnkValidation x2Value = visitNumStatementParameterX(ctx.x2);
+            final LYnkValidation x2Value = visit(ctx.x2);
             if( x2Value.isSkipError() || !x2Value.hasValue()){
                 addIssue(IssueType.ERROR, ctx.x2.getStart(), "The third parameter has a null value or a wrong type : " + ctx.x2.getText());
                 return SKIP_ERROR;
@@ -1036,27 +1067,34 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     @Override
     public LYnkValidation visitForwardStatement(LYnkParser.ForwardStatementContext ctx){
         if(!(ctx.numStatementParameterX() == null)){
-            final LYnkValidation fwdValue = visitNumStatementParameterX(ctx.numStatementParameterX());
+            if ( isLetter( ctx.numStatementParameterX().getText().charAt(0)) ){
+                addIssue(IssueType.ERROR, ctx.getStart(), "FWD statement was not given a parameter");
+                return SKIP_ERROR;
+            }
+            final LYnkValidation fwdValue = visit(ctx.numStatementParameterX());
             if( fwdValue.isSkipError() || !fwdValue.hasValue()){
                 addIssue(IssueType.ERROR, ctx.getStart(), "The value passed in FWD is null or the wrong type: " + ctx.numStatementParameterX().getText());
                 return SKIP_ERROR;
             }
             return VOID;
         }
-        // no params
-        addIssue(IssueType.ERROR, ctx.getStart(), "FWD statement was not given a parameter");
+        // no params (antlr does not support having nothing, so we detect if the given parameter is the beginning of a statement
         return SKIP_ERROR;
     }
 
     @Override
     public LYnkValidation visitBackwardStatement(LYnkParser.BackwardStatementContext ctx){
         if(!(ctx.numStatementParameterX() == null)){
-            final LYnkValidation bwdValue = visitNumStatementParameterX(ctx.numStatementParameterX());
+            if ( isLetter( ctx.numStatementParameterX().getText().charAt(0)) ){
+                addIssue(IssueType.ERROR, ctx.getStart(), "FWD statement was not given a parameter");
+                return SKIP_ERROR;
+            }
+            final LYnkValidation bwdValue = visit(ctx.numStatementParameterX());
             if( bwdValue.isSkipError() || !bwdValue.hasValue()){
                 addIssue(IssueType.ERROR, ctx.getStart(), "The value passed in FWD is null or the wrong type: " + ctx.numStatementParameterX().getText());
                 return SKIP_ERROR;
             }
-            return VOID;
+            return LYnkValidation.statement(new BackwardStatement((ArithmeticExpression) bwdValue.value(), varContext));
         }
         // no params
         addIssue(IssueType.ERROR, ctx.getStart(), "BWD statement was not given a parameter");
@@ -1066,7 +1104,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     @Override
     public LYnkValidation visitMoveStatement(LYnkParser.MoveStatementContext ctx){
         // no params
-        if(ctx.x == null && ctx.y == null){
+        if((ctx.x == null && ctx.y == null) || isLetter( ctx.numStatementParameterX().getText().charAt(0))){
             addIssue(IssueType.ERROR, ctx.getStart(), "MOV statement was not given a parameter");
             return SKIP_ERROR;
         }
@@ -1078,12 +1116,12 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
 
         // 2 parameters
-        final LYnkValidation xValue = visitNumStatementParameterX(ctx.x);
+        final LYnkValidation xValue = visit(ctx.x);
         if( xValue.isSkipError() || !xValue.hasValue()){
             addIssue(IssueType.ERROR, ctx.x.getStart(), "The x parameter has a null value or a wrong type : " + ctx.x.getText());
             return SKIP_ERROR;
         }
-        final LYnkValidation yValue = visitNumStatementParameterY(ctx.y);
+        final LYnkValidation yValue = visit(ctx.y);
         if( yValue.isSkipError() || !yValue.hasValue()){
             addIssue(IssueType.ERROR, ctx.y.getStart(), "The y parameter has a null value or a wrong type : " + ctx.y.getText());
             return SKIP_ERROR;
@@ -1094,7 +1132,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     @Override
     public LYnkValidation visitPositionStatement(LYnkParser.PositionStatementContext ctx){
         // no params
-        if(ctx.x == null && ctx.y == null){
+        if((ctx.x == null && ctx.y == null) || isLetter( ctx.numStatementParameterX().getText().charAt(0))){
             addIssue(IssueType.ERROR, ctx.getStart(), "MOV statement was not given a parameter");
             return SKIP_ERROR;
         }
@@ -1106,17 +1144,17 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
 
         // 2 parameters
-        final LYnkValidation xValue = visitNumStatementParameterX(ctx.x);
+        final LYnkValidation xValue = visit(ctx.x);
         if( xValue.isSkipError() || !xValue.hasValue()){
             addIssue(IssueType.ERROR, ctx.x.getStart(), "The x parameter has a null value or a wrong type : " + ctx.x.getText());
             return SKIP_ERROR;
         }
-        final LYnkValidation yValue = visitNumStatementParameterY(ctx.y);
+        final LYnkValidation yValue = visit(ctx.y);
         if( yValue.isSkipError() || !yValue.hasValue()){
             addIssue(IssueType.ERROR, ctx.y.getStart(), "The x parameter has a null value or a wrong type : " + ctx.y.getText());
             return SKIP_ERROR;
         }
-        return VOID;
+        return LYnkValidation.statement(new PositionStatement((ArithmeticExpression) xValue.value(), (ArithmeticExpression) yValue.value(), this.varContext));
     }
 
     @Override
@@ -1132,16 +1170,28 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     @Override
     public LYnkValidation visitColorStatement(LYnkParser.ColorStatementContext ctx) {
         // no params
-        if( ctx.HEXCODE() == null && ctx.arithmeticExpression() == null){
+        if( (ctx.HEXCODE() == null && ctx.arithmeticExpression() == null)  || isLetter( ctx.HEXCODE().getText().charAt(0)) || isLetter( ctx.arithmeticExpression(0).getText().charAt(0))){
             addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement was not given parameters");
             return SKIP_ERROR;
         }
-        // 1 or 2 params when expected 3
+        // 1 or 2 params when expected 3 for rgb
         if( (ctx.arithmeticExpression(0)==null && ctx.arithmeticExpression(1)==null && !(ctx.arithmeticExpression(2)==null)) || (ctx.arithmeticExpression(0)==null && !(ctx.arithmeticExpression(1)==null) && !(ctx.arithmeticExpression(2)==null))){
             addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement found 1 or 2 parameter for arithmeticExpressions but expected 3: " + ctx.arithmeticExpression().toString());
             return SKIP_ERROR;
         }
-        return VOID;
+        // 1 param and hexcode
+        if( ctx.HEXCODE() != null ){
+            final String hexcode = ctx.HEXCODE().getText();
+            return LYnkValidation.statement(new ColorStatement(hexcode, this.varContext));
+        }
+        // 3 param rgb (WORK FOR hsv FORMAT AS WELL)
+        if( ctx.arithmeticExpression(0) != null && ctx.arithmeticExpression(1) != null && ctx.arithmeticExpression(2) != null ){
+            final ArithmeticExpression red = (ArithmeticExpression) visit(ctx.arithmeticExpression(0)).value();
+            final ArithmeticExpression green = (ArithmeticExpression) visit(ctx.arithmeticExpression(1)).value();
+            final ArithmeticExpression blue = (ArithmeticExpression) visit(ctx.arithmeticExpression(2)).value();
+            return LYnkValidation.statement(new ColorStatement(red,green,blue,this.varContext));
+        }
+        return SKIP_ERROR;
     }
 
     @Override
@@ -1173,11 +1223,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return VOID;
         }
         catch( MissingCursorException e){
-            addIssue(IssueType.ERROR, ctx.LONG().getSymbol(), "The cursor n°" + ctx.LONG().getText() + " does not exist in the current context!");
+            addIssue(IssueType.ERROR, ctx.LONG().getSymbol(), "The cursor n°" + ctx.LONG().getText() + " does not exist in the current context");
             return SKIP_ERROR;
         }
         catch( CursorException e){
-            addIssue(IssueType.ERROR, ctx.LONG().getSymbol(), "The cursor n°" + ctx.LONG().getText() + " is in use in a block!");
+            addIssue(IssueType.ERROR, ctx.LONG().getSymbol(), "The cursor n°" + ctx.LONG().getText() + " is invalid!");
             return SKIP_ERROR;
         }
     }
@@ -1262,6 +1312,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 addIssue(IssueType.ERROR, ctx.y.getStart(), "The y parameter has a null value or a wrong type : " + ctx.y.getText());
                 return SKIP_ERROR;
             }
+            return LYnkValidation.statement(new LookAtStatement((ArithmeticExpression) xValue.value(), (ArithmeticExpression) yValue.value(), this.varContext));
         }
         // 1 id
         if(ctx.LONG() != null && ctx.x == null && ctx.y == null ){
@@ -1285,7 +1336,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error");
             return SKIP_ERROR;
         }
-        return VOID;
+        return LYnkValidation.statement(new RotationStatement((ArithmeticExpression) arithmetic.value(), this.varContext));
     }
 
     /**
@@ -1295,8 +1346,9 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     @Override
     public LYnkValidation visitStringDeclaration(LYnkParser.StringDeclarationContext ctx){
         String variable = ctx.IDENTIFICATION().getText();
+        //System.out.println(ctx.children);
         // no param
-        if(variable == null){
+        if( variable.equals("<missing IDENTIFICATION>")){
             addIssue(IssueType.ERROR, ctx.getStart(), "A variable name is needed in STR statement");
             return SKIP_ERROR;
         }
@@ -1307,17 +1359,18 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
         if( !(variable==null) && !this.varContext.hasVar(variable) && ctx.LITERAL() == null){
             this.varContext.setStrVarValue(variable, "");
-            return VOID;
+            return LYnkValidation.statement(new StringDeclaration(variable, this.varContext ));
         }
         // var name and its value
         if( !(variable==null) && this.varContext.hasVar(variable) && !(ctx.LITERAL() == null)){
             this.varContext.setStrVarValue(variable, ctx.LITERAL().getText());
-            return VOID;
+            return LYnkValidation.statement(new StringDeclaration(variable, ctx.LITERAL().getText(), this.varContext ));
         }
         if( !(variable==null) && !this.varContext.hasVar(variable) && !(ctx.LITERAL() == null)){
             this.varContext.setStrVarValue(variable, ctx.LITERAL().getText());
-            return VOID;
+            return LYnkValidation.statement(new StringDeclaration(variable, ctx.LITERAL().getText(), this.varContext ));
         }
+        addIssue(IssueType.WARNING, ctx.getStart(), "STR declaration unrecognizable");
         return SKIP_ERROR;
     }
 
@@ -1325,7 +1378,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     public LYnkValidation visitBoolDeclaration(LYnkParser.BoolDeclarationContext ctx){
         String variable = ctx.IDENTIFICATION().getText();
         // no param
-        if(variable==null){
+        if(variable.equals("<missing IDENTIFICATION>") || ctx.IDENTIFICATION() == null){
             addIssue(IssueType.ERROR, ctx.getStart(), "A variable name is needed in BOOL statement");
             return SKIP_ERROR;
         }
@@ -1357,6 +1410,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             this.varContext.setBoolVarValue(variable, bool.value());
             return VOID;
         }
+        addIssue(IssueType.WARNING, ctx.getStart(), "BOOL declaration unrecognizable");
         return SKIP_ERROR;
     }
 
@@ -1364,7 +1418,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     public LYnkValidation visitNumberDeclaration(LYnkParser.NumberDeclarationContext ctx){
         String variable = ctx.IDENTIFICATION().getText();
         // no param
-        if(variable == null){
+        if( variable.equals("<missing IDENTIFICATION>") ){
             addIssue(IssueType.ERROR, ctx.getStart(), "A variable name is needed in NUM statement");
             return SKIP_ERROR;
         }
@@ -1375,7 +1429,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
         if( !(variable==null) && !this.varContext.hasVar(variable) && ctx.arithmeticExpression() == null){
             this.varContext.setNumVarValue(variable, Double.parseDouble("0"));
-            return VOID;
+            return LYnkValidation.statement(new NumberDeclaration(variable, this.varContext));
         }
         // var name and its value
         if( !(variable== null) && this.varContext.hasVar(variable) && !(ctx.arithmeticExpression()== null)){
@@ -1384,8 +1438,8 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression has a null value or has an error");
                 return SKIP_ERROR;
             }
-            this.varContext.setNumVarValue(variable, number.value());
-            return VOID;
+            this.varContext.setNumVarValue(variable, ((ArithmeticExpression)number.value()).evaluate());
+            return LYnkValidation.statement(new NumberDeclaration(variable,(ArithmeticExpression) number.value(), this.varContext));
         }
         if( !variable.isEmpty() && !this.varContext.hasVar(variable) && !ctx.arithmeticExpression().isEmpty()){
             final LYnkValidation number = visit(ctx.arithmeticExpression());
@@ -1393,9 +1447,10 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression has a null value or has an error");
                 return SKIP_ERROR;
             }
-            this.varContext.setNumVarValue(variable, number.value());
-            return VOID;
+            this.varContext.setNumVarValue(variable, ((ArithmeticExpression)number.value()).evaluate());
+            return LYnkValidation.statement(new NumberDeclaration(variable,(ArithmeticExpression) number.value(), this.varContext));
         }
+        addIssue(IssueType.WARNING, ctx.getStart(), "NUM declaration unrecognizable");
         return SKIP_ERROR;
     }
 
@@ -1403,7 +1458,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     public LYnkValidation visitDeleteDeclaration(LYnkParser.DeleteDeclarationContext ctx){
         String variable = ctx.IDENTIFICATION().getText();
         // no param
-        if(variable == null){
+        if( variable.equals("<missing IDENTIFICATION>") ){
             addIssue(IssueType.ERROR, ctx.getStart(), "A variable name is needed in DEL statement");
             return SKIP_ERROR;
         }
@@ -1411,13 +1466,14 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             // Delete existing var
             if (!(variable == null)) {
                 this.varContext.delete(variable);
-                return VOID;
+                return LYnkValidation.statement(new DeleteDeclaration(variable, this.varContext));
             }
         }
         catch( VariableDoesNotExistException e){
             addIssue(IssueType.ERROR, ctx.IDENTIFICATION().getSymbol(), ctx.IDENTIFICATION().getText() + " does not exist in the current context");
             return SKIP_ERROR;
         }
+        addIssue(IssueType.WARNING, ctx.getStart(), "DEL declaration unrecognizable");
         return SKIP_ERROR;
     }
 
@@ -1442,5 +1498,22 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     @Override
     public void reportContextSensitivity(Parser parser, DFA dfa, int i, int i1, int i2, ATNConfigSet atnConfigSet) {
         //no implementation at the moment
+    }
+
+    /**
+     * Return if a character is a letter
+     * @param value char
+     * @return true if value is a letter
+     */
+    public boolean isLetter(char value){
+        // Majuscule
+        if( value >= 65 || value <= 90){
+            return true;
+        }
+        // Minuscule
+        if( value >= 97 || value <= 122){
+            return true;
+        }
+        return false;
     }
 }

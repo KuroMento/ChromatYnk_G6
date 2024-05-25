@@ -23,4 +23,9 @@ public class ArithmeticVariable extends ArithmeticExpression{
             return getValue();
         }
     }
+
+    @Override
+    public String toString(){
+        return this.identification;
+    }
 }
