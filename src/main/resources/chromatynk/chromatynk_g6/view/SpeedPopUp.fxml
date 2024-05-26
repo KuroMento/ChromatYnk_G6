@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="200.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chromatynk.chromatynk_g6.controller.Controller">
+   <Button layoutX="312.0" layoutY="156.0" mnemonicParsing="false" text="Change" onAction="#handleChange"/>
+   <TextField fx:id="speedField" layoutX="22.0" layoutY="88.0" prefHeight="24.0" prefWidth="356.0"/>
+   <Text layoutX="22.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Execution speed : (seconds)"/>
+   <Button layoutX="237.0" layoutY="156.0" mnemonicParsing="false" onAction="#handleCancel" text="Cancel"/>
+</AnchorPane>

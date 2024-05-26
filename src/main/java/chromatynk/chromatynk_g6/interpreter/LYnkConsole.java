@@ -13,10 +13,7 @@ import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExi
 import chromatynk.chromatynk_g6.parameters.ArithmeticOperator;
 import chromatynk.chromatynk_g6.parameters.BoolOperator;
 import chromatynk.chromatynk_g6.parameters.NumberOperator;
-import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticComparison;
-import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticExpression;
-import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticVariable;
-import chromatynk.chromatynk_g6.parameters.arithmeticExp.OperationExpression;
+import chromatynk.chromatynk_g6.parameters.arithmeticExp.*;
 import chromatynk.chromatynk_g6.parameters.booleanExp.*;
 import chromatynk.chromatynk_g6.parameters.literalExp.LiteralComparison;
 import chromatynk.chromatynk_g6.parameters.literalExp.LiteralExpression;
@@ -56,7 +53,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     //When the value is false, the syntaxError method returns without displaying errors.
     private static boolean REPORT_SYNTAX_ERRORS = true;
     private static boolean SYNTAX_ERROR = false;
-    private static boolean CONSOLE_DEBUG = false;
+    private static boolean CONSOLE_DEBUG = true;
 
     public static void main(String[] args){
         try {
@@ -121,6 +118,16 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         else{
             System.out.println("CONSOLE_DEBUG is not active!");
         }
+    }
+
+    /**
+     * Actualize the width and height for calculating percentages. Technically used for getting back the Canvas' dimensions.
+     * @param width The wanted width ( of the Canvas )
+     * @param height The wanted height ( of the Canvas )
+     */
+    public void setWidthAndHeight(int width, int height){
+        this.width = width;
+        this.height = height;
     }
 
     /**
@@ -216,8 +223,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 }
                 final LYnkValidation statementValidation = visit(statement);
                 if (!statementValidation.isSkipError() && !SYNTAX_ERROR) {
-                    System.out.println(statementValidation.asString());
-                    this.validStatements.add((Statement) statementValidation.value()); // no voc du coup?
+                    this.validStatements.add((Statement) statementValidation.value());
                 }
                 tempValidation = statementValidation;
             }
@@ -265,26 +271,35 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.statement(block);
     }
 
-    // Arithmetic Expression Visit
     /**
      * Arithmetic Expressions
      */
 
     /**
-     *
+     * Called when visiting a parenthesis <code>{@link ArithmeticExpression}</code>.
      * @param ctx the parse tree
-     * @return
+     * @return An <code>{@link ArithmeticExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
      */
     @Override
     public LYnkValidation visitParenthesisExpression(LYnkParser.ParenthesisExpressionContext ctx){
+        if( ctx.arithmeticExpression().getText().isEmpty() || ctx.arithmeticExpression() == null){
+            addIssue(IssueType.ERROR, ctx.getStart(), "The parenthesis boolean expression is empty or null");
+            return SKIP_ERROR;
+        }
         final LYnkValidation exp = visit(ctx.arithmeticExpression());
         if( exp.isSkipError() || !exp.hasValue() ){
             addIssue(IssueType.ERROR, ctx.getStart(), "The parenthesis arithmetic expression is empty or null");
             return SKIP_ERROR;
         }
-        return exp;
+        final ArithmeticParenthesis parenthesis = new ArithmeticParenthesis((ArithmeticExpression) exp.value());
+        return LYnkValidation.numExp(parenthesis);
     }
 
+    /**
+     * Called when visiting an operation between 2 <code>{@link ArithmeticExpression}</code>.
+     * @param ctx the parse tree
+     * @return An <code>{@link ArithmeticExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitMulDivExpression(LYnkParser.MulDivExpressionContext ctx){
         // Either empty value or error already detected deeper in the tree
@@ -368,6 +383,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.numExp(null);
     }
 
+    /**
+     * Called when visiting an operation between 2 <code>{@link ArithmeticExpression}</code>.
+     * @param ctx the parse tree
+     * @return An <code>{@link ArithmeticExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitPlusMinusExpression(LYnkParser.PlusMinusExpressionContext ctx){
         // Either empty value or error already detected deeper in the tree
@@ -451,6 +471,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.numExp(null);
     }
 
+    /**
+     * Called when visiting an operation between 2 <code>{@link ArithmeticExpression}</code>.
+     * @param ctx the parse tree
+     * @return An <code>{@link ArithmeticExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitCompExpression(LYnkParser.CompExpressionContext ctx){
         // Either empty value or error already detected deeper in the tree
@@ -534,6 +559,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.numExp(null);
     }
 
+    /**
+     * Called when visiting a Number <code>{@link ArithmeticExpression}</code>.
+     * @param ctx the parse tree
+     * @return An <code>{@link ArithmeticExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitNumberExpression(LYnkParser.NumberExpressionContext ctx) {
         final Double value = Double.parseDouble(ctx.NUMBER().getText());
@@ -544,6 +574,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.numExp(new ArithmeticExpression(value.doubleValue()));
     }
 
+    /**
+     * Called when visiting a Long <code>{@link ArithmeticExpression}</code>.
+     * @param ctx the parse tree
+     * @return An <code>{@link ArithmeticExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitLongExpression(LYnkParser.LongExpressionContext ctx){
         Double value = Double.parseDouble(ctx.LONG().getText());
@@ -554,6 +589,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.numExp(new ArithmeticExpression(value.doubleValue()));
     }
 
+    /**
+     * Called when visiting an <code>{@link ArithmeticVariable}</code>.
+     * @param ctx the parse tree
+     * @return An <code>{@link ArithmeticExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitIdentificationExpression(LYnkParser.IdentificationExpressionContext ctx){
         String variable = ctx.IDENTIFICATION().getText();
@@ -578,6 +618,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.numExp(null);
     }
 
+    /**
+     * Called when visiting a Double <code>{@link ArithmeticExpression}</code>.
+     * @param ctx the parse tree
+     * @return An <code>{@link ArithmeticExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitDoubleExpression(LYnkParser.DoubleExpressionContext ctx){
         Double value = Double.parseDouble(ctx.DOUBLE().getText());
@@ -587,21 +632,36 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
         return LYnkValidation.numExp(new ArithmeticExpression(value.doubleValue()));
     }
-    // Boolean Expression
 
     /**
      * Boolean Expressions
      */
 
+    /**
+     * Called when visiting a parenthesis <code>{@link BooleanExpression}</code>.
+     * @param ctx the parse tree
+     * @return A <code>{@link BooleanExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitParenthesisVar(LYnkParser.ParenthesisVarContext ctx){
-        if( ctx.booleanExpression() == null ){
+        if( ctx.booleanExpression().getText().isEmpty() || ctx.booleanExpression() == null ){
             addIssue(IssueType.ERROR, ctx.getStart(), "The parenthesis boolean expression is empty or null");
             return SKIP_ERROR;
         }
-        return visit(ctx.booleanExpression());
+        final LYnkValidation exp = visit(ctx.booleanExpression());
+        if( exp.isSkipError() || !exp.hasValue() ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "The parenthesis boolean expression is empty or null");
+            return SKIP_ERROR;
+        }
+        final BooleanParenthesis parenthesis = new BooleanParenthesis((BooleanExpression) exp.value());
+        return LYnkValidation.boolExp(parenthesis);
     }
 
+    /**
+     * Called when visiting a <code>{@link NotExpression}</code>.
+     * @param ctx the parse tree
+     * @return A <code>{@link BooleanExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitNotExpression(LYnkParser.NotExpressionContext ctx){
         if(ctx.booleanExpression() == null){
@@ -614,6 +674,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.boolExp(null);
     }
 
+    /**
+     * Called when visiting an <code>{@link AndExpression}</code> or an <code>{@link OrExpression}</code>.
+     * @param ctx the parse tree
+     * @return A <code>{@link BooleanExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitAndOrExpression(LYnkParser.AndOrExpressionContext ctx){
         // Either empty value or error already detected deeper in the tree
@@ -633,7 +698,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         try {
             // Both boolean
             if (left.isBoolExp() && right.isBoolExp()) {
-                if( ctx.op.getText() == "AND" ){
+                if( ctx.op.getText().equals("AND") ){
                     final AndExpression andExp = new AndExpression((BooleanExpression) left.value(), (BooleanExpression) right.value());
                     return LYnkValidation.boolExp(andExp);
                 }
@@ -649,7 +714,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                     return SKIP_ERROR;
                 }
                 final Boolean rightValue = varContext.getBoolVarValue(right.asString());
-                if( ctx.op.getText() == "AND" ){
+                if( ctx.op.getText().equals("AND") ){
                     final AndExpression andExp = new AndExpression((BooleanExpression) left.value(), new BoolVariable(right.asString(), this.varContext, rightValue.booleanValue()));
                     return LYnkValidation.boolExp(andExp);
                 }
@@ -665,7 +730,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                     return SKIP_ERROR;
                 }
                 final Boolean leftValue = varContext.getBoolVarValue(left.asString());
-                if( ctx.op.getText() == "AND" ){
+                if( ctx.op.getText().equals("AND") ){
                     final AndExpression andExp = new AndExpression(new BoolVariable(left.asString(), this.varContext, leftValue.booleanValue()), (BooleanExpression) right.value());
                     return LYnkValidation.boolExp(andExp);
                 }
@@ -685,7 +750,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 }
                 final Boolean leftValue = this.varContext.getBoolVarValue(left.asString());
                 final Boolean rightValue = this.varContext.getBoolVarValue(right.asString());
-                if( ctx.op.getText() == "AND" ){
+                if( ctx.op.getText().equals("AND") ){
                     final AndExpression andExp = new AndExpression( new BoolVariable(left.asString(), this.varContext, leftValue.booleanValue()), new BoolVariable(right.asString(), this.varContext, rightValue.booleanValue()));
                     return LYnkValidation.boolExp(andExp);
                 }
@@ -702,7 +767,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.VOID;
     }
 
-
+    /**
+     * Called when visiting a comparison between <code>{@link BoolVariable}</code> or <code>{@link LiteralVariable}</code> or <code>{@link ArithmeticVariable}</code>.
+     * @param ctx the parse tree
+     * @return A <code>{@link BooleanExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitVarComparison(LYnkParser.VarComparisonContext ctx){
         final Token left = ctx.left;
@@ -753,6 +822,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.boolExp(null);
     }
 
+    /**
+     * Called when visiting a <code>{@link LiteralComparison}</code> or an <code>{@link ArithmeticComparison}</code>.
+     * @param ctx the parse tree
+     * @return A <code>{@link BooleanExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitArithmeticLiteralComparison(LYnkParser.ArithmeticLiteralComparisonContext ctx) {
         try {
@@ -851,6 +925,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.bool(null);
     }
 
+    /**
+     * Called when visiting a <code>{@link BoolComparison}</code> expression.
+     * @param ctx the parse tree
+     * @return A <code>{@link BooleanExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitBooleanComparison(LYnkParser.BooleanComparisonContext ctx){
         // Either empty value or error already detected deeper in the tree
@@ -905,7 +984,12 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return SKIP_ERROR;
         }
     }
-    
+
+    /**
+     * Called when visiting a <code>{@link BoolVariable}</code>.
+     * @param ctx the parse tree
+     * @return A <code>{@link BooleanExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitIdentificationVar(LYnkParser.IdentificationVarContext ctx){
         // TODO: Revoir la maniere dont on stocke les variables et leurs valeurs
@@ -936,11 +1020,21 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.boolExp(null);
     }
 
+    /**
+     * Called when visiting a True Expression
+     * @param ctx the parse tree
+     * @return A <code>{@link BooleanExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitTrueVar(LYnkParser.TrueVarContext ctx){
         return LYnkValidation.boolExp(new TrueExpression());
     }
 
+    /**
+     * Called when visiting a False Expression
+     * @param ctx the parse tree
+     * @return A <code>{@link BooleanExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitFalseVar(LYnkParser.FalseVarContext ctx){
         return LYnkValidation.boolExp(new FalseExpression());
@@ -950,6 +1044,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
      * Statement Parameter X and Y
      */
 
+    /**
+     * Called when visiting a NumStatementParameter dedicated to the X axis, checks for errors
+     * @param ctx the parse tree
+     * @return An <code>{@link ArithmeticExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitNumStatementParameterX(LYnkParser.NumStatementParameterXContext ctx){
         if(!(ctx.arithmeticExpression() == null)){
@@ -970,6 +1069,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.numExp(null);
     }
 
+    /**
+     * Called when visiting a NumStatementParameter dedicated to the Y axis, checks for errors
+     * @param ctx the parse tree
+     * @return An <code>{@link ArithmeticExpression}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitNumStatementParameterY(LYnkParser.NumStatementParameterYContext ctx){
         if(!(ctx.arithmeticExpression()==null)){
@@ -990,12 +1094,12 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.numExp(null);
     }
 
-    /**
+    /*
      * Statements
      */
 
     /**
-     * Called when visiting a IF statement, checks for errors
+     * Called when visiting an IF statement, checks for errors
      * @param ctx the parse tree
      * @return A <code>{@link IfStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
      */
@@ -1306,30 +1410,32 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement was not given correct parameters");
             return SKIP_ERROR;
         }
-        final LYnkValidation p1 = visit(ctx.arithmeticExpression(0));
-        final LYnkValidation p2 = visit(ctx.arithmeticExpression(1));
-        final LYnkValidation p3 = visit(ctx.arithmeticExpression(2));
-        // no params
-        if( (p1.isSkipError() || !p1.hasValue()) && (p2.isSkipError() || !p2.hasValue()) && (p3.isSkipError() || !p3.hasValue())){
-            addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement was given wrong parameters, check type");
-            return SKIP_ERROR;
-        }
-        // 1 or 2 params when expected 3 for rgb
-        if( (p3.isSkipError() || !p3.hasValue()) || ((p2.isSkipError() || !p2.hasValue()) && (p3.isSkipError() || !p3.hasValue())) ){
-            addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement found 1 or 2 correct parameter for arithmeticExpressions but expected 3: [" + ctx.arithmeticExpression(0).getText() + " " + ctx.arithmeticExpression(1).getText() + "] ");
-            return SKIP_ERROR;
+        if( !ctx.arithmeticExpression().isEmpty() ){
+            final LYnkValidation p1 = visit(ctx.arithmeticExpression(0));
+            final LYnkValidation p2 = visit(ctx.arithmeticExpression(1));
+            final LYnkValidation p3 = visit(ctx.arithmeticExpression(2));
+            // no params
+            if ((p1.isSkipError() || !p1.hasValue()) && (p2.isSkipError() || !p2.hasValue()) && (p3.isSkipError() || !p3.hasValue())) {
+                addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement was given wrong parameters, check type");
+                return SKIP_ERROR;
+            }
+            // 1 or 2 params when expected 3 for rgb
+            if ((p3.isSkipError() || !p3.hasValue()) || ((p2.isSkipError() || !p2.hasValue()) && (p3.isSkipError() || !p3.hasValue()))) {
+                addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement found 1 or 2 correct parameter for arithmeticExpressions but expected 3: [" + ctx.arithmeticExpression(0).getText() + " " + ctx.arithmeticExpression(1).getText() + "] ");
+                return SKIP_ERROR;
+            }
+            // 3 param rgb (WORK FOR hsv FORMAT AS WELL)
+            if (ctx.arithmeticExpression(0) != null && ctx.arithmeticExpression(1) != null && ctx.arithmeticExpression(2) != null) {
+                final ArithmeticExpression red = (ArithmeticExpression) p1.value();
+                final ArithmeticExpression green = (ArithmeticExpression) p2.value();
+                final ArithmeticExpression blue = (ArithmeticExpression) p3.value();
+                return LYnkValidation.statement(new ColorStatement(red, green, blue, this.varContext));
+            }
         }
         // 1 param and hexcode
         if( ctx.HEXCODE() != null ){
             final String hexcode = ctx.HEXCODE().getText();
             return LYnkValidation.statement(new ColorStatement(hexcode, this.varContext));
-        }
-        // 3 param rgb (WORK FOR hsv FORMAT AS WELL)
-        if( ctx.arithmeticExpression(0) != null && ctx.arithmeticExpression(1) != null && ctx.arithmeticExpression(2) != null ){
-            final ArithmeticExpression red = (ArithmeticExpression) p1.value();
-            final ArithmeticExpression green = (ArithmeticExpression) p2.value();
-            final ArithmeticExpression blue = (ArithmeticExpression) p3.value();
-            return LYnkValidation.statement(new ColorStatement(red,green,blue,this.varContext));
         }
         return SKIP_ERROR;
     }
@@ -1585,7 +1691,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 return SKIP_ERROR;
             }
             this.varContext.setBoolVarValue(variable, ((BooleanExpression)bool.value()).evaluate());
-            return LYnkValidation.statement(new BoolDeclaration(variable, new BooleanExpression( ((BooleanExpression)bool.value()).evaluate()), varContext));
+            return LYnkValidation.statement(new BoolDeclaration(variable, (BooleanExpression)bool.value(), varContext));
         }
         if( !(variable==null) && !this.varContext.hasVar(variable) && !(ctx.booleanExpression()==null)){
             final LYnkValidation bool = visit(ctx.booleanExpression());
@@ -1594,7 +1700,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
                 return SKIP_ERROR;
             }
             this.varContext.setBoolVarValue(variable, ((BooleanExpression)bool.value()).evaluate());
-            return LYnkValidation.statement(new BoolDeclaration(variable, new BooleanExpression( ((BooleanExpression)bool.value()).evaluate()), varContext));
+            return LYnkValidation.statement(new BoolDeclaration(variable, (BooleanExpression)bool.value(), varContext));
         }
         addIssue(IssueType.WARNING, ctx.getStart(), "BOOL declaration unrecognizable");
         return SKIP_ERROR;
@@ -1656,7 +1762,6 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         // no param
         if( variable.equals("<missing IDENTIFICATION>") ){
             addIssue(IssueType.ERROR, ctx.getStart(), "A variable name is needed in DEL statement");
-            System.out.println(ctx.getStart());
             return SKIP_ERROR;
         }
         try {
@@ -1690,7 +1795,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
         // System.out.println(msg);
         if( (msg.substring(0,10).equals("extraneous")) && !SYNTAX_ERROR){
-            this.issues.push(new LYnkIssue(IssueType.ERROR, "Incomplete statement causing syntax errors.", line, charPositionInLine, msg));
+            this.issues.push(new LYnkIssue(IssueType.ERROR, "[CRITICAL]: Incomplete statement causing syntax errors and input modifications.", line, charPositionInLine, msg));
             SYNTAX_ERROR = true;
         }
         if( msg.substring(0,17).equals("token recognition")){

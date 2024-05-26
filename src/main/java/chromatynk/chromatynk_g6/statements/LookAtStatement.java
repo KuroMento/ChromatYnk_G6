@@ -3,6 +3,9 @@ package chromatynk.chromatynk_g6.statements;
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticExpression;
 
+/**
+ * A LOOKAT statement's representation
+ */
 public class LookAtStatement extends Statement{
     private long cursorId;
     private ArithmeticExpression x;
@@ -40,8 +43,8 @@ public class LookAtStatement extends Statement{
     @Override
     public String toString() {
         if(isIdLookAt()){
-            return super.toString() + " " + this.cursorId;
+            return super.toString() + " " + this.cursorId + "\n";
         }
-        return super.toString() + " " + this.x + " " + this.y;
+        return super.toString() + " " + this.x + " " + this.y + "\n";
     }
 }

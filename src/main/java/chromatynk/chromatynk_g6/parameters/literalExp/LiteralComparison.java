@@ -18,6 +18,7 @@ public class LiteralComparison extends BooleanExpression {
         this.operator = operator;
         final boolean compValue = compare();
         setValue(compValue);
+        setExpression(toString());
     }
     @Override
     public boolean evaluate(){

@@ -12,5 +12,10 @@ public class LiteralExpression {
     }
 
     @Override
-    public String toString(){ return this.value; }
+    public String toString(){
+        if( this instanceof LiteralVariable variable){
+            return variable.toString();
+        }
+        return this.value;
+    }
 }

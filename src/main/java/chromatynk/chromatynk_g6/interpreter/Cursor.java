@@ -37,7 +37,7 @@ public class Cursor {
     /**
      * a variable that shows the value of opacity.
      */
-    private float opacity;
+    private double opacity;
 
     /**
      * a variable that notices user if the cursor is visible or not.
@@ -155,13 +155,16 @@ public class Cursor {
         this.color = color;
     }
 
-    public float getOpacity() {
+    public double getOpacity() {
         return opacity;
     }
 
-    public void setOpacity(float opacity) throws OutOfRangeException {
-        if(opacity < 0 || opacity > 1){
-            throw new OutOfRangeException();
+    public void setOpacity(double opacity){
+        if(opacity < 0){
+            opacity = 0;
+        }
+        if(opacity > 1){
+            opacity = 1;
         }
         this.opacity = opacity;
     }
@@ -198,14 +201,22 @@ public class Cursor {
      * Place the cursor on the Canva when user uses pixels
      * @param posX the position on horizontal axe.
      * @param posY the position on vertical axe.
-     * @throws NegativeNumberException verify the cursor is not out of the canvas
      */
-    public void placeCursor(int posX,int posY) throws NegativeNumberException{
-        if(posY < 0 || posX < 0) {
-            throw new NegativeNumberException();
+    public void placeCursor(int posX,int posY){
+        // If the new values are outside of the canevas
+        if(posX < 0){
+            posX = 0;
         }
-
-        //Add the verification for the canvas
+        if(posY < 0){
+            posY = 0;
+        }
+         /*
+         if(posX > width) {
+             posX = width;
+         }
+         if(posY > height){
+             posY = height;
+         }*/
         this.posX= posX;
         this.posY= posY;
     }
@@ -214,18 +225,24 @@ public class Cursor {
      * Move the cursor on the Canva using the relative position
      * @param posX the amount to move in pixel on the horizontal axe.
      * @param posY the amount to move in pixel on the vertical axe.
-     * @throws NegativeNumberException verify the cursor is not out of the canvas
      */
-    public void moveCursor(int posX, int posY) throws NegativeNumberException {
+    public void moveCursor(int posX, int posY){
         int newPosX = this.posX + posX;
         int newPosY = this.posY + posY;
-
-        if (newPosX < 0 || newPosY < 0) {
-            throw new NegativeNumberException("The position : (" + newPosX + "x ; " + newPosY + " y) is out of the Canvas!");
+        // If the new values are outside of the canevas
+        if(newPosX < 0){
+            newPosX = 0;
         }
-
-
-        //Add the verification for the canvas
+        if(newPosY < 0){
+            newPosY = 0;
+        }
+         /*
+         if(newPosX > width) {
+             newPosX = width;
+         }
+         if(newPosY > height){
+             newPosY = height;
+         }*/
         this.posX = newPosX;
         this.posY = newPosY;
     }
@@ -246,30 +263,29 @@ public class Cursor {
      * @param value the value from witch the cursor will advance
      * @throws NegativeNumberException verify the cursor is not out of the canvas
      */
-     public void forward(int value) throws NegativeNumberException{
-         if (value < 0 ){
-            throw new NegativeNumberException();
-         }
-         double newX;
-         double newY;
+    public void forward(double value) {
+        int deltaX = (int)( value * Math.cos(this.rotationAngle));
+        int deltaY = (int)( value * Math.sin(this.rotationAngle));
+        int x = this.posX + deltaX;
+        int y = this.posY + deltaY;
+        // If the new values are outside of the canevas
+        if(x < 0){
+            x = 0;
+        }
+        if(y < 0){
+            y = 0;
+        }/*
+        if(x > width) {
+            x = width;
+        }
+        if(y > height){
+            y = height;
+        }
+        drawline(cursorManager.getSelectedCursorId(), x, y);*/
+    }
 
-             newX = Math.cos(Math.toRadians(this.rotationAngle))*value +this.posX; // Math use trigonometry in radiants so the conversion is needed
-             newY = Math.sin(Math.toRadians(this.rotationAngle))*value +this.posY;
 
-         if(newX < 0 ){
-            newX = 0;
-         }
-         if(newY < 0){
-            newY = 0;
-         }
-         // TODO:Add the verification for the canvas
-
-         this.posX = (int) newX;
-         this.posY = (int) newY;
-     }
-
-
-     /**
+    /**
      *  Move the cursor backward
      * @param value the value form witch the cursor goes backward
      * @throws NegativeNumberException verify the cursor is not out of the canvas

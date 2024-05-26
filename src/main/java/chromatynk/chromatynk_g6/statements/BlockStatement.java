@@ -5,6 +5,9 @@ import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A block statement's representation
+ */
 public class BlockStatement extends Statement{
     private List<Statement> block;
 
@@ -23,20 +26,11 @@ public class BlockStatement extends Statement{
 
     @Override
     public String toString() {
-        String blockMsg = "{ ";
+        String blockMsg = "{\n";
         for(Statement statement : block){
-            blockMsg = blockMsg + " " + statement.toString();
+            blockMsg = blockMsg + statement.toString();
         }
-        blockMsg = blockMsg + " }";
+        blockMsg = blockMsg + "}";
         return blockMsg;
     }
-
-    /*
-    public void execute(){
-        for(Statement currentStatement : this.block){
-            currentStatement.setVarContext(this.getVarContext());
-            currentStatement.execute();
-            this.setVarContext(currentStatement.getVarContext());
-        }
-    }*/
 }

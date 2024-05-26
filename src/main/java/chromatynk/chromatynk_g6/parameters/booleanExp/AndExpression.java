@@ -8,6 +8,7 @@ public class AndExpression extends BooleanExpression{
         super(left.evaluate() && right.evaluate());
         this.left = left;
         this.right = right;
+        setExpression(toString());
     }
 
     @Override

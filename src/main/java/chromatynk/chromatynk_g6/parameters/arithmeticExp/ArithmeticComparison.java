@@ -18,6 +18,7 @@ public class ArithmeticComparison extends BooleanExpression {
         this.operator = operator;
         final boolean compValue = compare();
         setValue(compValue);
+        setExpression(toString());
     }
 
     @Override

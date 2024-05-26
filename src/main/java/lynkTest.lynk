@@ -1,1 +1,13 @@
-STR
+STR a = "Hello"
+BOOL b = (3*3 > 3) AND (TRUE OR FALSE)
+NUM c = 3 + 6 / (2+1)
+
+IF (b) {
+    CURSOR 1
+    SELECT 1
+    COLOR #03A062
+    FOR i TO 4{
+        FWD 30
+        TURN 150
+    }
+}

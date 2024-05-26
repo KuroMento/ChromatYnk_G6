@@ -1,0 +1,16 @@
+STR a = "Hello"
+
+BOOL b = true
+
+NUM c = 3.0+6.0/(2.0+1.0)
+
+IF ((b)){
+CURSOR 1
+SELECT 1
+COLOR #03A062
+FOR i FROM 0 TO 4 STEP 1 {
+FWD 30.0
+TURN 150.0 
+}
+}
+

@@ -2,6 +2,10 @@ package chromatynk.chromatynk_g6.statements;
 
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 
+
+/**
+ * A REMOVE statement's representation
+ */
 public class RemoveStatement extends Statement{
     private long cursorId;
     public RemoveStatement(long cursorId, LYnkVariableImpl varContext){
@@ -15,6 +19,6 @@ public class RemoveStatement extends Statement{
 
     @Override
     public String toString() {
-        return super.toString() + " " + this.cursorId;
+        return super.toString() + " " + this.cursorId + " \n";
     }
 }

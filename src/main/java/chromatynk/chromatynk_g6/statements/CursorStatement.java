@@ -2,6 +2,9 @@ package chromatynk.chromatynk_g6.statements;
 
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 
+/**
+ * A CURSOR statement's representation
+ */
 public class CursorStatement extends Statement{
     private long cursorId;
     public CursorStatement(long cursorId, LYnkVariableImpl varContext){
@@ -15,6 +18,6 @@ public class CursorStatement extends Statement{
 
     @Override
     public String toString() {
-        return super.toString() + " " + cursorId;
+        return super.toString() + " " + cursorId + "\n";
     }
 }

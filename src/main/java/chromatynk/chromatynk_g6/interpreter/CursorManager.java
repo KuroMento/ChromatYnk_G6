@@ -60,11 +60,6 @@ public class CursorManager {
         return this.cursors.get(id);
     }
 
-    @Override
-    public String toString(){
-        return this.cursors.toString();
-    }
-
     /**
      * Checks if a cursor exists within the Canvas.
      * @param id The id of the wanted cursor to check
@@ -272,30 +267,14 @@ public class CursorManager {
     /**
      * Move forward every active cursor (Selected and Temporary).
      * @param value The distance to move forward
-     * @throws NegativeNumberException a number is negative
      */
-    public void forward(int value) throws NegativeNumberException {
+    public void forward(double value) {
         getSelectedCursor().forward(value);
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.forward(value);
         }
         for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
             mirrorCursor.forward(value);
-        }
-    }
-
-    /**
-     * Move backward every active cursor (Selected and Temporary).
-     * @param value The distance to move backward
-     * @throws NegativeNumberException a number is negative
-     */
-    public void backward(int value) throws NegativeNumberException {
-        getSelectedCursor().backward(value);
-        for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
-            mimicCursor.backward(value);
-        }
-        for(Cursor mirrorCursor : this.getSelectedCursor().getMirror()){
-            mirrorCursor.backward(value);
         }
     }
 
@@ -317,9 +296,8 @@ public class CursorManager {
      * Move every cursor's position by the amount passed in the parameters. (i.e. Moves the cursor based on its relative position)
      * @param x value to add on the horizontal axis
      * @param y value to add on the vertical axis
-     * @throws NegativeNumberException a number is negative
      */
-    public void move(int x, int y) throws NegativeNumberException {
+    public void move(int x, int y){
         getSelectedCursor().moveCursor(x,y);
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.moveCursor(x,y);
@@ -330,13 +308,12 @@ public class CursorManager {
     }
 
     /**
-     * Add to every cursor's position the amount passed in the parameters. (i.e. Change the cursor position based on its relative position)
+     * Put every cursor's position at amount passed in the parameters. (i.e. Change the cursor position)
      * @param x value to add on the horizontal axis
      * @param y value to add on the vertical axis
-     * @throws NegativeNumberException a number is negative
      */
-    public void position(int x, int y) throws NegativeNumberException {
-        getSelectedCursor().moveCursor(x,y);
+    public void position(int x, int y){
+        getSelectedCursor().placeCursor(x, y);
     }
 
     /**
@@ -367,10 +344,9 @@ public class CursorManager {
 
     /**
      * Set the opacity of every active cursor.
-     * @param value The new opacity value
-     * @throws OutOfRangeException out of range
+     * @param value double new opacity value
      */
-    public void press(float value) throws OutOfRangeException {
+    public void press(double value){
         getSelectedCursor().setOpacity(value);
         for(Cursor mimicCursor : this.getSelectedCursor().getMimics()){
             mimicCursor.setOpacity(value);

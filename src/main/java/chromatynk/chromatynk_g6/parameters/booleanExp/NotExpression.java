@@ -5,6 +5,7 @@ public class NotExpression extends BooleanExpression{
     public NotExpression(BooleanExpression booleanExpression){
         super(!booleanExpression.evaluate());
         this.boolExp = booleanExpression;
+        setExpression(toString());
     }
 
     @Override

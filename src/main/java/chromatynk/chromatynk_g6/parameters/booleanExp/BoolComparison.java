@@ -14,6 +14,7 @@ public class BoolComparison extends BooleanExpression{
         this.operator = operator;
         this.right = right;
         setValue(compare());
+        setExpression(toString());
     }
 
     @Override

@@ -3,6 +3,9 @@ package chromatynk.chromatynk_g6.statements;
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticExpression;
 
+/**
+ * A MOV statement's representation
+ */
 public class MoveStatement extends Statement{
     private ArithmeticExpression x;
     private ArithmeticExpression y;
@@ -22,6 +25,6 @@ public class MoveStatement extends Statement{
 
     @Override
     public String toString() {
-        return super.toString() + " " + this.x.toString() + " " + this.y.toString();
+        return super.toString() + " " + this.x.toString() + " " + this.y.toString() + "\n";
     }
 }

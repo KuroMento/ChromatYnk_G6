@@ -2,6 +2,9 @@ package chromatynk.chromatynk_g6.statements;
 
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 
+/**
+ * A MIMIC statement's representation
+ */
 public class MimicStatement extends Statement{
     private long cursorId;
     private BlockStatement block;
@@ -18,6 +21,6 @@ public class MimicStatement extends Statement{
 
     @Override
     public String toString() {
-        return super.toString() + " " + this.cursorId + " " + this.block.toString();
+        return super.toString() + " " + this.cursorId + " " + this.block.toString() + "\n";
     }
 }

@@ -2,6 +2,9 @@ package chromatynk.chromatynk_g6.statements;
 
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 
+/**
+ * A FOR statement's representation
+ */
 public class ForStatement extends Statement{
     private String variableName;
     private int from;
@@ -39,25 +42,6 @@ public class ForStatement extends Statement{
 
     @Override
     public String toString() {
-        return super.toString() + " " + this.variableName + " FROM " + this.from + " TO " + this.to + " STEP " + this.step + " " + this.block.toString();
+        return super.toString() + " " + this.variableName + " FROM " + this.from + " TO " + this.to + " STEP " + this.step + " " + this.block.toString() + "\n";
     }
-
-    /*
-    public void execute(){
-        if(to >= from && step > 0){
-            for(int i = from; i < to; i = i + step){
-                this.setVarContext(this.getVarContext());
-                block.setVarContext(this.getVarContext());
-                block.execute();
-                this.setVarContext(block.getVarContext());
-            }
-        }
-        if(to < from && step < 0){
-            for(int i = from; i > to; i = i + step){
-                block.setVarContext(this.getVarContext());
-                block.execute();
-                this.setVarContext(block.getVarContext());
-            }
-        }
-    }*/
 }

@@ -3,6 +3,10 @@ package chromatynk.chromatynk_g6.statements;
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticExpression;
 
+
+/**
+ * A PRESS statement's representation
+ */
 public class PressStatement extends Statement{
     private ArithmeticExpression expression;
 
@@ -17,6 +21,6 @@ public class PressStatement extends Statement{
 
     @Override
     public String toString() {
-        return super.toString() + "  " + this.expression.toString();
+        return super.toString() + "  " + this.expression.toString() + " \n";
     }
 }

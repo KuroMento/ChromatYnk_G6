@@ -3,6 +3,9 @@ package chromatynk.chromatynk_g6.statements;
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticExpression;
 
+/**
+ * A MIRROR statement's representation
+ */
 public class MirrorStatement extends Statement{
     private ArithmeticExpression x1;
     private ArithmeticExpression  y1;
@@ -50,8 +53,8 @@ public class MirrorStatement extends Statement{
     @Override
     public String toString() {
         if(isCentralMirror()) {
-            return super.toString() + " " + this.x1 + " " + this.y1;
+            return super.toString() + " " + this.x1 + " " + this.y1 + " " + this.block + "\n";
         }
-        return super.toString() + " " + this.x1 + " " + this.y1 + " " + this.x2 + " " + this.y2;
+        return super.toString() + " " + this.x1 + " " + this.y1 + " " + this.x2 + " " + this.y2 + " " + this.block + "\n";
     }
 }

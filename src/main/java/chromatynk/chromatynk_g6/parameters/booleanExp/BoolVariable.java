@@ -11,6 +11,7 @@ public class BoolVariable extends BooleanExpression{
         super(value);
         this.identification = identification;
         this.varContext = varContext;
+        setExpression(toString());
     }
 
     @Override

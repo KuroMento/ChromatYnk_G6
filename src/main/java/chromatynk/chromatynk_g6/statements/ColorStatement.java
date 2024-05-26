@@ -3,6 +3,9 @@ package chromatynk.chromatynk_g6.statements;
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticExpression;
 
+/**
+ * A COLOR statement's representation
+ */
 public class ColorStatement extends Statement{
     private ArithmeticExpression red;
     private ArithmeticExpression green;
@@ -42,11 +45,11 @@ public class ColorStatement extends Statement{
     @Override
     public String toString() {
         if( isHexCode()) {
-            return super.toString() + " hexa : " + hexcode;
+            return super.toString() + " " + hexcode + "\n";
         }
         if( isRGB() ) {
-            return super.toString() + " rgb : " + this.red + " " + this.green + " " + this.blue;
+            return super.toString() + " " + this.red + " " + this.green + " " + this.blue + "\n";
         }
-        return super.toString() + " hsv : " + this.red + " " + this.green + " " + this.blue;
+        return super.toString() + " " + this.red + " " + this.green + " " + this.blue + "\n";
     }
 }

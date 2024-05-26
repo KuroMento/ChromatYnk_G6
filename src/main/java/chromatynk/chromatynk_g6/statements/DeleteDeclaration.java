@@ -2,6 +2,9 @@ package chromatynk.chromatynk_g6.statements;
 
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 
+/**
+ * A DEL declaration's representation
+ */
 public class DeleteDeclaration extends Statement{
     private String identification;
     public DeleteDeclaration(String identification, LYnkVariableImpl varContext){
@@ -15,6 +18,6 @@ public class DeleteDeclaration extends Statement{
 
     @Override
     public String toString() {
-        return super.toString() + " " + this.identification;
+        return super.toString() + " " + this.identification + "\n";
     }
 }

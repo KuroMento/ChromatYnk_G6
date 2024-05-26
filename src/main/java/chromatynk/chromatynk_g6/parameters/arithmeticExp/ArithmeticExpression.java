@@ -16,6 +16,12 @@ public class ArithmeticExpression {
 
     @Override
     public String toString(){
+        if( this instanceof ArithmeticVariable variable){
+            return variable.toString();
+        }
+        if( this instanceof OperationExpression operationExpression){
+            return operationExpression.toString();
+        }
         return String.valueOf(value);
     }
 }
