@@ -9,3 +9,12 @@ There are two ways of reading instructions :
 - loading them with a file (the file needs to be on the .lynk format).
 
 In the settings, the execution speed can be chosen (default speed is 1).
+
+Authors :
+-Olivier Compagnon--Minarro
+-Clément Delamotte
+-Matthias Franchini
+-Célian Mignot
+-Hénoch Xu
+
+ING1 GI3 - G6

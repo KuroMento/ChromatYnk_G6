@@ -141,6 +141,7 @@ public class Controller {
 
         pane.heightProperty().addListener((observable, oldValue, newValue) -> {
             canvas.setHeight(newValue.doubleValue());
+            this.console.setWidthAndHeight((int) this.canvas.getWidth(), (int) this.canvas.getHeight());
         });
 
         pane.getChildren().add(imageView);
@@ -547,6 +548,14 @@ public class Controller {
         if(!command.trim().isEmpty()){
             inputArea.clear();
             inputArea.setPromptText("Enter your instructions here");
+            console.setCursorContext(this.cursorManager);
+            List<Statement> statements = console.verifyInput(command);
+            statementBuffer.addAll(statements);
+            for(Statement currentCommand : statements){
+                nextCommand(currentCommand);
+            }
+            statements.clear();
+            showIssues();
         }
     }
 
@@ -559,7 +568,7 @@ public class Controller {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setStroke(Color.color(color.getRed(), color.getGreen(), color.getBlue(), this.currentPress));
         //Informs the user of the situation
-        showInfo(String.format("Setting color : Red = %.2f Green = %.2f Blue = %.2f \n", color.getRed(), color.getGreen(), color.getBlue() ));
+        showInfo(String.format("Color : Red = %.2f Green = %.2f Blue = %.2f \n", color.getRed(), color.getGreen(), color.getBlue() ));
     }
 
     /**
@@ -607,7 +616,7 @@ public class Controller {
         imageView.setY(y - heightImage);
 
         //Informs the user of the situation
-        showInfo(String.format("Moving Cursor : new position = (%d, %d)\n", x, y));
+        showInfo(String.format("New position : (%d, %d)\n", x, y));
 
     }
 
@@ -625,7 +634,7 @@ public class Controller {
         gc.stroke();
         drawCursorImage(x,y);
         //Informs the user of the situation
-        showInfo(String.format("Drawn line : new position (%d, %d)\n", x, y));
+        showInfo(String.format("New position (%d, %d)\n", x, y));
     }
 
     //Pour effectuer les tests, Remettre auu bouton submit la méthode #handleSubmit()
@@ -829,10 +838,8 @@ public class Controller {
      */
     @FXML
     public void drawCursorImage(int x, int y){
-        if(this.imageView.isVisible()){
-            imageView.setX(x + widthImage);
-            imageView.setY(y + heightImage);
-        }
+        imageView.setX(x - widthImage);
+        imageView.setY(y - heightImage);
     }
 
     /**

@@ -1,6 +1,5 @@
 package chromatynk.chromatynk_g6.interpreter;
 
-import chromatynk.chromatynk_g6.exceptions.OutOfRangeException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.MimicStackEmptyException;
 import javafx.scene.paint.Color;
 import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;

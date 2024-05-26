@@ -36,11 +36,11 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <TextArea fx:id="inputArea" prefHeight="150.0" prefWidth="800.0" promptText="Enter your instructions here" HBox.hgrow="ALWAYS" />
-         <Button mnemonicParsing="false" onAction="#draw" prefHeight="30.0" prefWidth="100.0" text="Submit" HBox.hgrow="ALWAYS" />
+         <Button mnemonicParsing="false" onAction="#submitCommand" prefHeight="30.0" prefWidth="100.0" text="Submit" HBox.hgrow="ALWAYS" />
       </HBox>
    </bottom>
    <center>
-      <Pane id="canva" fx:id="pane" prefHeight="630.0" prefWidth="772.0" BorderPane.alignment="CENTER">
+      <Pane id="canvas" fx:id="pane" prefHeight="630.0" prefWidth="772.0" BorderPane.alignment="CENTER">
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
          </padding>
@@ -68,8 +68,6 @@
          </Menu>
          <Menu mnemonicParsing="false" text="Settings">
             <MenuItem mnemonicParsing="false" text="Execution Speed" onAction="#handleSpeed"/>
-            <MenuItem mnemonicParsing="false" text="CursorsList"/>
-            <MenuItem mnemonicParsing="false" text="VariablesList"/>
          </Menu>
          <Menu mnemonicParsing="false" text="Help">
             <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="About"/>
