@@ -1,6 +1,7 @@
 package chromatynk.chromatynk_g6.controller;
 
 import chromatynk.chromatynk_g6.MainApp;
+import chromatynk.chromatynk_g6.diagnostic.LYnkIssue;
 import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorAlreadyExistingException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorException;
@@ -114,9 +115,15 @@ public class Controller {
         this.pane = new Pane();
         this.historyFlow = new TextFlow();
         this.speedField = new TextField();
+
+        this.commandList = new ArrayList<>();
+        this.statementBuffer = new ArrayList<>();
+
+        this.cursorManager = new CursorManager();
         this.console = new LYnkConsole();
-        this.widthImage = imageView.getImage().getWidth()/8; //change how the cursor image is centered around the drawing
-        this.heightImage = imageView.getImage().getHeight()/8;
+
+        this.widthImage = imageView.getImage().getWidth()/2; //change how the cursor image is centered around the drawing
+        this.heightImage = imageView.getImage().getHeight()/2;
     }
 
     /**
@@ -129,6 +136,7 @@ public class Controller {
 
         pane.widthProperty().addListener((observable, oldValue, newValue) -> {
             canvas.setWidth(newValue.doubleValue());
+            this.console.setWidthAndHeight((int) this.canvas.getWidth(), (int) this.canvas.getHeight());
         });
 
         pane.heightProperty().addListener((observable, oldValue, newValue) -> {
@@ -255,7 +263,22 @@ public class Controller {
     public void nextCommand(Statement command) {
         switch (command.getKeyword()) {
             case "FWD":
-                cursorManager.forward(((ForwardStatement) command).getExpression().evaluate());
+                double value = ((ForwardStatement) command).getExpression().evaluate();
+                showInfo("Forward: " + value + "px" + "\n");
+                cursorManager.getSelectedCursor().forward(value);
+                drawLine(cursorManager.getSelectedCursor().getPosX(),cursorManager.getSelectedCursor().getPosY());
+                long id = cursorManager.getSelectedCursorId();
+                for(Cursor mimicCursor : cursorManager.getSelectedCursor().getMimics()){
+                    select(mimicCursor.getId());
+                    cursorManager.getSelectedCursor().forward(value);
+                    drawLine(mimicCursor.getPosX(), mimicCursor.getPosY());
+                }
+                for(Cursor mirrorCursor : cursorManager.getSelectedCursor().getMirror()){
+                    select(mirrorCursor.getId());
+                    cursorManager.getSelectedCursor().forward(value);
+                    drawLine(mirrorCursor.getPosX(), mirrorCursor.getPosY());
+                }
+                select(id);
                 break;
             case "BWD":
                 cursorManager.forward(-((BackwardStatement) command).getExpression().evaluate());
@@ -270,12 +293,15 @@ public class Controller {
                 cursorManager.position((int) ((MoveStatement) command).getX().evaluate(), (int) ((MoveStatement) command).getY().evaluate());
                 break;
             case "HIDE":
+                showInfo("Hiding selected cursor: " + cursorManager.getSelectedCursor() + "\n");
                 cursorManager.hide();
                 break;
             case "SHOW":
+                showInfo("Showing selected cursor: " + cursorManager.getSelectedCursor() + "\n");
                 cursorManager.show();
                 break;
             case "PRESS":
+                showInfo("Pressing cursor n°" + cursorManager.getSelectedCursor() + " : " + ((PressStatement) command).getExpression().evaluate() + "\n" );
                 cursorManager.press(((PressStatement) command).getExpression().evaluate());
                 break;
             case "COLOR":
@@ -309,6 +335,7 @@ public class Controller {
                 LookAtStatement look = ((LookAtStatement) command);
                 if (look.isIdLookAt()) {
                     cursorManager.lookAt(cursorManager.getCursors().get(look.getCursorId()).getPosX(), cursorManager.getCursors().get(look.getCursorId()).getPosY());
+                    showInfo("Looking at cursor n°" + look.getCursorId() + "\n");
                 } else {
                     cursorManager.lookAt((int) look.getX().evaluate(), (int) look.getY().evaluate());
                 }
@@ -321,11 +348,9 @@ public class Controller {
                 }
                 break;
             case "SELECT":
-                try {
-                    cursorManager.selectCursor(((SelectStatement) command).getCursorId());
-                } catch (CursorException e) {
-                    throw new RuntimeException(e);
-                }
+                long cursorId = ((SelectStatement) command).getCursorId();
+                select(cursorId);
+                showInfo(String.format("Select Cursor n° %d \n", cursorId));
                 break;
             case "REMOVE":
                 try {
@@ -336,7 +361,9 @@ public class Controller {
                 break;
             case "IF":
                 IfStatement ifStatement = (IfStatement) command;
+                showInfo("Entering IF : " + String.valueOf(ifStatement.getExpression().evaluate()) + "\n");
                 if (ifStatement.getExpression().evaluate()) {
+                    showInfo("Executing IF block \n");
                     for (Statement statement : ifStatement.getBlock().getBlock()) {
                         nextCommand(statement);
                     }
@@ -347,6 +374,7 @@ public class Controller {
                 int from = forStatement.getFrom();
                 int to = forStatement.getTo();
                 int step = forStatement.getStep();
+                showInfo("Entering FOR : " + forStatement.getVariableName() + " FROM:" + from + ", TO:" + to + ", STEP:" + step + "\n");
                 if (from <= to && step > 0) {
                     for (int var = from; var < to; var = var + step) {
                         varContext.setNumVarValue(forStatement.getVariableName(), (double) var);
@@ -369,6 +397,7 @@ public class Controller {
             case "WHILE":
                 WhileStatement whileStatement = (WhileStatement) command;
                 while (whileStatement.getExpression().evaluate()) {
+                    showInfo("Executing WHILE block \n");
                     for (Statement statement : whileStatement.getBlock().getBlock()) {
                         nextCommand(statement);
                     }
@@ -376,7 +405,9 @@ public class Controller {
                 break;
             case "MIMIC":
                 MimicStatement mimicStatement = (MimicStatement) command;
+                showInfo("Mimic cursor n°" + mimicStatement.getCursorId() + "\n");
                 cursorManager.addMimics(mimicStatement.getCursorId());
+                showInfo("Executing MIMIC block \n");
                 for (Statement statement : mimicStatement.getBlock().getBlock()) {
                     nextCommand(statement);
                 }
@@ -384,26 +415,33 @@ public class Controller {
             case "MIRROR":
                 MirrorStatement mirrorStatement = (MirrorStatement) command;
                 if (mirrorStatement.isCentralMirror()) {
+                    showInfo("Central Mirror: x=" + (int) mirrorStatement.getX1().evaluate() + ", y=" + (int) mirrorStatement.getY1().evaluate() + "\n");
                     cursorManager.addMirror((int) mirrorStatement.getX1().evaluate(), (int) mirrorStatement.getY1().evaluate());
                 } else {
                     cursorManager.addMirror((int) mirrorStatement.getX1().evaluate(), (int) mirrorStatement.getY1().evaluate(), (int) mirrorStatement.getX2().evaluate(), (int) mirrorStatement.getY2().evaluate());
                 }
+                showInfo("Executing MIRROR block \n");
                 for (Statement statement : mirrorStatement.getBlock().getBlock()) {
                     nextCommand(statement);
                 }
                 break;
             case "NUM":
                 NumberDeclaration numberDeclaration = (NumberDeclaration) command;
+                showInfo("Number variable: " + numberDeclaration.getVariableName() + " = " + numberDeclaration.getExpression().evaluate()+ "\n");
                 varContext.setNumVarValue(numberDeclaration.getVariableName(), numberDeclaration.getExpression().evaluate());
             case "STR":
                 StringDeclaration stringDeclaration = (StringDeclaration) command;
                 varContext.setBoolVarValue(stringDeclaration.getVariableName(), stringDeclaration.getExpression());
+                break;
             case "BOOL":
                 BoolDeclaration boolDeclaration = (BoolDeclaration) command;
+                showInfo("Number variable: " + boolDeclaration.getVariableName() + " = " + boolDeclaration.getExpression().evaluate() + "\n");
                 varContext.setBoolVarValue(boolDeclaration.getVariableName(), boolDeclaration.getExpression().evaluate());
+                break;
             case "DEL":
                 try {
                     varContext.delete(((DeleteDeclaration) command).getIdentification());
+                    showInfo("Deleting variable: " + ((DeleteDeclaration) command).getIdentification() + "\n");
                 } catch (VariableDoesNotExistException e) {
                     throw new RuntimeException(e);
                 }
@@ -507,7 +545,6 @@ public class Controller {
     private void submitCommand(){
         String command = inputArea.getText();
         if(!command.trim().isEmpty()){
-            System.out.println(command);
             inputArea.clear();
             inputArea.setPromptText("Enter your instructions here");
         }
@@ -521,7 +558,6 @@ public class Controller {
     private void setColorCursor(Color color){
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setStroke(Color.color(color.getRed(), color.getGreen(), color.getBlue(), this.currentPress));
-
         //Informs the user of the situation
         showInfo(String.format("Setting color : Red = %.2f Green = %.2f Blue = %.2f \n", color.getRed(), color.getGreen(), color.getBlue() ));
     }
@@ -534,10 +570,6 @@ public class Controller {
     private void  setThickCursor(float thickness){
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setLineWidth(thickness);
-
-
-        //Informs the user of the situation
-        showInfo(String.format("Setting thickness : new thickness = %.2f\n",thickness));
     }
 
     /**
@@ -550,10 +582,6 @@ public class Controller {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         this.currentPress = pressure;
         gc.setStroke(Color.color(color.getRed(), color.getGreen(), color.getBlue(), pressure));
-
-
-        //Informs the user of the situation
-        showInfo(String.format("Setting pressure : new pressure = %.2f\n", pressure));
     }
 
     /**
@@ -565,8 +593,7 @@ public class Controller {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.rotate(orientation);
         //Informs the user of the situation
-        showInfo(String.format("Setting rotation: new angle = %d\n", orientation));
-
+        showInfo(String.format("Rotation: %d°\n", orientation));
     }
 
     /**
@@ -576,8 +603,8 @@ public class Controller {
      */
     @FXML
     private void  moveCursor(int x,int y) {
-        imageView.setX(x + widthImage);
-        imageView.setY(y + heightImage);
+        imageView.setX(x - widthImage);
+        imageView.setY(y - heightImage);
 
         //Informs the user of the situation
         showInfo(String.format("Moving Cursor : new position = (%d, %d)\n", x, y));
@@ -633,7 +660,9 @@ public class Controller {
         drawCursorImage(0 ,0);
         historyFlow.getChildren().clear();
         setConsole(new LYnkConsole());
-        showInfo("Canvas has been reinitialized.\n0");
+        this.commandList = new ArrayList<>();
+        this.statementBuffer = new ArrayList<>();
+        showInfo("Canvas has been reinitialized.\n");
         disableMenu();
     }
 
@@ -731,7 +760,7 @@ public class Controller {
         try {
             fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
-            for (Statement s : console.getValidStatements()) {
+            for (Statement s : this.statementBuffer) {
                 bw.write(s.toString());
             }
             bw.close();
@@ -788,14 +817,12 @@ public class Controller {
             //Informs the user of the situation
             showInfo(String.format("Execution speed changed : new speed %.2f\n", stepperSpeed));
         }
-
     }
 
     @FXML
     private void handleSpeed(){
         mainApp.showSpeedPopUp();
         showSpeedExecution();
-
     }
     /**
      * The method draws a cursor on canvas
@@ -875,10 +902,25 @@ public class Controller {
     }
 
     /**
+     * Adds all <code>{@link LYnkIssue}</code> from the <code>{@link LYnkConsole}</code> to the historyFlow.
+     */
+    private void showIssues(){
+        for(LYnkIssue issue : console.getIssues()){
+            if( issue.isError() ){
+                showError(issue + "\n");
+            }
+            if( issue.isWarning() ){
+                showWarning(issue + "\n");
+            }
+        }
+    }
+
+    /**
      * Adds an information message to historyFlow
      * @param info the information to be displayed
      */
     private void showInfo(String info){
+        System.out.println(info); //Debugging Controller's actions on cursors and variables
         Text text = new Text(info);
         text.setFill(Color.BLACK);
         historyFlow.getChildren().add(text);

@@ -399,4 +399,9 @@ public class CursorManager {
             mirrorCursor.lookAt(x,y);
         }
     }
+    
+    @Override
+    public String toString(){
+        return getCursors().toString();
+    }
 }

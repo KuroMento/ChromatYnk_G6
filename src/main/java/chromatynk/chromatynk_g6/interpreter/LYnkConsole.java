@@ -158,12 +158,20 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     public CursorManager getCursorContext(){ return this.cursorContext; }
 
     /**
+     * Set the cursor Context for the console.
+     * @param cursorContext
+     */
+    public void setCursorContext(CursorManager cursorContext){ this.cursorContext = cursorContext; }
+
+    /**
      * Given a text input, generates issues and valid statements for the MainController
      * @param input The string to parse
      * @return The list of valid statements for this input
      */
     public List<Statement> verifyInput(String input){
         this.validStatements = new ArrayList<>();
+        this.issues = new ArrayDeque<>();
+
         final LYnkLexer lexer = new LYnkLexer(CharStreams.fromString(input));
         lexer.removeErrorListeners(); // Remove default ConsoleErrorListener
         lexer.addErrorListener(this); // Add self as an ANTLRErrorListener (implements)
@@ -182,6 +190,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         try {
             String input = Files.readString(path); // Read the content of the file into a String
             this.validStatements = new ArrayList<>();
+            this.issues = new ArrayDeque<>();
             final LYnkLexer lexer = new LYnkLexer(CharStreams.fromString(input));
             lexer.removeErrorListeners(); // Remove default ConsoleErrorListener
             lexer.addErrorListener(this); // Add self as an ANTLRErrorListener (implements)
@@ -215,7 +224,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
      */
     @Override
     public LYnkValidation visitProgram(final LYnkParser.ProgramContext ctx){
-        if(!ctx.EOF().getText().isEmpty()) {
+        if( ctx.EOF() != null && !ctx.EOF().getText().isEmpty()) {
             LYnkValidation tempValidation = VOID;
             for (LYnkParser.StatementContext statement : ctx.statement()) {
                 if (SYNTAX_ERROR || (REPORT_SYNTAX_ERRORS && (tempValidation.isSkipError() || !tempValidation.hasValue())) ){
@@ -229,7 +238,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             }
             return tempValidation;
         }
-        addIssue(IssueType.ERROR, ctx.EOF().getSymbol(), "The input file/program does not contain an end of file (i.e. EOF)");
+        addIssue(IssueType.ERROR, ctx.getStart(), "The input file does not contain an end of file (i.e. no <EOF> or possible wrong keyword error)");
         return SKIP_ERROR;
     }
 

@@ -12,6 +12,11 @@ public class LookAtStatement extends Statement{
     private ArithmeticExpression y;
     private boolean isIdLookAt;
 
+    /**
+     * Constructor of LookAtStatement
+     * @param cursorId The cursor id
+     * @param varContext The variable context
+     */
     public LookAtStatement(long cursorId, LYnkVariableImpl varContext){
         super("LOOKAT", varContext);
         this.cursorId = cursorId;
