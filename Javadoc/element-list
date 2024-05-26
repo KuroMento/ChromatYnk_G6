@@ -1,0 +1,14 @@
+module:chromatynk.chromatynk_g6
+chromatynk.chromatynk_g6
+chromatynk.chromatynk_g6.controller
+chromatynk.chromatynk_g6.diagnostic
+chromatynk.chromatynk_g6.exceptions
+chromatynk.chromatynk_g6.exceptions.cursorExceptions
+chromatynk.chromatynk_g6.exceptions.variableExceptions
+chromatynk.chromatynk_g6.interpreter
+chromatynk.chromatynk_g6.LYnk
+chromatynk.chromatynk_g6.parameters
+chromatynk.chromatynk_g6.parameters.arithmeticExp
+chromatynk.chromatynk_g6.parameters.booleanExp
+chromatynk.chromatynk_g6.parameters.literalExp
+chromatynk.chromatynk_g6.statements
