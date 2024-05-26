@@ -11,6 +11,16 @@ public class ForStatement extends Statement{
     private int to;
     private int step;
     private BlockStatement block;
+
+    /**
+     * Constructor of ForStatement
+     * @param variableName Name of the variable
+     * @param from Variable the for start from
+     * @param to Variable the for goes to
+     * @param step Variable the for uses as step
+     * @param block The block statement
+     * @param varContext The variable context
+     */
     public ForStatement(String variableName, int from, int to, int step, BlockStatement block, LYnkVariableImpl varContext){
         super("FOR", varContext);
         this.variableName = variableName;
@@ -39,7 +49,10 @@ public class ForStatement extends Statement{
     public BlockStatement getBlock() {
         return block;
     }
-
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString() {
         return super.toString() + " " + this.variableName + " FROM " + this.from + " TO " + this.to + " STEP " + this.step + " " + this.block.toString() + "\n";

@@ -23,6 +23,9 @@ public class CursorManager {
      */
     private long selectedCursorId;
 
+    private int height;
+    private int width;
+
     /**
      * Constructor of CursorManager adding by default a generic cursor to the list of active cursors.
      */
@@ -58,6 +61,28 @@ public class CursorManager {
      */
     public Cursor getCursor(long id) {
         return this.cursors.get(id);
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    /**
+     * Change the border size for all cursors
+     * @param width int width of the canvas
+     * @param height int height of the canvas
+     */
+    public void setAllBorder(int width, int height){
+        setWidth(width);
+        setHeight(height);
+        for(Cursor cursor : cursors.values()){
+            cursor.setWidth(width);
+            cursor.setHeight(height);
+        }
     }
 
     /**
@@ -223,12 +248,49 @@ public class CursorManager {
 
 
     /**
-     * Creates a line between the middle of the canvas and a given point.
+     * Add one or more mirror cursor to the selected cursor
      * @param x1 x coordinate of the point
      * @param y1 y coordinate of the point
      */
     public void addMirror(int x1, int y1){
-        addMirror(x1, y1, 960, 540); //TODO: modify x2 and y2 with the correct values
+
+        // add mirror cursor to each existing mirror cursor
+        Cursor[] existingMirrorCursors = new Cursor[this.getSelectedCursor().getMirror().size()];
+        this.getSelectedCursor().getMirror().copyInto(existingMirrorCursors);
+        for(Cursor mirrorCursor : existingMirrorCursors){
+            int x = mirrorCursor.getPosX();
+            int y = mirrorCursor.getPosY();
+            double theta = Math.atan((double) (y-y1)/(x-x1));
+            theta = Math.toDegrees(theta);
+            Cursor cursor = new Cursor(getSelectedCursorId());
+            cursor.setPosX(x + 2 * (x1 - x));
+            cursor.setPosY(y + 2 * (y1 - y));
+            cursor.setRotationAngle((float)theta);
+            getSelectedCursor().addMirror(cursor);
+        }
+        // add mirror cursor to each existing mimic cursor
+        Cursor[] existingMimicCursors = new Cursor[this.getSelectedCursor().getMimics().size()];
+        this.getSelectedCursor().getMimics().copyInto(existingMirrorCursors);
+        for(Cursor mimicCursor : existingMimicCursors){
+            int x = mimicCursor.getPosX();
+            int y = mimicCursor.getPosY();
+            double theta = Math.atan((double) (y-y1)/(x-x1));
+            theta = Math.toDegrees(theta);
+            Cursor cursor = new Cursor(getSelectedCursorId());
+            cursor.setPosX(x + 2 * (x1 - x));
+            cursor.setPosY(y + 2 * (y1 - y));
+            cursor.setRotationAngle((float)theta);
+            getSelectedCursor().addMirror(cursor);
+        }
+        int x = getSelectedCursor().getPosX();
+        int y = getSelectedCursor().getPosY();
+        double theta = Math.atan((double) (y-y1)/(x-x1));
+        theta = Math.toDegrees(theta);
+        Cursor cursor = new Cursor(getSelectedCursorId());
+        cursor.setPosX(x + 2 * (x1 - x));
+        cursor.setPosY(y + 2 * (y1 - y));
+        cursor.setRotationAngle((float)theta);
+        getSelectedCursor().addMirror(cursor);
     }
 
     /**

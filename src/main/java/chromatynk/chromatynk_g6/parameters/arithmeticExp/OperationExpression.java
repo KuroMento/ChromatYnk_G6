@@ -7,6 +7,12 @@ public class OperationExpression extends ArithmeticExpression{
     private ArithmeticExpression right;
     private NumberOperator operator;
 
+    /** constructor
+     *
+     * @param left
+     * @param operator
+     * @param right
+     */
     public OperationExpression(ArithmeticExpression left, NumberOperator operator, ArithmeticExpression right){
         super(0d);
         this.left = left;
@@ -14,12 +20,18 @@ public class OperationExpression extends ArithmeticExpression{
         this.right = right;
         setValue(compare());
     }
-
+    /**
+     * This method returns a boolean.
+     * @return
+     */
     @Override
     public double evaluate(){
         return compare();
     }
-
+    /**
+     * This method compares and evaluates the right and left part of the entering command.
+     * @return
+     */
     public double compare(){
         final double leftValue = this.left.evaluate();
         final double rightValue = this.right.evaluate();
@@ -31,7 +43,10 @@ public class OperationExpression extends ArithmeticExpression{
         }
         return getValue();
     }
-
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString(){
         return left.toString() + operator.toString() + right.toString();

@@ -13,6 +13,16 @@ public class MirrorStatement extends Statement{
     private ArithmeticExpression  y2;
     private boolean isCentralMirror;
     private BlockStatement block;
+
+    /**
+     * Constructor of MirrorStatement for a central mirror.
+     * @param x1 The horizontal value of the first point
+     * @param y1 The vertical value of the first point
+     * @param x2 The horizontal value of the second point
+     * @param y2 The vertical value of the second point
+     * @param block The block for the statement
+     * @param varContext The variable context
+     */
     public MirrorStatement(ArithmeticExpression x1, ArithmeticExpression  y1, ArithmeticExpression  x2, ArithmeticExpression  y2, BlockStatement block, LYnkVariableImpl varContext){
         super("MIRROR", varContext);
         this.x1 = x1;
@@ -22,6 +32,14 @@ public class MirrorStatement extends Statement{
         this.block = block;
         this.isCentralMirror = false;
     }
+
+    /**
+     * Constructor of MirrorStatement for a central mirror.
+     * @param x1 The horizontal value of the first point
+     * @param y1 The vertical value of the first point
+     * @param block The block for the statement
+     * @param varContext The variable context
+     */
     public MirrorStatement(ArithmeticExpression  x1, ArithmeticExpression  y1, BlockStatement block, LYnkVariableImpl varContext){
         super("MIRROR", varContext);
         this.x1 = x1;
@@ -29,7 +47,6 @@ public class MirrorStatement extends Statement{
         this.block = block;
         this.isCentralMirror = true;
     }
-
     public ArithmeticExpression  getX1() {
         return x1;
     }
@@ -48,8 +65,16 @@ public class MirrorStatement extends Statement{
 
     public BlockStatement getBlock(){ return this.block; }
 
+    /**
+     *  Check if the mirror is a central symmetry
+     * @return
+     */
     public boolean isCentralMirror(){ return this.isCentralMirror; }
 
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString() {
         if(isCentralMirror()) {

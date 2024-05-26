@@ -11,11 +11,19 @@ import java.util.List;
 public class BlockStatement extends Statement{
     private List<Statement> block;
 
+    /**
+     * Constructor of BlockStatement
+     * @param varContext The variable context
+     */
     public BlockStatement(LYnkVariableImpl varContext){
         super("BLOCK", varContext);
         this.block = new ArrayList<>();
     }
 
+    /**
+     * Add the selected statement
+     * @param statement Selected statement
+     */
     public void addStatement(Statement statement){
         block.add(statement);
     }
@@ -23,7 +31,10 @@ public class BlockStatement extends Statement{
     public List<Statement> getBlock() {
         return block;
     }
-
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString() {
         String blockMsg = "{\n";

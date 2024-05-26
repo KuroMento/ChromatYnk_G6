@@ -29,6 +29,10 @@ public class LookAtStatement extends Statement{
         this.isIdLookAt = false;
     }
 
+    /**getters/setters
+     *
+     * @return
+     */
     public long getCursorId() {
         return cursorId;
     }
@@ -44,7 +48,10 @@ public class LookAtStatement extends Statement{
     public boolean isIdLookAt() {
         return this.isIdLookAt;
     }
-
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString() {
         if(isIdLookAt()){

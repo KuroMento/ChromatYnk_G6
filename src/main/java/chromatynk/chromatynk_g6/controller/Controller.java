@@ -6,11 +6,11 @@ import chromatynk.chromatynk_g6.exceptions.NegativeNumberException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorAlreadyExistingException;
 import chromatynk.chromatynk_g6.exceptions.cursorExceptions.CursorException;
 import chromatynk.chromatynk_g6.exceptions.variableExceptions.VariableDoesNotExistException;
+import chromatynk.chromatynk_g6.interpreter.Cursor;
 import chromatynk.chromatynk_g6.interpreter.CursorManager;
 import chromatynk.chromatynk_g6.interpreter.LYnkConsole;
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 import chromatynk.chromatynk_g6.statements.*;
-import chromatynk.chromatynk_g6.statements.Statement;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -33,6 +34,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Controller {
 
@@ -86,6 +89,9 @@ public class Controller {
     private CursorManager cursorManager;
 
     private LYnkVariableImpl varContext = new LYnkVariableImpl();
+
+    private List<Statement> commandList;
+    private List<Statement> statementBuffer;
 
 
     private final String[] instructionsList = {"FWD", "BWD", "TURN", "MOV", "POS", "HIDE", "SHOW", "PRESS", "COLOR", "THICK",
@@ -143,8 +149,8 @@ public class Controller {
             canvas.setHeight(newValue.doubleValue());
             this.console.setWidthAndHeight((int) this.canvas.getWidth(), (int) this.canvas.getHeight());
         });
-
         pane.getChildren().add(imageView);
+        imageView.setRotate(90);
         drawCursorImage(0,0);
         setStepperSpeed(1);
         showSpeedExecution();
@@ -262,6 +268,9 @@ public class Controller {
      * @param command Statement describing the command
      */
     public void nextCommand(Statement command) {
+        int width = (int)canvas.getWidth();
+        int height = (int)canvas.getHeight();
+        cursorManager.setAllBorder(width, height);
         switch (command.getKeyword()) {
             case "FWD":
                 double value = ((ForwardStatement) command).getExpression().evaluate();
@@ -282,52 +291,79 @@ public class Controller {
                 select(id);
                 break;
             case "BWD":
-                cursorManager.forward(-((BackwardStatement) command).getExpression().evaluate());
+                double backwardValue = ((BackwardStatement) command).getExpression().evaluate();
+                showInfo("Backward: " +  backwardValue + "px"  + "\n");
+                cursorManager.getSelectedCursor().forward(-backwardValue);
+                drawLine(cursorManager.getSelectedCursor().getPosX(),cursorManager.getSelectedCursor().getPosY());
+                long backwardId = cursorManager.getSelectedCursorId();
+                for(Cursor mimicCursor : cursorManager.getSelectedCursor().getMimics()){
+                    select(mimicCursor.getId());
+                    cursorManager.getSelectedCursor().forward(-backwardValue);
+                    drawLine(mimicCursor.getPosX(), mimicCursor.getPosY());
+                }
+                for(Cursor mirrorCursor : cursorManager.getSelectedCursor().getMirror()){
+                    select(mirrorCursor.getId());
+                    cursorManager.getSelectedCursor().forward(-backwardValue);
+                    drawLine(mirrorCursor.getPosX(), mirrorCursor.getPosY());
+                }
+                select(backwardId);
                 break;
             case "TURN":
                 cursorManager.turn((float) ((RotationStatement) command).getExpression().evaluate());
+                showInfo("Rotation: " + (float) ((RotationStatement) command).getExpression().evaluate() + "°"  + "\n");
+                rotateCursor(cursorManager.getSelectedCursor().getRotationAngle());
                 break;
             case "MOV":
                 cursorManager.move((int) ((MoveStatement) command).getX().evaluate(), (int) ((MoveStatement) command).getY().evaluate());
+                showInfo("Moved by: x=" + (int) ((MoveStatement) command).getX().evaluate() + ", y=" + (int) ((MoveStatement) command).getY().evaluate() + "\n");
+                moveCursor(cursorManager.getSelectedCursor().getPosX(), cursorManager.getSelectedCursor().getPosY());
                 break;
             case "POS":
-                cursorManager.position((int) ((MoveStatement) command).getX().evaluate(), (int) ((MoveStatement) command).getY().evaluate());
+                cursorManager.position((int) ((PositionStatement) command).getX().evaluate(), (int) ((PositionStatement) command).getY().evaluate());
+                showInfo("New Position: x=" + (int) ((PositionStatement) command).getX().evaluate() + ", y=" + (int) ((PositionStatement) command).getY().evaluate() + "\n");
+                moveCursor(cursorManager.getSelectedCursor().getPosX(), cursorManager.getSelectedCursor().getPosY());
                 break;
             case "HIDE":
                 showInfo("Hiding selected cursor: " + cursorManager.getSelectedCursor() + "\n");
                 cursorManager.hide();
+                hideCursor();
                 break;
             case "SHOW":
                 showInfo("Showing selected cursor: " + cursorManager.getSelectedCursor() + "\n");
                 cursorManager.show();
+                showCursor();
                 break;
             case "PRESS":
                 showInfo("Pressing cursor n°" + cursorManager.getSelectedCursor() + " : " + ((PressStatement) command).getExpression().evaluate() + "\n" );
                 cursorManager.press(((PressStatement) command).getExpression().evaluate());
+                setPresCursor(cursorManager.getSelectedCursor().getColor(), cursorManager.getSelectedCursor().getOpacity());
                 break;
             case "COLOR":
                 ColorStatement color = ((ColorStatement) command);
                 if (color.isHexCode()) {
                     String hexCode = color.getHexcode();
-                    int resultRed = Integer.valueOf(hexCode.substring(0, 2), 16);
-                    int resultGreen = Integer.valueOf(hexCode.substring(2, 4), 16);
-                    int resultBlue = Integer.valueOf(hexCode.substring(4, 6), 16);
-                    cursorManager.color(new Color(resultRed, resultGreen, resultBlue, cursorManager.getSelectedCursor().getOpacity()));
-                    break;
+                    int resultRed = Integer.valueOf(hexCode.substring(1, 3), 16);
+                    int resultGreen = Integer.valueOf(hexCode.substring(3, 5), 16);
+                    int resultBlue = Integer.valueOf(hexCode.substring(5, 7), 16);
+                    cursorManager.color(new Color((double) resultRed /255, (double)resultGreen/255, (double)resultBlue/255, cursorManager.getSelectedCursor().getOpacity()));
                 }
-                if (color.isRGB()) {
-                    cursorManager.color(new Color(color.getRed().evaluate(), color.getGreen().evaluate(), color.getGreen().evaluate(), cursorManager.getSelectedCursor().getOpacity()));
-                    break;
+                else {
+                    if (color.isRGB()) {
+                        cursorManager.color(new Color(color.getRed().evaluate() / 255, color.getGreen().evaluate() / 255, color.getGreen().evaluate() / 255, cursorManager.getSelectedCursor().getOpacity()));
+                    }
+                    else {
+                        if (color.isHSV()) {
+                            cursorManager.color(Color.hsb(color.getRed().evaluate(), color.getGreen().evaluate(), color.getBlue().evaluate()));
+                        }
+                    }
                 }
-                if (color.isHSV()) {
-                    double[] rgb = hsvToRgb(color.getRed().evaluate(), color.getGreen().evaluate(), color.getBlue().evaluate());
-                    cursorManager.color(new Color(rgb[0], rgb[1], rgb[2], cursorManager.getSelectedCursor().getOpacity()));
-                    break;
-                }
+                setColorCursor(cursorManager.getSelectedCursor().getColor());
                 break;
             case "THICK":
                 try {
                     cursorManager.thick((float) ((ThickStatement) command).getExpression().evaluate());
+                    setThickCursor(cursorManager.getSelectedCursor().getThickness());
+                    showInfo("Thickness: " + (float) ((ThickStatement) command).getExpression().evaluate() + "px" + "\n");
                 } catch (NegativeNumberException e) {
                     throw new RuntimeException(e);
                 }
@@ -339,14 +375,13 @@ public class Controller {
                     showInfo("Looking at cursor n°" + look.getCursorId() + "\n");
                 } else {
                     cursorManager.lookAt((int) look.getX().evaluate(), (int) look.getY().evaluate());
+                    showInfo("Looking at: x=" + look.getX().evaluate() + ", Y=" + look.getY().evaluate() + "\n");
                 }
+                rotateCursor(cursorManager.getSelectedCursor().getRotationAngle());
                 break;
             case "CURSOR":
-                try {
-                    cursorManager.addCursor(((CursorStatement) command).getCursorId());
-                } catch (CursorAlreadyExistingException e) {
-                    throw new RuntimeException(e);
-                }
+                CursorStatement cursorStatement = (CursorStatement) command;
+                showInfo("Creating Cursor n°" + cursorStatement.getCursorId() + "\n");
                 break;
             case "SELECT":
                 long cursorId = ((SelectStatement) command).getCursorId();
@@ -354,11 +389,8 @@ public class Controller {
                 showInfo(String.format("Select Cursor n° %d \n", cursorId));
                 break;
             case "REMOVE":
-                try {
-                    cursorManager.removeCursor(((RemoveStatement) command).getCursorId());
-                } catch (CursorException e) {
-                    throw new RuntimeException(e);
-                }
+                long removeCursorId = ((RemoveStatement) command).getCursorId();
+                showInfo(String.format("Remove Cursor n° %d \n", removeCursorId));
                 break;
             case "IF":
                 IfStatement ifStatement = (IfStatement) command;
@@ -394,9 +426,15 @@ public class Controller {
                         }
                     }
                 }
+                try {
+                    varContext.delete(forStatement.getVariableName());
+                } catch (VariableDoesNotExistException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             case "WHILE":
                 WhileStatement whileStatement = (WhileStatement) command;
+                showInfo("Entering WHILE : " + String.valueOf(whileStatement.getExpression().evaluate()) + "\n");
                 while (whileStatement.getExpression().evaluate()) {
                     showInfo("Executing WHILE block \n");
                     for (Statement statement : whileStatement.getBlock().getBlock()) {
@@ -419,6 +457,7 @@ public class Controller {
                     showInfo("Central Mirror: x=" + (int) mirrorStatement.getX1().evaluate() + ", y=" + (int) mirrorStatement.getY1().evaluate() + "\n");
                     cursorManager.addMirror((int) mirrorStatement.getX1().evaluate(), (int) mirrorStatement.getY1().evaluate());
                 } else {
+                    showInfo("Line Mirror: x1=" + (int) mirrorStatement.getX1().evaluate() + ", y1=" + (int) mirrorStatement.getY1().evaluate() + ", x2=" + (int) mirrorStatement.getX2().evaluate() + ", y2=" + (int) mirrorStatement.getY2().evaluate());
                     cursorManager.addMirror((int) mirrorStatement.getX1().evaluate(), (int) mirrorStatement.getY1().evaluate(), (int) mirrorStatement.getX2().evaluate(), (int) mirrorStatement.getY2().evaluate());
                 }
                 showInfo("Executing MIRROR block \n");
@@ -432,6 +471,7 @@ public class Controller {
                 varContext.setNumVarValue(numberDeclaration.getVariableName(), numberDeclaration.getExpression().evaluate());
             case "STR":
                 StringDeclaration stringDeclaration = (StringDeclaration) command;
+                showInfo("String variable : " + stringDeclaration.getVariableName() + " = " + stringDeclaration.getExpression() + "\n");
                 varContext.setBoolVarValue(stringDeclaration.getVariableName(), stringDeclaration.getExpression());
                 break;
             case "BOOL":
@@ -452,71 +492,19 @@ public class Controller {
     }
 
     /**
-     * Convert a hsv color to rgb
-     * @param H double hue
-     * @param S double saturation
-     * @param V double value
-     * @return rgb values
+     * Select a cursor with its id
+     * @param cursorId long id of the cursor to select
      */
-    public static double[] hsvToRgb(double H, double S, double V) {
-
-        double R, G, B;
-        double[] rgb = new double[3];
-        H /= 360f;
-        S /= 100f;
-        V /= 100f;
-        if (S == 0) {
-            rgb[0] = V * 255;
-            rgb[1] = V * 255;
-            rgb[2] = V * 255;
-        } else {
-            double var_h = H * 6;
-            if (var_h == 6)
-                var_h = 0;
-            int var_i = (int) Math.floor(var_h);
-            double var_1 = V * (1 - S);
-            double var_2 = V * (1 - S * (var_h - var_i));
-            double var_3 = V * (1 - S * (1 - (var_h - var_i)));
-
-            double var_r;
-            double var_g;
-            double var_b;
-            switch (var_i){
-                case 0:
-                    var_r = V;
-                    var_g = var_3;
-                    var_b = var_1;
-                    break;
-                case 1:
-                    var_r = var_2;
-                    var_g = V;
-                    var_b = var_1;
-                    break;
-                case 2:
-                    var_r = var_1;
-                    var_g = V;
-                    var_b = var_3;
-                    break;
-                case 3:
-                    var_r = var_1;
-                    var_g = var_2;
-                    var_b = V;
-                    break;
-                case 4:
-                    var_r = var_3;
-                    var_g = var_1;
-                    var_b = V;
-                    break;
-                default:
-                    var_r = V;
-                    var_g = var_1;
-                    var_b = var_2;
-            }
-            rgb[0] = var_r * 255;
-            rgb[1] = var_g * 255;
-            rgb[2] = var_b * 255;
+    public void select(long cursorId){
+        try {
+            cursorManager.selectCursor(cursorId);
+        } catch (CursorException e) {
+            throw new RuntimeException(e);
         }
-        return rgb;
+        rotateCursor(cursorManager.getSelectedCursor().getRotationAngle());
+        setThickCursor(cursorManager.getSelectedCursor().getThickness());
+        setPresCursor(cursorManager.getSelectedCursor().getColor(),cursorManager.getSelectedCursor().getOpacity());
+        drawCursorImage(cursorManager.getSelectedCursor().getPosX(),cursorManager.getSelectedCursor().getPosY());
     }
 
     /**
@@ -630,32 +618,11 @@ public class Controller {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         isCanvaModified = true;
         enabledMenu();
-        gc.strokeLine(imageView.getX()-widthImage, imageView.getY()-heightImage, x,y);
+        gc.strokeLine(imageView.getX()+widthImage, imageView.getY()+heightImage, x,y);
         gc.stroke();
         drawCursorImage(x,y);
         //Informs the user of the situation
         showInfo(String.format("New position (%d, %d)\n", x, y));
-    }
-
-    //Pour effectuer les tests, Remettre auu bouton submit la méthode #handleSubmit()
-    @FXML
-    private void draw(){
-        drawCursorImage(0,0);
-        setThickCursor(4.5F);
-        setPresCursor(Color.DARKCYAN,0.3);
-        drawLine(200, 200);
-        setColorCursor(Color.OLIVE);
-        //setPresCursor(Color.OLIVE,1);
-        setThickCursor(12F);
-        drawLine(300, 300);
-        rotateCursor(180);
-        setColorCursor(Color.BROWN);
-        setPresCursor(Color.BROWN,0.4);
-        rotateCursor(90);
-        setThickCursor(1);
-        drawLine(400,400);
-        hideCursor();
-        showCursor();
     }
 
     /**
@@ -664,7 +631,7 @@ public class Controller {
     @FXML
     public void handleNew(){
         canvas.getGraphicsContext2D().clearRect(0,0,canvas.getWidth(),canvas.getHeight());
-        imageView.setRotate(0);
+        imageView.setRotate(90);
         showCursor();
         drawCursorImage(0 ,0);
         historyFlow.getChildren().clear();
@@ -855,7 +822,7 @@ public class Controller {
      * @param angle the angle the cursor points to.
      */
     public void rotateCursor(float angle){
-        this.imageView.setRotate(imageView.getRotate() + angle);
+        this.imageView.setRotate(90 + angle);
     }
 
 

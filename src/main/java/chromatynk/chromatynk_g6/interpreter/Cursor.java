@@ -53,6 +53,9 @@ public class Cursor {
      */
     private Stack<Cursor> mirror;
 
+    private int width;
+    private int height;
+
     /**
      * Complete Constructor of the class <code>Cursor</code> :
      * @param id the identification of the cursor.
@@ -180,6 +183,14 @@ public class Cursor {
 
     public Stack<Cursor> getMirror(){ return this.mirror;}
 
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     //Methods
 
     /**
@@ -209,13 +220,13 @@ public class Cursor {
         if(posY < 0){
             posY = 0;
         }
-         /*
-         if(posX > width) {
-             posX = width;
-         }
-         if(posY > height){
-             posY = height;
-         }*/
+
+        if(posX > width) {
+            posX = width;
+        }
+        if(posY > height){
+            posY = height;
+        }
         this.posX= posX;
         this.posY= posY;
     }
@@ -235,13 +246,12 @@ public class Cursor {
         if(newPosY < 0){
             newPosY = 0;
         }
-         /*
-         if(newPosX > width) {
-             newPosX = width;
-         }
-         if(newPosY > height){
-             newPosY = height;
-         }*/
+        if(newPosX > width) {
+            newPosX = width;
+        }
+        if(newPosY > height){
+            newPosY = height;
+        }
         this.posX = newPosX;
         this.posY = newPosY;
     }
@@ -263,8 +273,8 @@ public class Cursor {
      * @throws NegativeNumberException verify the cursor is not out of the canvas
      */
     public void forward(double value) {
-        int deltaX = (int)( value * Math.cos(this.rotationAngle));
-        int deltaY = (int)( value * Math.sin(this.rotationAngle));
+        int deltaX = (int)( value * Math.cos(Math.toRadians(this.rotationAngle)));
+        int deltaY = (int)( value * Math.sin(Math.toRadians(this.rotationAngle)));
         int x = this.posX + deltaX;
         int y = this.posY + deltaY;
         // If the new values are outside of the canevas
@@ -273,42 +283,15 @@ public class Cursor {
         }
         if(y < 0){
             y = 0;
-        }/*
+        }
         if(x > width) {
             x = width;
         }
         if(y > height){
             y = height;
         }
-        drawline(cursorManager.getSelectedCursorId(), x, y);*/
-    }
-
-
-    /**
-     *  Move the cursor backward
-     * @param value the value form witch the cursor goes backward
-     * @throws NegativeNumberException verify the cursor is not out of the canvas
-     */
-    public void backward(int value) throws NegativeNumberException{
-        if (value < 0 ){
-            throw new NegativeNumberException();
-        }
-        double newX;
-        double newY;
-
-        newX = this.posX - Math.sin(Math.toRadians(90-this.rotationAngle))*value; // Math use trigonometry in radiants so the conversion is needed
-        newY = this.posY - Math.cos(Math.toRadians(90-this.rotationAngle))*value;
-
-        if(newX < 0 ){
-            newX = 0;
-        }
-        if(newY < 0){
-            newY = 0;
-        }
-        //TODO:Add the verification for the canvas
-
-        this.posX = (int) newX;
-        this.posY = (int) newY;
+        this.posX = x;
+        this.posY = y;
     }
 
     /**

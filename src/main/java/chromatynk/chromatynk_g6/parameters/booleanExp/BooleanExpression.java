@@ -9,10 +9,17 @@ public class BooleanExpression {
     private boolean value;
     private String expression;
 
+    /** constructor
+     *
+     * @param value
+     */
     public BooleanExpression(boolean value){
         this.value = value;
     }
-
+    /**
+     * This method compares and evaluates the right and left part of the entering command.
+     * @return
+     */
     public boolean evaluate(){
         return this.value;
     }
@@ -23,7 +30,10 @@ public class BooleanExpression {
 
     public String getExpression(){ return this.expression; }
     public void setExpression(String expression){ this.expression = expression; }
-
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString(){
         return this.expression;

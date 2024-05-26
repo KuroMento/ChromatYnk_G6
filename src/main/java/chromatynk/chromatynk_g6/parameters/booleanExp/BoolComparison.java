@@ -8,6 +8,12 @@ public class BoolComparison extends BooleanExpression{
     private BooleanExpression right;
     private BoolOperator operator;
 
+    /** constructor
+     *
+     * @param left
+     * @param operator
+     * @param right
+     */
     public BoolComparison(BooleanExpression left, BoolOperator operator, BooleanExpression right){
         super(true);
         this.left = left;
@@ -16,12 +22,18 @@ public class BoolComparison extends BooleanExpression{
         setValue(compare());
         setExpression(toString());
     }
-
+    /**
+     * This method returns a boolean.
+     * @return
+     */
     @Override
     public boolean evaluate(){
         return compare();
     }
-
+    /**
+     * This method compares and evaluates the right and left part of the entering command.
+     * @return
+     */
     public boolean compare(){
         final boolean leftValue = left.evaluate();
         final boolean rightValue = right.evaluate();
@@ -31,7 +43,10 @@ public class BoolComparison extends BooleanExpression{
             default: return getValue();
         }
     }
-
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString(){
         return left.toString() + operator.toString() + right.toString();

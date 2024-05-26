@@ -12,6 +12,14 @@ public class ColorStatement extends Statement{
     private ArithmeticExpression blue;
 
     private String hexcode;
+
+    /**
+     * Constructor of ColorStatement if the color is on format RGB
+     * @param red R color parameter
+     * @param green G color parameter
+     * @param blue B color parameter
+     * @param varContext The variable context
+     */
     public ColorStatement(ArithmeticExpression red, ArithmeticExpression green, ArithmeticExpression blue, LYnkVariableImpl varContext){
         super("COLOR", varContext);
         this.red = red;
@@ -19,6 +27,11 @@ public class ColorStatement extends Statement{
         this.blue = blue;
     }
 
+    /**
+     * Construction of ColorStatement if the color is on format hexadecimal
+     * @param colorHex the hexadecimal color
+     * @param varContext The variable context
+     */
     public ColorStatement(String colorHex, LYnkVariableImpl varContext){
         super("COLOR", varContext);
         this.hexcode = colorHex;
@@ -42,6 +55,10 @@ public class ColorStatement extends Statement{
     public boolean isHSV(){ return (0 <= this.red.evaluate() && this.red.evaluate() <= 1) && (0 <= this.green.evaluate() && this.green.evaluate() <= 1) && (0 <= this.blue.evaluate() && this.blue.evaluate() <= 1); }
     public boolean isRGB(){ return (0 <= this.red.evaluate() && this.red.evaluate() <= 255) && (0 <= this.green.evaluate() && this.green.evaluate() <= 255) && (0 <= this.blue.evaluate() && this.blue.evaluate() <= 255);}
 
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString() {
         if( isHexCode()) {

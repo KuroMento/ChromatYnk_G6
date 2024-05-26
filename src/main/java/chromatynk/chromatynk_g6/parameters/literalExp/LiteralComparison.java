@@ -11,6 +11,12 @@ public class LiteralComparison extends BooleanExpression {
 
     private ArithmeticOperator operator;
 
+    /** constructor
+     *
+     * @param left
+     * @param operator
+     * @param right
+     */
     public LiteralComparison(LiteralExpression left, ArithmeticOperator operator, LiteralExpression right){
         super(true);
         this.left = left;
@@ -20,11 +26,18 @@ public class LiteralComparison extends BooleanExpression {
         setValue(compValue);
         setExpression(toString());
     }
+    /**
+     * This method returns a boolean.
+     * @return
+     */
     @Override
     public boolean evaluate(){
         return compare();
     }
-
+    /**
+     * This method compares and evaluates the right and left part of the entering command.
+     * @return
+     */
     public boolean compare(){
         final int comparison = left.evaluate().compareTo(right.evaluate());
         switch (this.operator){
@@ -74,7 +87,10 @@ public class LiteralComparison extends BooleanExpression {
                 return getValue();
         }
     }
-
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString(){
         return left.toString() + operator.toString() + right.toString();

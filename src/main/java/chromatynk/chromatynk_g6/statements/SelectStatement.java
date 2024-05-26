@@ -8,6 +8,12 @@ import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
  */
 public class SelectStatement extends Statement{
     private long cursorId;
+
+    /**
+     * Constructor of SelectStatement
+     * @param cursorId The cursor id
+     * @param varContext The variable context
+     */
     public SelectStatement(long cursorId, LYnkVariableImpl varContext){
         super("SELECT", varContext);
         this.cursorId = cursorId;
@@ -17,6 +23,10 @@ public class SelectStatement extends Statement{
         return cursorId;
     }
 
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString() {
         return super.toString() + " " + this.cursorId + "\n";

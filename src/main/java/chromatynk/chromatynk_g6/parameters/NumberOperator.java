@@ -16,9 +16,14 @@ public enum NumberOperator {
 
     private final int index;
 
+    /** constructor
+     *
+     * @param index
+     */
     NumberOperator(int index){
         this.index = index;
     }
+
 
     public int getIndex(){
         return this.index;
@@ -38,7 +43,10 @@ public enum NumberOperator {
             default: return VOID;
         }
     }
-
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString(){
         switch (this.index){

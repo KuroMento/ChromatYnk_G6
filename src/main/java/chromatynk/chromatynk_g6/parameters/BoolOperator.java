@@ -15,9 +15,14 @@ public enum BoolOperator {
 
     private final int index;
 
+    /** constructor
+     *
+     * @param index
+     */
     BoolOperator(int index){
         this.index = index;
     }
+
 
     public int getIndex(){
         return this.index;
@@ -35,7 +40,10 @@ public enum BoolOperator {
             default: return VOID;
         }
     }
-
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString(){
         switch (this.index){

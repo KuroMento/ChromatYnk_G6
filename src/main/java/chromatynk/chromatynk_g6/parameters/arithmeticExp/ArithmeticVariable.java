@@ -7,12 +7,21 @@ public class ArithmeticVariable extends ArithmeticExpression{
     private LYnkVariableImpl varContext;
     private String identification;
 
+    /** constructor
+     *
+     * @param identification
+     * @param varContext
+     * @param value
+     */
     public ArithmeticVariable(String identification, LYnkVariableImpl varContext, double value){
         super(value);
         this.identification = identification;
         this.varContext = varContext;
     }
-
+    /**
+     * This method returns a boolean.
+     * @return
+     */
     @Override
     public double evaluate(){
         try{
@@ -23,7 +32,10 @@ public class ArithmeticVariable extends ArithmeticExpression{
             return getValue();
         }
     }
-
+    /**
+     * This method convert to a String and return it
+     * @return
+     */
     @Override
     public String toString(){
         return this.identification;
