@@ -35,12 +35,16 @@ import java.nio.file.Files;
 import static chromatynk.chromatynk_g6.diagnostic.LYnkValidation.SKIP_ERROR;
 import static chromatynk.chromatynk_g6.diagnostic.LYnkValidation.VOID;
 
+/**
+ * LYnkConsole is responsible for collecting valid statements as well
+ * as errors which are then both handled by the MainController class.
+ */
 public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTLRErrorListener {
 
     /**
      * A set of issues linked to the given code
      */
-    private Set<LYnkIssue> issues;
+    private Deque<LYnkIssue> issues;
 
     private LYnkVariableImpl varContext;
     private CursorManager cursorContext;
@@ -50,20 +54,17 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
     private List<Statement> validStatements;
 
     //When the value is false, the syntaxError method returns without displaying errors.
-    private static boolean REPORT_SYNTAX_ERRORS = false;
+    private static boolean REPORT_SYNTAX_ERRORS = true;
     private static boolean SYNTAX_ERROR = false;
+    private static boolean CONSOLE_DEBUG = false;
 
     public static void main(String[] args){
         try {
             File lynktest = new File("/home/cytech/_Cours/S2/Java/ChromatYnk_G6/src/main/java/lynkTest.lynk");
             String input = new String(Files.readAllBytes(lynktest.toPath()));
-            LYnkConsole console = new LYnkConsole(input);
+            LYnkConsole console = new LYnkConsole();
 
             console.verifyInput(input);
-            System.out.println("Issues: " + console.getIssues());
-            System.out.println("Valid Statements: " + console.getValidStatements());
-            System.out.println("Variables: " + console.getVariables());
-            System.out.println("Cursors: " + console.getCursorContext());
         }
         catch( IOException e ){
             System.out.println(e.getMessage());
@@ -72,10 +73,9 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
 
     /**
      * Creates a new console for inspecting inputs
-     * @param input The string to check for errors and execute
      */
-    public LYnkConsole(String input){
-        this.issues = new LinkedHashSet<>(0);
+    public LYnkConsole(){
+        this.issues = new ArrayDeque<>();
         this.varContext = new LYnkVariableImpl();
         this.cursorContext = new CursorManager();
         this.validStatements = new ArrayList<Statement>();
@@ -87,7 +87,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
      * @param cursorContext The MainController's cursor context
      */
     public LYnkConsole(LYnkVariableImpl varContext, CursorManager cursorContext){
-        this.issues = new LinkedHashSet<>(0);
+        this.issues = new ArrayDeque<>();
         this.validStatements = new ArrayList<Statement>();
         this.varContext = varContext;
         this.cursorContext = cursorContext;
@@ -105,18 +105,49 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
         final int line = token.getLine();
         final int offset = token.getCharPositionInLine() + 1;
-        this.issues.add(new LYnkIssue(issueType, message, line, offset, ""));
+        this.issues.push(new LYnkIssue(issueType, message, line, offset, ""));
     }
 
-    public List<LYnkIssue> getIssues(){
-        return issues.stream().toList();
+    /**
+     * Prints the console attributs after <code>{@link LYnkConsole#verifyInput(String)}</code> or <code>{@link LYnkConsole#verifyInput(Path)}</code>
+     */
+    public void debugConsole(){
+        if( CONSOLE_DEBUG ) {
+            System.out.println("Issues: " + getIssues());
+            System.out.println("Valid Statements: " + getValidStatements());
+            System.out.println("Variables: " + getVariables());
+            System.out.println("Cursors: " + getCursorContext());
+        }
+        else{
+            System.out.println("CONSOLE_DEBUG is not active!");
+        }
     }
 
+    /**
+     * Getter for <code>{@link LYnkConsole}</code>'s <code>issues</code> attribut.
+     * @return The issue stack
+     */
+    public Deque<LYnkIssue> getIssues(){
+        return this.issues;
+    }
+
+    /**
+     * Getter for <code>{@link LYnkConsole}</code>'s <code>validStatements</code> attribut.
+     * @return The list of valid statements
+     */
     public List<Statement> getValidStatements(){
         return this.validStatements;
     }
 
+    /**
+     * Getter for <code>{@link LYnkConsole}</code>'s <code>varContext</code>'s map content which tracks variables according to the last execution.
+     * @return The map of variables.
+     */
     public Map<String, Variable> getVariables(){ return this.varContext.getVariableMap(); }
+    /**
+     * Getter for <code>{@link LYnkConsole}</code>'s <code>cursorContext</code>'s map content which tracks cursors according to the last execution.
+     * @return The map of cursors.
+     */
     public CursorManager getCursorContext(){ return this.cursorContext; }
 
     /**
@@ -135,6 +166,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         parser.addErrorListener(this); // Add self as an ANTLRErrorListener (implements)
 
         visitProgram(parser.program());
+        debugConsole();
 
         return getValidStatements();
     }
@@ -152,6 +184,7 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             parser.addErrorListener(this); // Add self as an ANTLRErrorListener (implements)
 
             visitProgram(parser.program());
+            debugConsole();
 
             return getValidStatements();
         } catch (IOException e) {
@@ -961,6 +994,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
      * Statements
      */
 
+    /**
+     * Called when visiting a IF statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link IfStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitIfStatement(LYnkParser.IfStatementContext ctx){
         final LYnkValidation boolExp = visit(ctx.booleanExpression());
@@ -973,17 +1011,18 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return SKIP_ERROR;
         }
         final LYnkValidation block = visit(ctx.blockStatement());
-        if(!block.hasValue()){
-            addIssue(IssueType.ERROR, ctx.getStart(), " IF statement should have a block statement!");
-            return SKIP_ERROR;
-        }
-        if(block.isSkipError()){
-            addIssue(IssueType.ERROR, ctx.getStart(), "An error occurred in the block below");
+        if(block.isSkipError() || !block.hasValue()){
+            addIssue(IssueType.ERROR, ctx.getStart(), "An error occurred in the IF block below");
             return SKIP_ERROR;
         }
         return LYnkValidation.statement(new IfStatement((BooleanExpression) boolExp.value(),(BlockStatement) block.value(), varContext));
     }
 
+    /**
+     * Called when visiting a WHILE statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link WhileStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitWhileStatement(LYnkParser.WhileStatementContext ctx){
         if( ctx.booleanExpression() == null){
@@ -995,18 +1034,19 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             addIssue(IssueType.ERROR, ctx.getStart(), "Incorrect boolean expression in WHILE statement");
             return SKIP_ERROR;
         }
-        if( ctx.blockStatement() == null){
-            addIssue(IssueType.ERROR, ctx.getStart(), " WHILE statement should have a block statement!");
-            return SKIP_ERROR;
-        }
         final LYnkValidation block = visit(ctx.blockStatement());
         if(block.isSkipError() || !block.hasValue()){
-            addIssue(IssueType.ERROR, ctx.getStart(), "An error occurred in the block below :");
+            addIssue(IssueType.ERROR, ctx.getStart(), "An error occurred in the WHILE block below :");
             return SKIP_ERROR;
         }
         return LYnkValidation.statement(new WhileStatement((BooleanExpression) boolExp.value(), (BlockStatement) block.value(), varContext));
     }
 
+    /**
+     * Called when visiting a FOR statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link ForStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitForStatement(LYnkParser.ForStatementContext ctx){
         //
@@ -1066,9 +1106,14 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.statement(new ForStatement(forVar,from,to,step,(BlockStatement) block.value(), this.varContext));
     }
 
+    /**
+     * Called when visiting a MIMIC statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link MimicStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitMimicStatement(LYnkParser.MimicStatementContext ctx){
-        if(ctx.LONG()==null){
+        if(ctx.LONG().equals("<missing LONG>")){
             addIssue(IssueType.ERROR, ctx.LONG().getSymbol(), "Mimic statement is missing a cursorId");
             return SKIP_ERROR;
         }
@@ -1078,12 +1123,17 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
         final LYnkValidation block = visit(ctx.blockStatement());
         if(block.isSkipError() || !block.hasValue()){
-            addIssue(IssueType.ERROR, ctx.getStart(), "An error occurred a MIMIC block");
+            addIssue(IssueType.ERROR, ctx.getStart(), "An error occurred in the MIMIC block.");
             return SKIP_ERROR;
         }
         return LYnkValidation.statement(new MimicStatement(Long.parseLong(ctx.LONG().getText()), (BlockStatement) block.value() ,varContext));
     }
 
+    /**
+     * Called when visiting a MIRROR statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link MirrorStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitMirrorStatement(LYnkParser.MirrorStatementContext ctx){
         // 2 parameters (x1, y1)
@@ -1140,10 +1190,15 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return LYnkValidation.statement(new MirrorStatement((ArithmeticExpression) x1Value.value(), (ArithmeticExpression) y1Value.value(), (ArithmeticExpression) x2Value.value(), (ArithmeticExpression) y2Value.value(), (BlockStatement) block.value(),varContext));
         }
         // No parameters
-        addIssue(IssueType.ERROR, ctx.getStart(), "No parameters were found in MIRROR statement");
+        addIssue(IssueType.ERROR, ctx.getStart(), "Unknown error found in MIRROR statement, check for parameters");
         return SKIP_ERROR;
     }
 
+    /**
+     * Called when visiting a FWD statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link ForwardStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitForwardStatement(LYnkParser.ForwardStatementContext ctx){
         if(!(ctx.numStatementParameterX() == null)){
@@ -1154,10 +1209,15 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             }
             return LYnkValidation.statement(new ForwardStatement((ArithmeticExpression) fwdValue.value(), varContext));
         }
-        // no params (antlr does not support having nothing, so we detect if the given parameter is the beginning of a statement
+        addIssue(IssueType.WARNING, ctx.getStart(), "Unrecognizable FWD statement");
         return SKIP_ERROR;
     }
 
+    /**
+     * Called when visiting a BWD statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link BackwardStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitBackwardStatement(LYnkParser.BackwardStatementContext ctx){
         if(!(ctx.numStatementParameterX() == null)){
@@ -1169,24 +1229,17 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
             return LYnkValidation.statement(new BackwardStatement((ArithmeticExpression) bwdValue.value(), varContext));
         }
         // no params
-        addIssue(IssueType.ERROR, ctx.getStart(), "BWD statement was not given a parameter");
+        addIssue(IssueType.WARNING, ctx.getStart(), "Unrecognizable BWD statement");
         return SKIP_ERROR;
     }
 
+    /**
+     * Called when visiting a MOV statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link MoveStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitMoveStatement(LYnkParser.MoveStatementContext ctx){
-        // no params
-        if((ctx.x == null && ctx.y == null)){
-            addIssue(IssueType.ERROR, ctx.getStart(), "MOV statement was not given a parameter");
-            return SKIP_ERROR;
-        }
-
-        // x or y empty
-        if(!(ctx.x == null) && ctx.y == null || ctx.x == null && !(ctx.y == null)){
-            addIssue(IssueType.ERROR, ctx.getStart(), "MOV statement was given only 1 parameter");
-            return SKIP_ERROR;
-        }
-
         // 2 parameters
         final LYnkValidation xValue = visit(ctx.x);
         if( xValue.isSkipError() || !xValue.hasValue()){
@@ -1201,20 +1254,13 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return LYnkValidation.statement(new MoveStatement((ArithmeticExpression) xValue.value(), (ArithmeticExpression) yValue.value(), varContext));
     }
 
+    /**
+     * Called when visiting a POS statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link PositionStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitPositionStatement(LYnkParser.PositionStatementContext ctx){
-        // no params
-        if((ctx.x == null && ctx.y == null)){
-            addIssue(IssueType.ERROR, ctx.getStart(), "MOV statement was not given a parameter");
-            return SKIP_ERROR;
-        }
-
-        // x or y empty
-        if(!(ctx.x == null) && ctx.y == null || ctx.x == null && !(ctx.y == null)){
-            addIssue(IssueType.ERROR, ctx.getStart(), "MOV statement was given only 1 parameter");
-            return SKIP_ERROR;
-        }
-
         // 2 parameters
         final LYnkValidation xValue = visit(ctx.x);
         if( xValue.isSkipError() || !xValue.hasValue()){
@@ -1223,32 +1269,54 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
         final LYnkValidation yValue = visit(ctx.y);
         if( yValue.isSkipError() || !yValue.hasValue()){
-            addIssue(IssueType.ERROR, ctx.y.getStart(), "The x parameter has a null value or a wrong type : " + ctx.y.getText());
+            addIssue(IssueType.ERROR, ctx.y.getStart(), "The y parameter has a null value or a wrong type : " + ctx.y.getText());
             return SKIP_ERROR;
         }
         return LYnkValidation.statement(new PositionStatement((ArithmeticExpression) xValue.value(), (ArithmeticExpression) yValue.value(), this.varContext));
     }
 
+    /**
+     * Called when visiting a HIDE statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link HideStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitHideStatement(LYnkParser.HideStatementContext ctx){
         return LYnkValidation.statement(new HideStatement(varContext));
     }
 
+    /**
+     * Called when visiting a SHOW statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link ShowStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitShowStatement(LYnkParser.ShowStatementContext ctx){
         return LYnkValidation.statement(new ShowStatement(varContext));
     }
 
+    /**
+     * Called when visiting a COLOR statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link ColorStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitColorStatement(LYnkParser.ColorStatementContext ctx) {
+        if( ctx.arithmeticExpression().isEmpty() && ctx.HEXCODE()==null ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement was not given correct parameters");
+            return SKIP_ERROR;
+        }
+        final LYnkValidation p1 = visit(ctx.arithmeticExpression(0));
+        final LYnkValidation p2 = visit(ctx.arithmeticExpression(1));
+        final LYnkValidation p3 = visit(ctx.arithmeticExpression(2));
         // no params
-        if( (ctx.HEXCODE() == null && ctx.arithmeticExpression() == null)){
-            addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement was not given parameters");
+        if( (p1.isSkipError() || !p1.hasValue()) && (p2.isSkipError() || !p2.hasValue()) && (p3.isSkipError() || !p3.hasValue())){
+            addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement was given wrong parameters, check type");
             return SKIP_ERROR;
         }
         // 1 or 2 params when expected 3 for rgb
-        if( (ctx.arithmeticExpression(0)==null && ctx.arithmeticExpression(1)==null && !(ctx.arithmeticExpression(2)==null)) || (ctx.arithmeticExpression(0)==null && !(ctx.arithmeticExpression(1)==null) && !(ctx.arithmeticExpression(2)==null))){
-            addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement found 1 or 2 parameter for arithmeticExpressions but expected 3: " + ctx.arithmeticExpression().toString());
+        if( (p3.isSkipError() || !p3.hasValue()) || ((p2.isSkipError() || !p2.hasValue()) && (p3.isSkipError() || !p3.hasValue())) ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "COLOR statement found 1 or 2 correct parameter for arithmeticExpressions but expected 3: [" + ctx.arithmeticExpression(0).getText() + " " + ctx.arithmeticExpression(1).getText() + "] ");
             return SKIP_ERROR;
         }
         // 1 param and hexcode
@@ -1258,18 +1326,23 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
         // 3 param rgb (WORK FOR hsv FORMAT AS WELL)
         if( ctx.arithmeticExpression(0) != null && ctx.arithmeticExpression(1) != null && ctx.arithmeticExpression(2) != null ){
-            final ArithmeticExpression red = (ArithmeticExpression) visit(ctx.arithmeticExpression(0)).value();
-            final ArithmeticExpression green = (ArithmeticExpression) visit(ctx.arithmeticExpression(1)).value();
-            final ArithmeticExpression blue = (ArithmeticExpression) visit(ctx.arithmeticExpression(2)).value();
+            final ArithmeticExpression red = (ArithmeticExpression) p1.value();
+            final ArithmeticExpression green = (ArithmeticExpression) p2.value();
+            final ArithmeticExpression blue = (ArithmeticExpression) p3.value();
             return LYnkValidation.statement(new ColorStatement(red,green,blue,this.varContext));
         }
         return SKIP_ERROR;
     }
 
+    /**
+     * Called when visiting a CURSOR statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link CursorStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitCursorStatement(LYnkParser.CursorStatementContext ctx){
         // no params
-        if( ctx.LONG() == null){
+        if( ctx.LONG() == null || ctx.LONG().getText().equals("<missing LONG>")){
             addIssue(IssueType.ERROR, ctx.getStart(), "CURSOR statement was not given a parameter");
             return SKIP_ERROR;
         }
@@ -1283,10 +1356,15 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
     }
 
+    /**
+     * Called when visiting a SELECT statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link SelectStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitSelectStatement(LYnkParser.SelectStatementContext ctx){
         // no params
-        if( ctx.LONG() == null ){
+        if( ctx.LONG() == null  || ctx.LONG().getText().equals("<missing LONG>")){
             addIssue(IssueType.ERROR, ctx.getStart(), "SELECT statement was not given a parameter");
             return SKIP_ERROR;
         }
@@ -1304,10 +1382,15 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
     }
 
+    /**
+     * Called when visiting a REMOVE statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link RemoveStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitRemoveStatement(LYnkParser.RemoveStatementContext ctx){
         // no params
-        if( ctx.LONG() == null ){
+        if( ctx.LONG() == null  || ctx.LONG().getText().equals("<missing LONG>")){
             addIssue(IssueType.ERROR, ctx.getStart(), "REMOVE statement was not given a parameter");
             return SKIP_ERROR;
         }
@@ -1325,16 +1408,21 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         }
     }
 
+    /**
+     * Called when visiting a PRESS statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link PressStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitPressStatement(LYnkParser.PressStatementContext ctx){
-        if( (ctx.PERCENTAGE() == null) && ctx.arithmeticExpression() ==null){
+        if( ctx.PERCENTAGE() == null && ctx.arithmeticExpression() == null){
             addIssue(IssueType.ERROR, ctx.getStart(), "PRESS statement was not given a parameter");
             return SKIP_ERROR;
         }
         if(ctx.arithmeticExpression() != null) {
             final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
             if (arithmetic.isSkipError() || !arithmetic.hasValue()) {
-                addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error");
+                addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error (PRESS)");
                 return SKIP_ERROR;
             }
             return LYnkValidation.statement(new PressStatement((ArithmeticExpression) arithmetic.value(), varContext));
@@ -1348,25 +1436,35 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return SKIP_ERROR;
     }
 
+    /**
+     * Called when visiting a THICK statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link ThickStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitThickStatement(LYnkParser.ThickStatementContext ctx){
-        if( ctx.arithmeticExpression() == null ){
+        if( ctx.arithmeticExpression() == null || ctx.arithmeticExpression().getText().isEmpty()){
             addIssue(IssueType.ERROR, ctx.getStart(), "THICK statement was not given a parameter");
             return SKIP_ERROR;
         }
         final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
         if( arithmetic.isSkipError() || !arithmetic.hasValue()){
-            addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error");
+            addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error (THICK)");
             return SKIP_ERROR;
         }
         return LYnkValidation.statement(new ThickStatement((ArithmeticExpression) arithmetic.value(), varContext));
     }
 
+    /**
+     * Called when visiting a LOOKAT statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link LookAtStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitLookAtStatement(LYnkParser.LookAtStatementContext ctx){
         // no params
-        if( ctx.LONG() == null && ctx.x == null && ctx.y == null ){
-            addIssue(IssueType.ERROR, ctx.getStart(), "LOOKAT statement was not given a parameter");
+        if( ctx.LONG() == null && (ctx.x == null && ctx.y == null) ){
+            addIssue(IssueType.ERROR, ctx.getStart(), "LOOKAT statement was not given enough parameter");
             return SKIP_ERROR;
         }
         // 1 param
@@ -1399,15 +1497,20 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return SKIP_ERROR;
     }
 
+    /**
+     * Called when visiting a TURN statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link RotationStatement}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitRotationStatement(LYnkParser.RotationStatementContext ctx){
-        if( ctx.arithmeticExpression() == null ){
+        if( ctx.arithmeticExpression() == null ||  ctx.arithmeticExpression().getText().isEmpty()){
             addIssue(IssueType.ERROR, ctx.getStart(), "TURN statement was not given a parameter");
             return SKIP_ERROR;
         }
         final LYnkValidation arithmetic = visit(ctx.arithmeticExpression());
         if( arithmetic.isSkipError() || !arithmetic.hasValue()){
-            addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error");
+            addIssue(IssueType.ERROR, ctx.getStart(), "The arithmetic expression passed in argument contains an error (TURN)");
             return SKIP_ERROR;
         }
         return LYnkValidation.statement(new RotationStatement((ArithmeticExpression) arithmetic.value(), this.varContext));
@@ -1417,6 +1520,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
      * Variable declarations
      */
 
+    /**
+     * Called when visiting a STR statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link StringDeclaration}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitStringDeclaration(LYnkParser.StringDeclarationContext ctx){
         String variable = ctx.IDENTIFICATION().getText();
@@ -1447,6 +1555,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return SKIP_ERROR;
     }
 
+    /**
+     * Called when visiting a BOOL statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link BoolDeclaration}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitBoolDeclaration(LYnkParser.BoolDeclarationContext ctx){
         String variable = ctx.IDENTIFICATION().getText();
@@ -1487,6 +1600,11 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return SKIP_ERROR;
     }
 
+    /**
+     * Called when visiting a NUM statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link NumberDeclaration}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitNumberDeclaration(LYnkParser.NumberDeclarationContext ctx){
         String variable = ctx.IDENTIFICATION().getText();
@@ -1527,12 +1645,18 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return SKIP_ERROR;
     }
 
+    /**
+     * Called when visiting a DEL statement, checks for errors
+     * @param ctx the parse tree
+     * @return A <code>{@link DeleteDeclaration}</code> encapsulated in the <code>{@link LYnkValidation}</code> class for error checks
+     */
     @Override
     public LYnkValidation visitDeleteDeclaration(LYnkParser.DeleteDeclarationContext ctx){
         String variable = ctx.IDENTIFICATION().getText();
         // no param
         if( variable.equals("<missing IDENTIFICATION>") ){
             addIssue(IssueType.ERROR, ctx.getStart(), "A variable name is needed in DEL statement");
+            System.out.println(ctx.getStart());
             return SKIP_ERROR;
         }
         try {
@@ -1550,37 +1674,75 @@ public class LYnkConsole extends LYnkBaseVisitor<LYnkValidation> implements ANTL
         return SKIP_ERROR;
     }
 
+    /**
+     * Method from ANTLRErrorListener that detect any syntax error upon using the lexer and the parser to obtain an AST
+     * @param recognizer What parser got the error. From this object, you can access the context as well as the input stream.
+     * @param offendingSymbol The offending token in the input token stream, unless recognizer is a lexer (then it's null). If no viable alternative error, e has token at which we started production for the decision.
+     * @param line The line number in the input where the error occurred.
+     * @param charPositionInLine The character position within that line where the error occurred.
+     * @param msg The message to emit.
+     * @param re The exception generated by the parser that led to the reporting of an error. It is null in the case where the parser was able to recover in line without exiting the surrounding rule.
+     */
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException re){
         if(!REPORT_SYNTAX_ERRORS){
             return;
         }
-        System.out.println(msg);
-        if( (msg.substring(0,10).equals("extraneous") || msg.substring(0,7).equals("missing")) && !SYNTAX_ERROR){
-            this.issues.add(new LYnkIssue(IssueType.ERROR, "Incomplete statement causing syntax errors.", line, charPositionInLine, msg));
+        // System.out.println(msg);
+        if( (msg.substring(0,10).equals("extraneous")) && !SYNTAX_ERROR){
+            this.issues.push(new LYnkIssue(IssueType.ERROR, "Incomplete statement causing syntax errors.", line, charPositionInLine, msg));
             SYNTAX_ERROR = true;
         }
         if( msg.substring(0,17).equals("token recognition")){
-            this.issues.add(new LYnkIssue(IssueType.ERROR, "A parameter type is not recognized, maybe check the COLOR hexcode", line, charPositionInLine, msg));
+            this.issues.push(new LYnkIssue(IssueType.ERROR, "A parameter type is not recognized, maybe check the COLOR hexcode", line, charPositionInLine, msg));
         }
         if( msg.substring(0,16).equals("mismatched input")){
-            this.issues.add(new LYnkIssue(IssueType.ERROR, "A statement's parameter has the wrong type", line, charPositionInLine, msg));
+            this.issues.push(new LYnkIssue(IssueType.ERROR, "A statement's parameter has the wrong type", line, charPositionInLine, msg));
         }
         //this.issues.add(new LYnkIssue(IssueType.ERROR, "Incomplete statement causing syntax errors.", line, charPositionInLine, msg));
     }
 
+
+    /**
+     * Unused method for ambiguous statements.
+     * @param parser the parser instance
+     * @param dfa the DFA for the current decision
+     * @param i the input index where the decision started
+     * @param i1 the input where the ambiguity was identified
+     * @param b true if the ambiguity is exactly known, otherwise false.
+     * @param bitSet the potentially ambiguous alternatives, or null to indicate that the potentially ambiguous alternatives are the complete set of represented alternatives in configs
+     * @param atnConfigSet the ATN configuration set where the ambiguity was identified
+     */
     @Override
     public void reportAmbiguity(Parser parser, DFA dfa, int i, int i1, boolean b, BitSet bitSet, ATNConfigSet atnConfigSet) {
         //no implementation at the moment
         //System.out.println("Ambiguity");
     }
 
+    /**
+     * Unused method for full context.
+     * @param parser the parser instance
+     * @param dfa the DFA for the current decision
+     * @param i the input index where the decision started
+     * @param i1 the input index where the SLL conflict occurred
+     * @param bitSet The specific conflicting alternatives.
+     * @param atnConfigSet the ATN configuration set where the SLL conflict was detected
+     */
     @Override
     public void reportAttemptingFullContext(Parser parser, DFA dfa, int i, int i1, BitSet bitSet, ATNConfigSet atnConfigSet) {
         //no implementation at the moment
         //System.out.println("FullContext");
     }
 
+    /**
+     * Unsed method for context sensitivity
+     * @param parser the parser instance
+     * @param dfa the DFA for the current decision
+     * @param i the input index where the decision started
+     * @param i1 the input index where the context sensitivity was finally determined
+     * @param i2 the unambiguous result of the full-context prediction
+     * @param atnConfigSet the ATN configuration set where the unambiguous prediction was determined
+     */
     @Override
     public void reportContextSensitivity(Parser parser, DFA dfa, int i, int i1, int i2, ATNConfigSet atnConfigSet) {
         //no implementation at the moment

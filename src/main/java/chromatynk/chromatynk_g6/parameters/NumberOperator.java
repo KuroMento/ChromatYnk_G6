@@ -1,5 +1,12 @@
 package chromatynk.chromatynk_g6.parameters;
 
+import chromatynk.chromatynk_g6.interpreter.LYnkConsole;
+import chromatynk.chromatynk_g6.parameters.arithmeticExp.ArithmeticExpression;
+import chromatynk.chromatynk_g6.parameters.booleanExp.BooleanExpression;
+
+/**
+ * An enumeration for arithmetic operations between <code>{@link ArithmeticExpression}</code>.
+ */
 public enum NumberOperator {
     VOID(0),
     PLUS(45),
@@ -17,6 +24,11 @@ public enum NumberOperator {
         return this.index;
     }
 
+    /**
+     * Used to get back the operator from the ctx in visit methods in <code>{@link LYnkConsole}</code> to evaluate an <code>{@link ArithmeticExpression}</code>.
+     * @param index The ctx.op.getType() in <code>{@link LYnkConsole}</code> methods.
+     * @return An <code>{@link NumberOperator}</code>.
+     */
     public static NumberOperator getOp(int index){
         switch (index){
             case 45: return PLUS;

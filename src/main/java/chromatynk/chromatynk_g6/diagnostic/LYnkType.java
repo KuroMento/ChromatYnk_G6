@@ -1,5 +1,8 @@
 package chromatynk.chromatynk_g6.diagnostic;
 
+/**
+ * An enumeration for <code>{@link LYnkValidation}</code>'s type recognition.
+ */
 public enum LYnkType {
     BOOLEAN,
     NUMBER,

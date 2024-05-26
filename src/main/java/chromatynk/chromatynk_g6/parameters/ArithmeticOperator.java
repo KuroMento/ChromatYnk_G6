@@ -1,5 +1,14 @@
 package chromatynk.chromatynk_g6.parameters;
 
+import chromatynk.chromatynk_g6.diagnostic.LYnkValidation;
+import chromatynk.chromatynk_g6.parameters.arithmeticExp.*;
+import chromatynk.chromatynk_g6.parameters.booleanExp.*;
+import chromatynk.chromatynk_g6.parameters.literalExp.*;
+import chromatynk.chromatynk_g6.interpreter.LYnkConsole;
+
+/**
+ * An enumeration for comparisons between <code>{@link ArithmeticExpression}</code> and <code>{@link LiteralExpression}</code>.
+ */
 public enum ArithmeticOperator {
     VOID(0),
     EQUAL(48),
@@ -19,6 +28,11 @@ public enum ArithmeticOperator {
         return this.index;
     }
 
+    /**
+     * Used to get back the operator from the ctx in visit methods in <code>{@link LYnkConsole}</code> for comparing <code>{@link ArithmeticExpression}</code> or <code>{@link LiteralExpression}</code>.
+     * @param index The ctx.op.getType() in <code>{@link LYnkConsole}</code> methods.
+     * @return An <code>{@link ArithmeticOperator}</code>.
+     */
     public static ArithmeticOperator getOp(int index){
         switch (index){
             case 48: return EQUAL;
