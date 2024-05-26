@@ -349,7 +349,7 @@ public class Controller {
                 }
                 else {
                     if (color.isRGB()) {
-                        cursorManager.color(new Color(color.getRed().evaluate() / 255, color.getGreen().evaluate() / 255, color.getGreen().evaluate() / 255, cursorManager.getSelectedCursor().getOpacity()));
+                        cursorManager.color(new Color(color.getRed().evaluate() / 255, color.getGreen().evaluate() / 255, color.getBlue().evaluate() / 255, cursorManager.getSelectedCursor().getOpacity()));
                     }
                     else {
                         if (color.isHSV()) {
