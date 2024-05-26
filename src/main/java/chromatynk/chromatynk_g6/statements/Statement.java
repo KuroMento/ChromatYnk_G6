@@ -2,6 +2,10 @@ package chromatynk.chromatynk_g6.statements;
 
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 
+
+/**
+ * A generic statement's representation
+ */
 public abstract class Statement {
     private String keyword;
 

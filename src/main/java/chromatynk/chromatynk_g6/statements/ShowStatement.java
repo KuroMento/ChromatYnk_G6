@@ -2,6 +2,10 @@ package chromatynk.chromatynk_g6.statements;
 
 import chromatynk.chromatynk_g6.interpreter.LYnkVariableImpl;
 
+
+/**
+ * A SHOW statement's representation
+ */
 public class ShowStatement extends Statement{
     public ShowStatement(LYnkVariableImpl varContext){
         super("SHOW", varContext);
@@ -10,6 +14,6 @@ public class ShowStatement extends Statement{
 
     @Override
     public String toString() {
-        return getKeyword();
+        return getKeyword() + "\n";
     }
 }
